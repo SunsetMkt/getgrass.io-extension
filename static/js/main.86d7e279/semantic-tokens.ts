@@ -8,4 +8,4 @@ export const semanticTokens = {
     "chakra-subtle-text": { _light: "gray.600", _dark: "gray.400" },
     "chakra-placeholder-color": { _light: "gray.500", _dark: "whiteAlpha.400" },
   },
-}
+};

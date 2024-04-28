@@ -3,8 +3,7 @@ import { default as default2 } from "lodash.mergewith";
 function omit(object, keys) {
   const result = {};
   Object.keys(object).forEach((key) => {
-    if (keys.includes(key))
-      return;
+    if (keys.includes(key)) return;
     result[key] = object[key];
   });
   return result;
@@ -33,8 +32,7 @@ function split(object, keys) {
 function get(obj, path, fallback, index) {
   const key = typeof path === "string" ? path.split(".") : [path];
   for (index = 0; index < key.length; index += 1) {
-    if (!obj)
-      break;
+    if (!obj) break;
     obj = obj[key[index]];
   }
   return obj === void 0 ? fallback : obj;
@@ -73,15 +71,23 @@ function objectFilter(object, fn) {
   });
   return result;
 }
-var filterUndefined = (object) => objectFilter(object, (val) => val !== null && val !== void 0);
+var filterUndefined = (object) =>
+  objectFilter(object, (val) => val !== null && val !== void 0);
 var objectKeys = (obj) => Object.keys(obj);
-var fromEntries = (entries) => entries.reduce((carry, [key, value]) => {
-  carry[key] = value;
-  return carry;
-}, {});
+var fromEntries = (entries) =>
+  entries.reduce((carry, [key, value]) => {
+    carry[key] = value;
+    return carry;
+  }, {});
 var getCSSVar = (theme, scale, value) => {
   var _a, _b, _c;
-  return (_c = (_b = (_a = theme.__cssMap) == null ? void 0 : _a[`${scale}.${value}`]) == null ? void 0 : _b.varRef) != null ? _c : value;
+  return (_c =
+    (_b = (_a = theme.__cssMap) == null ? void 0 : _a[`${scale}.${value}`]) ==
+    null
+      ? void 0
+      : _b.varRef) != null
+    ? _c
+    : value;
 };
 
 export {
@@ -97,5 +103,5 @@ export {
   objectKeys,
   fromEntries,
   getCSSVar,
-  default2 as default
+  default2 as default,
 };

@@ -1,30 +1,34 @@
-import {
-  getOwnerDocument,
-  isHTMLElement
-} from "./chunk-3XANSPY5.mjs";
+import { getOwnerDocument, isHTMLElement } from "./chunk-3XANSPY5.mjs";
 
 // src/tabbable.ts
-var hasDisplayNone = (element) => window.getComputedStyle(element).display === "none";
+var hasDisplayNone = (element) =>
+  window.getComputedStyle(element).display === "none";
 var hasTabIndex = (element) => element.hasAttribute("tabindex");
-var hasNegativeTabIndex = (element) => hasTabIndex(element) && element.tabIndex === -1;
+var hasNegativeTabIndex = (element) =>
+  hasTabIndex(element) && element.tabIndex === -1;
 function isDisabled(element) {
-  return Boolean(element.getAttribute("disabled")) === true || Boolean(element.getAttribute("aria-disabled")) === true;
+  return (
+    Boolean(element.getAttribute("disabled")) === true ||
+    Boolean(element.getAttribute("aria-disabled")) === true
+  );
 }
 function isInputElement(element) {
-  return isHTMLElement(element) && element.localName === "input" && "select" in element;
+  return (
+    isHTMLElement(element) &&
+    element.localName === "input" &&
+    "select" in element
+  );
 }
 function isActiveElement(element) {
   const doc = isHTMLElement(element) ? getOwnerDocument(element) : document;
   return doc.activeElement === element;
 }
 function hasFocusWithin(element) {
-  if (!document.activeElement)
-    return false;
+  if (!document.activeElement) return false;
   return element.contains(document.activeElement);
 }
 function isHidden(element) {
-  if (element.parentElement && isHidden(element.parentElement))
-    return true;
+  if (element.parentElement && isHidden(element.parentElement)) return true;
   return element.hidden;
 }
 function isContentEditable(element) {
@@ -37,24 +41,25 @@ function isFocusable(element) {
   }
   const { localName } = element;
   const focusableTags = ["input", "select", "textarea", "button"];
-  if (focusableTags.indexOf(localName) >= 0)
-    return true;
+  if (focusableTags.indexOf(localName) >= 0) return true;
   const others = {
     a: () => element.hasAttribute("href"),
     audio: () => element.hasAttribute("controls"),
-    video: () => element.hasAttribute("controls")
+    video: () => element.hasAttribute("controls"),
   };
   if (localName in others) {
     return others[localName]();
   }
-  if (isContentEditable(element))
-    return true;
+  if (isContentEditable(element)) return true;
   return hasTabIndex(element);
 }
 function isTabbable(element) {
-  if (!element)
-    return false;
-  return isHTMLElement(element) && isFocusable(element) && !hasNegativeTabIndex(element);
+  if (!element) return false;
+  return (
+    isHTMLElement(element) &&
+    isFocusable(element) &&
+    !hasNegativeTabIndex(element)
+  );
 }
 
 export {
@@ -68,5 +73,5 @@ export {
   isHidden,
   isContentEditable,
   isFocusable,
-  isTabbable
+  isTabbable,
 };

@@ -1,4 +1,4 @@
-import { Icon, IconProps } from "@chakra-ui/icon"
+import { Icon, IconProps } from "@chakra-ui/icon";
 import {
   chakra,
   forwardRef,
@@ -7,7 +7,7 @@ import {
   ThemingProps,
   useStyleConfig,
   HTMLChakraProps,
-} from "@chakra-ui/system"
+} from "@chakra-ui/system";
 
 function CloseIcon(props: IconProps) {
   return (
@@ -17,7 +17,7 @@ function CloseIcon(props: IconProps) {
         d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"
       />
     </Icon>
-  )
+  );
 }
 
 export interface CloseButtonProps
@@ -27,7 +27,7 @@ export interface CloseButtonProps
    * If `true`, the close button will be disabled.
    * @default false
    */
-  isDisabled?: boolean
+  isDisabled?: boolean;
 }
 
 /**
@@ -40,8 +40,8 @@ export interface CloseButtonProps
  */
 export const CloseButton = forwardRef<CloseButtonProps, "button">(
   function CloseButton(props, ref) {
-    const styles = useStyleConfig("CloseButton", props)
-    const { children, isDisabled, __css, ...rest } = omitThemingProps(props)
+    const styles = useStyleConfig("CloseButton", props);
+    const { children, isDisabled, __css, ...rest } = omitThemingProps(props);
 
     const baseStyle: SystemStyleObject = {
       outline: 0,
@@ -49,7 +49,7 @@ export const CloseButton = forwardRef<CloseButtonProps, "button">(
       alignItems: "center",
       justifyContent: "center",
       flexShrink: 0,
-    }
+    };
 
     return (
       <chakra.button
@@ -66,8 +66,8 @@ export const CloseButton = forwardRef<CloseButtonProps, "button">(
       >
         {children || <CloseIcon width="1em" height="1em" />}
       </chakra.button>
-    )
-  },
-)
+    );
+  }
+);
 
-CloseButton.displayName = "CloseButton"
+CloseButton.displayName = "CloseButton";

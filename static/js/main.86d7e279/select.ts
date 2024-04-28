@@ -1,15 +1,15 @@
-import { selectAnatomy as parts } from "@chakra-ui/anatomy"
+import { selectAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { inputTheme } from "./input"
+} from "@chakra-ui/styled-system";
+import { inputTheme } from "./input";
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $bg = cssVar("select-bg")
+const $bg = cssVar("select-bg");
 
 const baseStyleField = defineStyle({
   ...inputTheme.baseStyle?.field,
@@ -24,7 +24,7 @@ const baseStyleField = defineStyle({
   "> option, > optgroup": {
     bg: $bg.reference,
   },
-})
+});
 
 const baseStyleIcon = defineStyle({
   width: "6",
@@ -36,16 +36,16 @@ const baseStyleIcon = defineStyle({
   _disabled: {
     opacity: 0.5,
   },
-})
+});
 
 const baseStyle = definePartsStyle({
   field: baseStyleField,
   icon: baseStyleIcon,
-})
+});
 
 const iconSpacing = defineStyle({
   paddingInlineEnd: "8",
-})
+});
 
 const sizes = {
   lg: {
@@ -79,11 +79,11 @@ const sizes = {
       insetEnd: "1",
     },
   },
-}
+};
 
 export const selectTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
   variants: inputTheme.variants,
   defaultProps: inputTheme.defaultProps,
-})
+});

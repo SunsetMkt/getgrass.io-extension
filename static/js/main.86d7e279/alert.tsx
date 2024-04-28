@@ -1,4 +1,4 @@
-import { cx } from "@chakra-ui/shared-utils"
+import { cx } from "@chakra-ui/shared-utils";
 import {
   chakra,
   forwardRef,
@@ -7,20 +7,20 @@ import {
   SystemStyleObject,
   ThemingProps,
   useMultiStyleConfig,
-} from "@chakra-ui/system"
+} from "@chakra-ui/system";
 import {
   AlertProvider,
   AlertStatus,
   AlertStylesProvider,
   getStatusColorScheme,
-} from "./alert-context"
+} from "./alert-context";
 
 interface AlertOptions {
   /**
    * The status of the alert
    * @default "info"
    */
-  status?: AlertStatus
+  status?: AlertStatus;
 }
 
 export interface AlertProps
@@ -30,7 +30,7 @@ export interface AlertProps
   /**
    * @default false
    */
-  addRole?: boolean
+  addRole?: boolean;
 }
 
 /**
@@ -41,10 +41,10 @@ export interface AlertProps
  * @see WAI-ARIA https://www.w3.org/WAI/ARIA/apg/patterns/alert/
  */
 export const Alert = forwardRef<AlertProps, "div">(function Alert(props, ref) {
-  const { status = "info", addRole = true, ...rest } = omitThemingProps(props)
-  const colorScheme = props.colorScheme ?? getStatusColorScheme(status)
+  const { status = "info", addRole = true, ...rest } = omitThemingProps(props);
+  const colorScheme = props.colorScheme ?? getStatusColorScheme(status);
 
-  const styles = useMultiStyleConfig("Alert", { ...props, colorScheme })
+  const styles = useMultiStyleConfig("Alert", { ...props, colorScheme });
 
   const alertStyles: SystemStyleObject = {
     width: "100%",
@@ -53,7 +53,7 @@ export const Alert = forwardRef<AlertProps, "div">(function Alert(props, ref) {
     position: "relative",
     overflow: "hidden",
     ...styles.container,
-  }
+  };
 
   return (
     <AlertProvider value={{ status }}>
@@ -68,7 +68,7 @@ export const Alert = forwardRef<AlertProps, "div">(function Alert(props, ref) {
         />
       </AlertStylesProvider>
     </AlertProvider>
-  )
-})
+  );
+});
 
-Alert.displayName = "Alert"
+Alert.displayName = "Alert";

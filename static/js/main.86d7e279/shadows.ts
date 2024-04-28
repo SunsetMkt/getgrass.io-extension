@@ -11,6 +11,6 @@ const shadows = {
   none: "none",
   "dark-lg":
     "rgba(0, 0, 0, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.2) 0px 5px 10px, rgba(0, 0, 0, 0.4) 0px 15px 40px",
-}
+};
 
-export default shadows
+export default shadows;

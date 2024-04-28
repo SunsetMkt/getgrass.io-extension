@@ -1,4 +1,4 @@
-import { chakra, forwardRef, HTMLChakraProps } from "@chakra-ui/system"
+import { chakra, forwardRef, HTMLChakraProps } from "@chakra-ui/system";
 
 export interface CenterProps extends HTMLChakraProps<"div"> {}
 
@@ -14,12 +14,12 @@ export const Center = chakra("div", {
     alignItems: "center",
     justifyContent: "center",
   },
-})
+});
 
-Center.displayName = "Center"
+Center.displayName = "Center";
 
 export interface AbsoluteCenterProps extends HTMLChakraProps<"div"> {
-  axis?: "horizontal" | "vertical" | "both"
+  axis?: "horizontal" | "vertical" | "both";
 }
 
 const centerStyles = {
@@ -36,7 +36,7 @@ const centerStyles = {
     top: "50%",
     transform: "translate(-50%, -50%)",
   },
-}
+};
 
 /**
  * React component used to horizontally and vertically center an element
@@ -49,7 +49,7 @@ const centerStyles = {
  */
 export const AbsoluteCenter = forwardRef<AbsoluteCenterProps, "div">(
   function AbsoluteCenter(props, ref) {
-    const { axis = "both", ...rest } = props
+    const { axis = "both", ...rest } = props;
     return (
       <chakra.div
         ref={ref}
@@ -57,6 +57,6 @@ export const AbsoluteCenter = forwardRef<AbsoluteCenterProps, "div">(
         {...rest}
         position="absolute"
       />
-    )
-  },
-)
+    );
+  }
+);

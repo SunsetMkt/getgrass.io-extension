@@ -1,16 +1,16 @@
-import { drawerAnatomy as parts } from "@chakra-ui/anatomy"
+import { drawerAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { runIfFn } from "../utils/run-if-fn"
+} from "@chakra-ui/styled-system";
+import { runIfFn } from "../utils/run-if-fn";
 
 const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $bg = cssVar("drawer-bg")
-const $bs = cssVar("drawer-box-shadow")
+const $bg = cssVar("drawer-bg");
+const $bs = cssVar("drawer-box-shadow");
 
 /**
  * Since the `maxWidth` prop references theme.sizes internally,
@@ -20,26 +20,26 @@ function getSize(value: string) {
   if (value === "full") {
     return definePartsStyle({
       dialog: { maxW: "100vw", h: "100vh" },
-    })
+    });
   }
   return definePartsStyle({
     dialog: { maxW: value },
-  })
+  });
 }
 
 const baseStyleOverlay = defineStyle({
   bg: "blackAlpha.600",
   zIndex: "modal",
-})
+});
 
 const baseStyleDialogContainer = defineStyle({
   display: "flex",
   zIndex: "modal",
   justifyContent: "center",
-})
+});
 
 const baseStyleDialog = defineStyle((props) => {
-  const { isFullHeight } = props
+  const { isFullHeight } = props;
 
   return {
     ...(isFullHeight && { height: "100vh" }),
@@ -54,33 +54,33 @@ const baseStyleDialog = defineStyle((props) => {
     },
     bg: $bg.reference,
     boxShadow: $bs.reference,
-  }
-})
+  };
+});
 
 const baseStyleHeader = defineStyle({
   px: "6",
   py: "4",
   fontSize: "xl",
   fontWeight: "semibold",
-})
+});
 
 const baseStyleCloseButton = defineStyle({
   position: "absolute",
   top: "2",
   insetEnd: "3",
-})
+});
 
 const baseStyleBody = defineStyle({
   px: "6",
   py: "2",
   flex: "1",
   overflow: "auto",
-})
+});
 
 const baseStyleFooter = defineStyle({
   px: "6",
   py: "4",
-})
+});
 
 const baseStyle = definePartsStyle((props) => ({
   overlay: baseStyleOverlay,
@@ -90,7 +90,7 @@ const baseStyle = definePartsStyle((props) => ({
   closeButton: baseStyleCloseButton,
   body: baseStyleBody,
   footer: baseStyleFooter,
-}))
+}));
 
 const sizes = {
   xs: getSize("xs"),
@@ -99,7 +99,7 @@ const sizes = {
   lg: getSize("2xl"),
   xl: getSize("4xl"),
   full: getSize("full"),
-}
+};
 
 export const drawerTheme = defineMultiStyleConfig({
   baseStyle,
@@ -107,4 +107,4 @@ export const drawerTheme = defineMultiStyleConfig({
   defaultProps: {
     size: "xs",
   },
-})
+});

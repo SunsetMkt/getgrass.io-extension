@@ -1,4 +1,4 @@
-import isWeb from './isWeb';
+import isWeb from "./isWeb";
 
 export default (value: unknown): value is HTMLElement => {
   if (!isWeb) {

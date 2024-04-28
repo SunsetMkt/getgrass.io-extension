@@ -1,7 +1,7 @@
-import isObject from '../utils/isObject';
+import isObject from "../utils/isObject";
 
-import isDateObject from './isDateObject';
-import isPrimitive from './isPrimitive';
+import isDateObject from "./isDateObject";
+import isPrimitive from "./isPrimitive";
 
 export default function deepEqual(object1: any, object2: any) {
   if (isPrimitive(object1) || isPrimitive(object2)) {
@@ -26,7 +26,7 @@ export default function deepEqual(object1: any, object2: any) {
       return false;
     }
 
-    if (key !== 'ref') {
+    if (key !== "ref") {
       const val2 = object2[key];
 
       if (

@@ -1,20 +1,20 @@
-import { createContext, useContext } from "react"
-import { ColorModeContextType } from "./color-mode-types"
+import { createContext, useContext } from "react";
+import { ColorModeContextType } from "./color-mode-types";
 
-export const ColorModeContext = createContext({} as ColorModeContextType)
+export const ColorModeContext = createContext({} as ColorModeContextType);
 
-ColorModeContext.displayName = "ColorModeContext"
+ColorModeContext.displayName = "ColorModeContext";
 
 /**
  * React hook that reads from `ColorModeProvider` context
  * Returns the color mode and function to toggle it
  */
 export function useColorMode() {
-  const context = useContext(ColorModeContext)
+  const context = useContext(ColorModeContext);
   if (context === undefined) {
-    throw new Error("useColorMode must be used within a ColorModeProvider")
+    throw new Error("useColorMode must be used within a ColorModeProvider");
   }
-  return context
+  return context;
 }
 
 /**
@@ -31,8 +31,8 @@ export function useColorMode() {
  */
 export function useColorModeValue<TLight = unknown, TDark = unknown>(
   light: TLight,
-  dark: TDark,
+  dark: TDark
 ) {
-  const { colorMode } = useColorMode()
-  return colorMode === "dark" ? dark : light
+  const { colorMode } = useColorMode();
+  return colorMode === "dark" ? dark : light;
 }

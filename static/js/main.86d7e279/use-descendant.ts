@@ -1,8 +1,8 @@
-import { createContext } from "@chakra-ui/react-context"
-import { mergeRefs } from "@chakra-ui/react-use-merge-refs"
-import { useRef, useState } from "react"
-import { DescendantsManager, DescendantOptions } from "./descendant"
-import { useSafeLayoutEffect, cast } from "./utils"
+import { createContext } from "@chakra-ui/react-context";
+import { mergeRefs } from "@chakra-ui/react-use-merge-refs";
+import { useRef, useState } from "react";
+import { DescendantsManager, DescendantOptions } from "./descendant";
+import { useSafeLayoutEffect, cast } from "./utils";
 
 /**
  * @internal
@@ -10,13 +10,13 @@ import { useSafeLayoutEffect, cast } from "./utils"
  */
 function useDescendants<
   T extends HTMLElement = HTMLElement,
-  K extends Record<string, any> = {},
+  K extends Record<string, any> = {}
 >() {
-  const descendants = useRef(new DescendantsManager<T, K>())
+  const descendants = useRef(new DescendantsManager<T, K>());
   useSafeLayoutEffect(() => {
-    return () => descendants.current.destroy()
-  })
-  return descendants.current
+    return () => descendants.current.destroy();
+  });
+  return descendants.current;
 }
 
 export interface UseDescendantsReturn
@@ -35,7 +35,7 @@ const [DescendantsContextProvider, useDescendantsContext] =
     name: "DescendantsProvider",
     errorMessage:
       "useDescendantsContext must be used within DescendantsProvider",
-  })
+  });
 
 /**
  * @internal
@@ -46,37 +46,37 @@ const [DescendantsContextProvider, useDescendantsContext] =
  */
 function useDescendant<
   T extends HTMLElement = HTMLElement,
-  K extends Record<string, any> = {},
+  K extends Record<string, any> = {}
 >(options?: DescendantOptions<K>) {
-  const descendants = useDescendantsContext()
-  const [index, setIndex] = useState(-1)
-  const ref = useRef<T>(null)
+  const descendants = useDescendantsContext();
+  const [index, setIndex] = useState(-1);
+  const ref = useRef<T>(null);
 
   useSafeLayoutEffect(() => {
     return () => {
-      if (!ref.current) return
-      descendants.unregister(ref.current)
-    }
-  }, [])
+      if (!ref.current) return;
+      descendants.unregister(ref.current);
+    };
+  }, []);
 
   useSafeLayoutEffect(() => {
-    if (!ref.current) return
-    const dataIndex = Number(ref.current.dataset["index"])
+    if (!ref.current) return;
+    const dataIndex = Number(ref.current.dataset["index"]);
     if (index != dataIndex && !Number.isNaN(dataIndex)) {
-      setIndex(dataIndex)
+      setIndex(dataIndex);
     }
-  })
+  });
 
   const refCallback = options
     ? cast<React.RefCallback<T>>(descendants.register(options))
-    : cast<React.RefCallback<T>>(descendants.register)
+    : cast<React.RefCallback<T>>(descendants.register);
 
   return {
     descendants,
     index,
     enabledIndex: descendants.enabledIndexOf(ref.current),
     register: mergeRefs(refCallback, ref),
-  }
+  };
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -86,18 +86,18 @@ function useDescendant<
 
 export function createDescendantContext<
   T extends HTMLElement = HTMLElement,
-  K extends Record<string, any> = {},
+  K extends Record<string, any> = {}
 >() {
-  type ContextProviderType = React.Provider<DescendantsManager<T, K>>
-  const ContextProvider = cast<ContextProviderType>(DescendantsContextProvider)
+  type ContextProviderType = React.Provider<DescendantsManager<T, K>>;
+  const ContextProvider = cast<ContextProviderType>(DescendantsContextProvider);
 
   const _useDescendantsContext = () =>
-    cast<DescendantsManager<T, K>>(useDescendantsContext())
+    cast<DescendantsManager<T, K>>(useDescendantsContext());
 
   const _useDescendant = (options?: DescendantOptions<K>) =>
-    useDescendant<T, K>(options)
+    useDescendant<T, K>(options);
 
-  const _useDescendants = () => useDescendants<T, K>()
+  const _useDescendants = () => useDescendants<T, K>();
 
   return [
     // context provider
@@ -108,5 +108,5 @@ export function createDescendantContext<
     _useDescendants,
     // descendant index information
     _useDescendant,
-  ] as const
+  ] as const;
 }

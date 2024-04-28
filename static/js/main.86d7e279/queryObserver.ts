@@ -5,13 +5,13 @@ import {
   replaceData,
   shallowEqualObjects,
   timeUntilStale,
-} from './utils'
-import { notifyManager } from './notifyManager'
-import { focusManager } from './focusManager'
-import { Subscribable } from './subscribable'
-import { fetchState } from './query'
-import type { FetchOptions, Query, QueryState } from './query'
-import type { QueryClient } from './queryClient'
+} from "./utils";
+import { notifyManager } from "./notifyManager";
+import { focusManager } from "./focusManager";
+import { Subscribable } from "./subscribable";
+import { fetchState } from "./query";
+import type { FetchOptions, Query, QueryState } from "./query";
+import type { QueryClient } from "./queryClient";
 import type {
   DefaultError,
   DefaultedQueryObserverOptions,
@@ -22,18 +22,18 @@ import type {
   QueryObserverResult,
   QueryOptions,
   RefetchOptions,
-} from './types'
+} from "./types";
 
 type QueryObserverListener<TData, TError> = (
-  result: QueryObserverResult<TData, TError>,
-) => void
+  result: QueryObserverResult<TData, TError>
+) => void;
 
 export interface NotifyOptions {
-  listeners?: boolean
+  listeners?: boolean;
 }
 
 export interface ObserverFetchOptions extends FetchOptions {
-  throwOnError?: boolean
+  throwOnError?: boolean;
 }
 
 export class QueryObserver<
@@ -41,30 +41,36 @@ export class QueryObserver<
   TError = DefaultError,
   TData = TQueryFnData,
   TQueryData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey,
+  TQueryKey extends QueryKey = QueryKey
 > extends Subscribable<QueryObserverListener<TData, TError>> {
-  #client: QueryClient
-  #currentQuery: Query<TQueryFnData, TError, TQueryData, TQueryKey> = undefined!
-  #currentQueryInitialState: QueryState<TQueryData, TError> = undefined!
-  #currentResult: QueryObserverResult<TData, TError> = undefined!
-  #currentResultState?: QueryState<TQueryData, TError>
+  #client: QueryClient;
+  #currentQuery: Query<TQueryFnData, TError, TQueryData, TQueryKey> =
+    undefined!;
+  #currentQueryInitialState: QueryState<TQueryData, TError> = undefined!;
+  #currentResult: QueryObserverResult<TData, TError> = undefined!;
+  #currentResultState?: QueryState<TQueryData, TError>;
   #currentResultOptions?: QueryObserverOptions<
     TQueryFnData,
     TError,
     TData,
     TQueryData,
     TQueryKey
-  >
-  #selectError: TError | null
-  #selectFn?: (data: TQueryData) => TData
-  #selectResult?: TData
+  >;
+  #selectError: TError | null;
+  #selectFn?: (data: TQueryData) => TData;
+  #selectResult?: TData;
   // This property keeps track of the last query with defined data.
   // It will be used to pass the previous data and query to the placeholder function between renders.
-  #lastQueryWithDefinedData?: Query<TQueryFnData, TError, TQueryData, TQueryKey>
-  #staleTimeoutId?: ReturnType<typeof setTimeout>
-  #refetchIntervalId?: ReturnType<typeof setInterval>
-  #currentRefetchInterval?: number | false
-  #trackedProps = new Set<keyof QueryObserverResult>()
+  #lastQueryWithDefinedData?: Query<
+    TQueryFnData,
+    TError,
+    TQueryData,
+    TQueryKey
+  >;
+  #staleTimeoutId?: ReturnType<typeof setTimeout>;
+  #refetchIntervalId?: ReturnType<typeof setInterval>;
+  #currentRefetchInterval?: number | false;
+  #trackedProps = new Set<keyof QueryObserverResult>();
 
   constructor(
     client: QueryClient,
@@ -74,37 +80,37 @@ export class QueryObserver<
       TData,
       TQueryData,
       TQueryKey
-    >,
+    >
   ) {
-    super()
+    super();
 
-    this.#client = client
-    this.#selectError = null
-    this.bindMethods()
-    this.setOptions(options)
+    this.#client = client;
+    this.#selectError = null;
+    this.bindMethods();
+    this.setOptions(options);
   }
 
   protected bindMethods(): void {
-    this.refetch = this.refetch.bind(this)
+    this.refetch = this.refetch.bind(this);
   }
 
   protected onSubscribe(): void {
     if (this.listeners.size === 1) {
-      this.#currentQuery.addObserver(this)
+      this.#currentQuery.addObserver(this);
 
       if (shouldFetchOnMount(this.#currentQuery, this.options)) {
-        this.#executeFetch()
+        this.#executeFetch();
       } else {
-        this.updateResult()
+        this.updateResult();
       }
 
-      this.#updateTimers()
+      this.#updateTimers();
     }
   }
 
   protected onUnsubscribe(): void {
     if (!this.hasListeners()) {
-      this.destroy()
+      this.destroy();
     }
   }
 
@@ -112,23 +118,23 @@ export class QueryObserver<
     return shouldFetchOn(
       this.#currentQuery,
       this.options,
-      this.options.refetchOnReconnect,
-    )
+      this.options.refetchOnReconnect
+    );
   }
 
   shouldFetchOnWindowFocus(): boolean {
     return shouldFetchOn(
       this.#currentQuery,
       this.options,
-      this.options.refetchOnWindowFocus,
-    )
+      this.options.refetchOnWindowFocus
+    );
   }
 
   destroy(): void {
-    this.listeners = new Set()
-    this.#clearStaleTimeout()
-    this.#clearRefetchInterval()
-    this.#currentQuery.removeObserver(this)
+    this.listeners = new Set();
+    this.#clearStaleTimeout();
+    this.#clearRefetchInterval();
+    this.#currentQuery.removeObserver(this);
   }
 
   setOptions(
@@ -139,35 +145,35 @@ export class QueryObserver<
       TQueryData,
       TQueryKey
     >,
-    notifyOptions?: NotifyOptions,
+    notifyOptions?: NotifyOptions
   ): void {
-    const prevOptions = this.options
-    const prevQuery = this.#currentQuery
+    const prevOptions = this.options;
+    const prevQuery = this.#currentQuery;
 
-    this.options = this.#client.defaultQueryOptions(options)
+    this.options = this.#client.defaultQueryOptions(options);
 
     if (
       this.options.enabled !== undefined &&
-      typeof this.options.enabled !== 'boolean'
+      typeof this.options.enabled !== "boolean"
     ) {
-      throw new Error('Expected enabled to be a boolean')
+      throw new Error("Expected enabled to be a boolean");
     }
 
-    this.#updateQuery()
-    this.#currentQuery.setOptions(this.options)
+    this.#updateQuery();
+    this.#currentQuery.setOptions(this.options);
 
     if (
       prevOptions._defaulted &&
       !shallowEqualObjects(this.options, prevOptions)
     ) {
       this.#client.getQueryCache().notify({
-        type: 'observerOptionsUpdated',
+        type: "observerOptionsUpdated",
         query: this.#currentQuery,
         observer: this,
-      })
+      });
     }
 
-    const mounted = this.hasListeners()
+    const mounted = this.hasListeners();
 
     // Fetch if there are subscribers
     if (
@@ -176,14 +182,14 @@ export class QueryObserver<
         this.#currentQuery,
         prevQuery,
         this.options,
-        prevOptions,
+        prevOptions
       )
     ) {
-      this.#executeFetch()
+      this.#executeFetch();
     }
 
     // Update result
-    this.updateResult(notifyOptions)
+    this.updateResult(notifyOptions);
 
     // Update stale interval if needed
     if (
@@ -192,10 +198,10 @@ export class QueryObserver<
         this.options.enabled !== prevOptions.enabled ||
         this.options.staleTime !== prevOptions.staleTime)
     ) {
-      this.#updateStaleTimeout()
+      this.#updateStaleTimeout();
     }
 
-    const nextRefetchInterval = this.#computeRefetchInterval()
+    const nextRefetchInterval = this.#computeRefetchInterval();
 
     // Update refetch interval if needed
     if (
@@ -204,7 +210,7 @@ export class QueryObserver<
         this.options.enabled !== prevOptions.enabled ||
         nextRefetchInterval !== this.#currentRefetchInterval)
     ) {
-      this.#updateRefetchInterval(nextRefetchInterval)
+      this.#updateRefetchInterval(nextRefetchInterval);
     }
   }
 
@@ -215,11 +221,11 @@ export class QueryObserver<
       TData,
       TQueryData,
       TQueryKey
-    >,
+    >
   ): QueryObserverResult<TData, TError> {
-    const query = this.#client.getQueryCache().build(this.#client, options)
+    const query = this.#client.getQueryCache().build(this.#client, options);
 
-    const result = this.createResult(query, options)
+    const result = this.createResult(query, options);
 
     if (shouldAssignObserverCurrentProperties(this, result)) {
       // this assigns the optimistic result to the current Observer
@@ -238,44 +244,44 @@ export class QueryObserver<
 
       // When keeping the previous data, the result doesn't change until new
       // data arrives.
-      this.#currentResult = result
-      this.#currentResultOptions = this.options
-      this.#currentResultState = this.#currentQuery.state
+      this.#currentResult = result;
+      this.#currentResultOptions = this.options;
+      this.#currentResultState = this.#currentQuery.state;
     }
-    return result
+    return result;
   }
 
   getCurrentResult(): QueryObserverResult<TData, TError> {
-    return this.#currentResult
+    return this.#currentResult;
   }
 
   trackResult(
     result: QueryObserverResult<TData, TError>,
-    onPropTracked?: (key: keyof QueryObserverResult) => void,
+    onPropTracked?: (key: keyof QueryObserverResult) => void
   ): QueryObserverResult<TData, TError> {
-    const trackedResult = {} as QueryObserverResult<TData, TError>
+    const trackedResult = {} as QueryObserverResult<TData, TError>;
 
     Object.keys(result).forEach((key) => {
       Object.defineProperty(trackedResult, key, {
         configurable: false,
         enumerable: true,
         get: () => {
-          this.trackProp(key as keyof QueryObserverResult)
-          onPropTracked?.(key as keyof QueryObserverResult)
-          return result[key as keyof QueryObserverResult]
+          this.trackProp(key as keyof QueryObserverResult);
+          onPropTracked?.(key as keyof QueryObserverResult);
+          return result[key as keyof QueryObserverResult];
         },
-      })
-    })
+      });
+    });
 
-    return trackedResult
+    return trackedResult;
   }
 
   trackProp(key: keyof QueryObserverResult) {
-    this.#trackedProps.add(key)
+    this.#trackedProps.add(key);
   }
 
   getCurrentQuery(): Query<TQueryFnData, TError, TQueryData, TQueryKey> {
-    return this.#currentQuery
+    return this.#currentQuery;
   }
 
   refetch({ ...options }: RefetchOptions = {}): Promise<
@@ -283,7 +289,7 @@ export class QueryObserver<
   > {
     return this.fetch({
       ...options,
-    })
+    });
   }
 
   fetchOptimistic(
@@ -293,88 +299,88 @@ export class QueryObserver<
       TData,
       TQueryData,
       TQueryKey
-    >,
+    >
   ): Promise<QueryObserverResult<TData, TError>> {
-    const defaultedOptions = this.#client.defaultQueryOptions(options)
+    const defaultedOptions = this.#client.defaultQueryOptions(options);
 
     const query = this.#client
       .getQueryCache()
-      .build(this.#client, defaultedOptions)
-    query.isFetchingOptimistic = true
+      .build(this.#client, defaultedOptions);
+    query.isFetchingOptimistic = true;
 
-    return query.fetch().then(() => this.createResult(query, defaultedOptions))
+    return query.fetch().then(() => this.createResult(query, defaultedOptions));
   }
 
   protected fetch(
-    fetchOptions: ObserverFetchOptions,
+    fetchOptions: ObserverFetchOptions
   ): Promise<QueryObserverResult<TData, TError>> {
     return this.#executeFetch({
       ...fetchOptions,
       cancelRefetch: fetchOptions.cancelRefetch ?? true,
     }).then(() => {
-      this.updateResult()
-      return this.#currentResult
-    })
+      this.updateResult();
+      return this.#currentResult;
+    });
   }
 
   #executeFetch(
-    fetchOptions?: ObserverFetchOptions,
+    fetchOptions?: ObserverFetchOptions
   ): Promise<TQueryData | undefined> {
     // Make sure we reference the latest query as the current one might have been removed
-    this.#updateQuery()
+    this.#updateQuery();
 
     // Fetch
     let promise: Promise<TQueryData | undefined> = this.#currentQuery.fetch(
       this.options as QueryOptions<TQueryFnData, TError, TQueryData, TQueryKey>,
-      fetchOptions,
-    )
+      fetchOptions
+    );
 
     if (!fetchOptions?.throwOnError) {
-      promise = promise.catch(noop)
+      promise = promise.catch(noop);
     }
 
-    return promise
+    return promise;
   }
 
   #updateStaleTimeout(): void {
-    this.#clearStaleTimeout()
+    this.#clearStaleTimeout();
 
     if (
       isServer ||
       this.#currentResult.isStale ||
       !isValidTimeout(this.options.staleTime)
     ) {
-      return
+      return;
     }
 
     const time = timeUntilStale(
       this.#currentResult.dataUpdatedAt,
-      this.options.staleTime,
-    )
+      this.options.staleTime
+    );
 
     // The timeout is sometimes triggered 1 ms before the stale time expiration.
     // To mitigate this issue we always add 1 ms to the timeout.
-    const timeout = time + 1
+    const timeout = time + 1;
 
     this.#staleTimeoutId = setTimeout(() => {
       if (!this.#currentResult.isStale) {
-        this.updateResult()
+        this.updateResult();
       }
-    }, timeout)
+    }, timeout);
   }
 
   #computeRefetchInterval() {
     return (
-      (typeof this.options.refetchInterval === 'function'
+      (typeof this.options.refetchInterval === "function"
         ? this.options.refetchInterval(this.#currentQuery)
         : this.options.refetchInterval) ?? false
-    )
+    );
   }
 
   #updateRefetchInterval(nextInterval: number | false): void {
-    this.#clearRefetchInterval()
+    this.#clearRefetchInterval();
 
-    this.#currentRefetchInterval = nextInterval
+    this.#currentRefetchInterval = nextInterval;
 
     if (
       isServer ||
@@ -382,7 +388,7 @@ export class QueryObserver<
       !isValidTimeout(this.#currentRefetchInterval) ||
       this.#currentRefetchInterval === 0
     ) {
-      return
+      return;
     }
 
     this.#refetchIntervalId = setInterval(() => {
@@ -390,27 +396,27 @@ export class QueryObserver<
         this.options.refetchIntervalInBackground ||
         focusManager.isFocused()
       ) {
-        this.#executeFetch()
+        this.#executeFetch();
       }
-    }, this.#currentRefetchInterval)
+    }, this.#currentRefetchInterval);
   }
 
   #updateTimers(): void {
-    this.#updateStaleTimeout()
-    this.#updateRefetchInterval(this.#computeRefetchInterval())
+    this.#updateStaleTimeout();
+    this.#updateRefetchInterval(this.#computeRefetchInterval());
   }
 
   #clearStaleTimeout(): void {
     if (this.#staleTimeoutId) {
-      clearTimeout(this.#staleTimeoutId)
-      this.#staleTimeoutId = undefined
+      clearTimeout(this.#staleTimeoutId);
+      this.#staleTimeoutId = undefined;
     }
   }
 
   #clearRefetchInterval(): void {
     if (this.#refetchIntervalId) {
-      clearInterval(this.#refetchIntervalId)
-      this.#refetchIntervalId = undefined
+      clearInterval(this.#refetchIntervalId);
+      this.#refetchIntervalId = undefined;
     }
   }
 
@@ -422,46 +428,47 @@ export class QueryObserver<
       TData,
       TQueryData,
       TQueryKey
-    >,
+    >
   ): QueryObserverResult<TData, TError> {
-    const prevQuery = this.#currentQuery
-    const prevOptions = this.options
+    const prevQuery = this.#currentQuery;
+    const prevOptions = this.options;
     const prevResult = this.#currentResult as
       | QueryObserverResult<TData, TError>
-      | undefined
-    const prevResultState = this.#currentResultState
-    const prevResultOptions = this.#currentResultOptions
-    const queryChange = query !== prevQuery
+      | undefined;
+    const prevResultState = this.#currentResultState;
+    const prevResultOptions = this.#currentResultOptions;
+    const queryChange = query !== prevQuery;
     const queryInitialState = queryChange
       ? query.state
-      : this.#currentQueryInitialState
+      : this.#currentQueryInitialState;
 
-    const { state } = query
-    let newState = { ...state }
-    let isPlaceholderData = false
-    let data: TData | undefined
+    const { state } = query;
+    let newState = { ...state };
+    let isPlaceholderData = false;
+    let data: TData | undefined;
 
     // Optimistically set result in fetching state if needed
     if (options._optimisticResults) {
-      const mounted = this.hasListeners()
+      const mounted = this.hasListeners();
 
-      const fetchOnMount = !mounted && shouldFetchOnMount(query, options)
+      const fetchOnMount = !mounted && shouldFetchOnMount(query, options);
 
       const fetchOptionally =
-        mounted && shouldFetchOptionally(query, prevQuery, options, prevOptions)
+        mounted &&
+        shouldFetchOptionally(query, prevQuery, options, prevOptions);
 
       if (fetchOnMount || fetchOptionally) {
         newState = {
           ...newState,
           ...fetchState(state.data, query.options),
-        }
+        };
       }
-      if (options._optimisticResults === 'isRestoring') {
-        newState.fetchStatus = 'idle'
+      if (options._optimisticResults === "isRestoring") {
+        newState.fetchStatus = "idle";
       }
     }
 
-    let { error, errorUpdatedAt, status } = newState
+    let { error, errorUpdatedAt, status } = newState;
 
     // Select data if needed
     if (options.select && newState.data !== undefined) {
@@ -471,88 +478,88 @@ export class QueryObserver<
         newState.data === prevResultState?.data &&
         options.select === this.#selectFn
       ) {
-        data = this.#selectResult
+        data = this.#selectResult;
       } else {
         try {
-          this.#selectFn = options.select
-          data = options.select(newState.data)
-          data = replaceData(prevResult?.data, data, options)
-          this.#selectResult = data
-          this.#selectError = null
+          this.#selectFn = options.select;
+          data = options.select(newState.data);
+          data = replaceData(prevResult?.data, data, options);
+          this.#selectResult = data;
+          this.#selectError = null;
         } catch (selectError) {
-          this.#selectError = selectError as TError
+          this.#selectError = selectError as TError;
         }
       }
     }
     // Use query data
     else {
-      data = newState.data as unknown as TData
+      data = newState.data as unknown as TData;
     }
 
     // Show placeholder data if needed
     if (
       options.placeholderData !== undefined &&
       data === undefined &&
-      status === 'pending'
+      status === "pending"
     ) {
-      let placeholderData
+      let placeholderData;
 
       // Memoize placeholder data
       if (
         prevResult?.isPlaceholderData &&
         options.placeholderData === prevResultOptions?.placeholderData
       ) {
-        placeholderData = prevResult.data
+        placeholderData = prevResult.data;
       } else {
         placeholderData =
-          typeof options.placeholderData === 'function'
+          typeof options.placeholderData === "function"
             ? (
                 options.placeholderData as unknown as PlaceholderDataFunction<TQueryData>
               )(
                 this.#lastQueryWithDefinedData?.state.data,
-                this.#lastQueryWithDefinedData as any,
+                this.#lastQueryWithDefinedData as any
               )
-            : options.placeholderData
+            : options.placeholderData;
         if (options.select && placeholderData !== undefined) {
           try {
-            placeholderData = options.select(placeholderData)
-            this.#selectError = null
+            placeholderData = options.select(placeholderData);
+            this.#selectError = null;
           } catch (selectError) {
-            this.#selectError = selectError as TError
+            this.#selectError = selectError as TError;
           }
         }
       }
 
       if (placeholderData !== undefined) {
-        status = 'success'
+        status = "success";
         data = replaceData(
           prevResult?.data,
           placeholderData as unknown,
-          options,
-        ) as TData
-        isPlaceholderData = true
+          options
+        ) as TData;
+        isPlaceholderData = true;
       }
     }
 
     if (this.#selectError) {
-      error = this.#selectError as any
-      data = this.#selectResult
-      errorUpdatedAt = Date.now()
-      status = 'error'
+      error = this.#selectError as any;
+      data = this.#selectResult;
+      errorUpdatedAt = Date.now();
+      status = "error";
     }
 
-    const isFetching = newState.fetchStatus === 'fetching'
-    const isPending = status === 'pending'
-    const isError = status === 'error'
+    const isFetching = newState.fetchStatus === "fetching";
+    const isPending = status === "pending";
+    const isError = status === "error";
 
-    const isLoading = isPending && isFetching
-    const hasData = data !== undefined
+    const isLoading = isPending && isFetching;
+    const hasData = data !== undefined;
 
     const result: QueryObserverBaseResult<TData, TError> = {
       status,
       fetchStatus: newState.fetchStatus,
       isPending,
-      isSuccess: status === 'success',
+      isSuccess: status === "success",
       isError,
       isInitialLoading: isLoading,
       isLoading,
@@ -570,103 +577,105 @@ export class QueryObserver<
       isFetching,
       isRefetching: isFetching && !isPending,
       isLoadingError: isError && !hasData,
-      isPaused: newState.fetchStatus === 'paused',
+      isPaused: newState.fetchStatus === "paused",
       isPlaceholderData,
       isRefetchError: isError && hasData,
       isStale: isStale(query, options),
       refetch: this.refetch,
-    }
+    };
 
-    return result as QueryObserverResult<TData, TError>
+    return result as QueryObserverResult<TData, TError>;
   }
 
   updateResult(notifyOptions?: NotifyOptions): void {
     const prevResult = this.#currentResult as
       | QueryObserverResult<TData, TError>
-      | undefined
+      | undefined;
 
-    const nextResult = this.createResult(this.#currentQuery, this.options)
-    this.#currentResultState = this.#currentQuery.state
-    this.#currentResultOptions = this.options
+    const nextResult = this.createResult(this.#currentQuery, this.options);
+    this.#currentResultState = this.#currentQuery.state;
+    this.#currentResultOptions = this.options;
 
     if (this.#currentResultState.data !== undefined) {
-      this.#lastQueryWithDefinedData = this.#currentQuery
+      this.#lastQueryWithDefinedData = this.#currentQuery;
     }
 
     // Only notify and update result if something has changed
     if (shallowEqualObjects(nextResult, prevResult)) {
-      return
+      return;
     }
 
-    this.#currentResult = nextResult
+    this.#currentResult = nextResult;
 
     // Determine which callbacks to trigger
-    const defaultNotifyOptions: NotifyOptions = {}
+    const defaultNotifyOptions: NotifyOptions = {};
 
     const shouldNotifyListeners = (): boolean => {
       if (!prevResult) {
-        return true
+        return true;
       }
 
-      const { notifyOnChangeProps } = this.options
+      const { notifyOnChangeProps } = this.options;
       const notifyOnChangePropsValue =
-        typeof notifyOnChangeProps === 'function'
+        typeof notifyOnChangeProps === "function"
           ? notifyOnChangeProps()
-          : notifyOnChangeProps
+          : notifyOnChangeProps;
 
       if (
-        notifyOnChangePropsValue === 'all' ||
+        notifyOnChangePropsValue === "all" ||
         (!notifyOnChangePropsValue && !this.#trackedProps.size)
       ) {
-        return true
+        return true;
       }
 
       const includedProps = new Set(
-        notifyOnChangePropsValue ?? this.#trackedProps,
-      )
+        notifyOnChangePropsValue ?? this.#trackedProps
+      );
 
       if (this.options.throwOnError) {
-        includedProps.add('error')
+        includedProps.add("error");
       }
 
       return Object.keys(this.#currentResult).some((key) => {
-        const typedKey = key as keyof QueryObserverResult
-        const changed = this.#currentResult[typedKey] !== prevResult[typedKey]
-        return changed && includedProps.has(typedKey)
-      })
-    }
+        const typedKey = key as keyof QueryObserverResult;
+        const changed = this.#currentResult[typedKey] !== prevResult[typedKey];
+        return changed && includedProps.has(typedKey);
+      });
+    };
 
     if (notifyOptions?.listeners !== false && shouldNotifyListeners()) {
-      defaultNotifyOptions.listeners = true
+      defaultNotifyOptions.listeners = true;
     }
 
-    this.#notify({ ...defaultNotifyOptions, ...notifyOptions })
+    this.#notify({ ...defaultNotifyOptions, ...notifyOptions });
   }
 
   #updateQuery(): void {
-    const query = this.#client.getQueryCache().build(this.#client, this.options)
+    const query = this.#client
+      .getQueryCache()
+      .build(this.#client, this.options);
 
     if (query === this.#currentQuery) {
-      return
+      return;
     }
 
     const prevQuery = this.#currentQuery as
       | Query<TQueryFnData, TError, TQueryData, TQueryKey>
-      | undefined
-    this.#currentQuery = query
-    this.#currentQueryInitialState = query.state
+      | undefined;
+    this.#currentQuery = query;
+    this.#currentQueryInitialState = query.state;
 
     if (this.hasListeners()) {
-      prevQuery?.removeObserver(this)
-      query.addObserver(this)
+      prevQuery?.removeObserver(this);
+      query.addObserver(this);
     }
   }
 
   onQueryUpdate(): void {
-    this.updateResult()
+    this.updateResult();
 
     if (this.hasListeners()) {
-      this.#updateTimers()
+      this.#updateTimers();
     }
   }
 
@@ -675,74 +684,74 @@ export class QueryObserver<
       // First, trigger the listeners
       if (notifyOptions.listeners) {
         this.listeners.forEach((listener) => {
-          listener(this.#currentResult)
-        })
+          listener(this.#currentResult);
+        });
       }
 
       // Then the cache listeners
       this.#client.getQueryCache().notify({
         query: this.#currentQuery,
-        type: 'observerResultsUpdated',
-      })
-    })
+        type: "observerResultsUpdated",
+      });
+    });
   }
 }
 
 function shouldLoadOnMount(
   query: Query<any, any, any, any>,
-  options: QueryObserverOptions<any, any, any, any>,
+  options: QueryObserverOptions<any, any, any, any>
 ): boolean {
   return (
     options.enabled !== false &&
     query.state.data === undefined &&
-    !(query.state.status === 'error' && options.retryOnMount === false)
-  )
+    !(query.state.status === "error" && options.retryOnMount === false)
+  );
 }
 
 function shouldFetchOnMount(
   query: Query<any, any, any, any>,
-  options: QueryObserverOptions<any, any, any, any, any>,
+  options: QueryObserverOptions<any, any, any, any, any>
 ): boolean {
   return (
     shouldLoadOnMount(query, options) ||
     (query.state.data !== undefined &&
       shouldFetchOn(query, options, options.refetchOnMount))
-  )
+  );
 }
 
 function shouldFetchOn(
   query: Query<any, any, any, any>,
   options: QueryObserverOptions<any, any, any, any, any>,
-  field: (typeof options)['refetchOnMount'] &
-    (typeof options)['refetchOnWindowFocus'] &
-    (typeof options)['refetchOnReconnect'],
+  field: (typeof options)["refetchOnMount"] &
+    (typeof options)["refetchOnWindowFocus"] &
+    (typeof options)["refetchOnReconnect"]
 ) {
   if (options.enabled !== false) {
-    const value = typeof field === 'function' ? field(query) : field
+    const value = typeof field === "function" ? field(query) : field;
 
-    return value === 'always' || (value !== false && isStale(query, options))
+    return value === "always" || (value !== false && isStale(query, options));
   }
-  return false
+  return false;
 }
 
 function shouldFetchOptionally(
   query: Query<any, any, any, any>,
   prevQuery: Query<any, any, any, any>,
   options: QueryObserverOptions<any, any, any, any, any>,
-  prevOptions: QueryObserverOptions<any, any, any, any, any>,
+  prevOptions: QueryObserverOptions<any, any, any, any, any>
 ): boolean {
   return (
     (query !== prevQuery || prevOptions.enabled === false) &&
-    (!options.suspense || query.state.status !== 'error') &&
+    (!options.suspense || query.state.status !== "error") &&
     isStale(query, options)
-  )
+  );
 }
 
 function isStale(
   query: Query<any, any, any, any>,
-  options: QueryObserverOptions<any, any, any, any, any>,
+  options: QueryObserverOptions<any, any, any, any, any>
 ): boolean {
-  return options.enabled !== false && query.isStaleByTime(options.staleTime)
+  return options.enabled !== false && query.isStaleByTime(options.staleTime);
 }
 
 // this function would decide if we will update the observer's 'current'
@@ -752,17 +761,17 @@ function shouldAssignObserverCurrentProperties<
   TError = unknown,
   TData = TQueryFnData,
   TQueryData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey,
+  TQueryKey extends QueryKey = QueryKey
 >(
   observer: QueryObserver<TQueryFnData, TError, TData, TQueryData, TQueryKey>,
-  optimisticResult: QueryObserverResult<TData, TError>,
+  optimisticResult: QueryObserverResult<TData, TError>
 ) {
   // if the newly created result isn't what the observer is holding as current,
   // then we'll need to update the properties as well
   if (!shallowEqualObjects(observer.getCurrentResult(), optimisticResult)) {
-    return true
+    return true;
   }
 
   // basically, just keep previous properties if nothing changed
-  return false
+  return false;
 }

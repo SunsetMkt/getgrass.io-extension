@@ -4,9 +4,9 @@
  */
 export function anatomy<T extends string = string>(
   name: string,
-  map = {} as Record<T, Part>,
+  map = {} as Record<T, Part>
 ): Anatomy<T> {
-  let called = false
+  let called = false;
 
   /**
    * Prevents user from calling `.parts` multiple times.
@@ -14,24 +14,24 @@ export function anatomy<T extends string = string>(
    */
   function assert() {
     if (!called) {
-      called = true
-      return
+      called = true;
+      return;
     }
 
     throw new Error(
-      "[anatomy] .part(...) should only be called once. Did you mean to use .extend(...) ?",
-    )
+      "[anatomy] .part(...) should only be called once. Did you mean to use .extend(...) ?"
+    );
   }
 
   /**
    * Add the core parts of the components
    */
   function parts<V extends string>(...values: V[]) {
-    assert()
+    assert();
     for (const part of values) {
-      ;(map as any)[part] = toPart(part)
+      (map as any)[part] = toPart(part);
     }
-    return anatomy(name, map) as unknown as Omit<Anatomy<V>, "parts">
+    return anatomy(name, map) as unknown as Omit<Anatomy<V>, "parts">;
   }
 
   /**
@@ -39,10 +39,10 @@ export function anatomy<T extends string = string>(
    */
   function extend<U extends string>(...parts: U[]) {
     for (const part of parts) {
-      if (part in map) continue
-      ;(map as any)[part] = toPart(part)
+      if (part in map) continue;
+      (map as any)[part] = toPart(part);
     }
-    return anatomy(name, map) as unknown as Omit<Anatomy<T | U>, "parts">
+    return anatomy(name, map) as unknown as Omit<Anatomy<T | U>, "parts">;
   }
 
   /**
@@ -50,9 +50,9 @@ export function anatomy<T extends string = string>(
    */
   function selectors() {
     const value = Object.fromEntries(
-      Object.entries(map).map(([key, part]) => [key, (part as any).selector]),
-    )
-    return value as Record<T, string>
+      Object.entries(map).map(([key, part]) => [key, (part as any).selector])
+    );
+    return value as Record<T, string>;
   }
 
   /**
@@ -60,9 +60,9 @@ export function anatomy<T extends string = string>(
    */
   function classnames() {
     const value = Object.fromEntries(
-      Object.entries(map).map(([key, part]) => [key, (part as any).className]),
-    )
-    return value as Record<T, string>
+      Object.entries(map).map(([key, part]) => [key, (part as any).className])
+    );
+    return value as Record<T, string>;
   }
 
   /**
@@ -71,23 +71,23 @@ export function anatomy<T extends string = string>(
   function toPart(part: string) {
     const el = ["container", "root"].includes(part ?? "")
       ? [name]
-      : [name, part]
-    const attr = el.filter(Boolean).join("__")
-    const className = `chakra-${attr}`
+      : [name, part];
+    const attr = el.filter(Boolean).join("__");
+    const className = `chakra-${attr}`;
 
     const partObj = {
       className,
       selector: `.${className}`,
       toString: () => part,
-    }
+    };
 
-    return partObj as typeof partObj & string
+    return partObj as typeof partObj & string;
   }
 
   /**
    * Used to get the derived type of the anatomy
    */
-  const __type = {} as T
+  const __type = {} as T;
 
   return {
     parts,
@@ -96,24 +96,24 @@ export function anatomy<T extends string = string>(
     selectors,
     classnames,
     get keys(): T[] {
-      return Object.keys(map) as T[]
+      return Object.keys(map) as T[];
     },
     __type,
-  }
+  };
 }
 
 type Part = {
-  className: string
-  selector: string
-  toString: () => string
-}
+  className: string;
+  selector: string;
+  toString: () => string;
+};
 
 type Anatomy<T extends string> = {
-  parts: <V extends string>(...values: V[]) => Omit<Anatomy<V>, "parts">
-  toPart: (part: string) => Part
-  extend: <U extends string>(...parts: U[]) => Omit<Anatomy<T | U>, "parts">
-  selectors: () => Record<T, string>
-  classnames: () => Record<T, string>
-  keys: T[]
-  __type: T
-}
+  parts: <V extends string>(...values: V[]) => Omit<Anatomy<V>, "parts">;
+  toPart: (part: string) => Part;
+  extend: <U extends string>(...parts: U[]) => Omit<Anatomy<T | U>, "parts">;
+  selectors: () => Record<T, string>;
+  classnames: () => Record<T, string>;
+  keys: T[];
+  __type: T;
+};

@@ -16,7 +16,7 @@ export default function getViewportRect(element, strategy) {
     height = visualViewport.height;
     var layoutViewport = isLayoutViewport();
 
-    if (layoutViewport || !layoutViewport && strategy === 'fixed') {
+    if (layoutViewport || (!layoutViewport && strategy === "fixed")) {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
     }
@@ -26,6 +26,6 @@ export default function getViewportRect(element, strategy) {
     width: width,
     height: height,
     x: x + getWindowScrollBarX(element),
-    y: y
+    y: y,
   };
 }

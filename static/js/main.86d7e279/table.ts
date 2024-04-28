@@ -1,12 +1,12 @@
-import { tableAnatomy as parts } from "@chakra-ui/anatomy"
+import { tableAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { mode } from "@chakra-ui/theme-tools"
+} from "@chakra-ui/styled-system";
+import { mode } from "@chakra-ui/theme-tools";
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
 const baseStyle = definePartsStyle({
   table: {
@@ -30,16 +30,16 @@ const baseStyle = definePartsStyle({
     textAlign: "center",
     fontWeight: "medium",
   },
-})
+});
 
 const numericStyles = defineStyle({
   "&[data-is-numeric=true]": {
     textAlign: "end",
   },
-})
+});
 
 const variantSimple = definePartsStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
 
   return {
     th: {
@@ -63,11 +63,11 @@ const variantSimple = definePartsStyle((props) => {
         },
       },
     },
-  }
-})
+  };
+});
 
 const variantStripe = definePartsStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
 
   return {
     th: {
@@ -104,14 +104,14 @@ const variantStripe = definePartsStyle((props) => {
         },
       },
     },
-  }
-})
+  };
+});
 
 const variants = {
   simple: variantSimple,
   striped: variantStripe,
   unstyled: defineStyle({}),
-}
+};
 
 const sizes = {
   sm: definePartsStyle({
@@ -169,7 +169,7 @@ const sizes = {
       fontSize: "md",
     },
   }),
-}
+};
 
 export const tableTheme = defineMultiStyleConfig({
   baseStyle,
@@ -180,4 +180,4 @@ export const tableTheme = defineMultiStyleConfig({
     size: "md",
     colorScheme: "gray",
   },
-})
+});

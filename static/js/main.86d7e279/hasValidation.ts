@@ -1,6 +1,6 @@
-import { Field } from '../types';
+import { Field } from "../types";
 
-export default (options: Field['_f']) =>
+export default (options: Field["_f"]) =>
   options.mount &&
   (options.required ||
     options.min ||

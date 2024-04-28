@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 export default {
   silentJSONParsing: true,
   forcedJSONParsing: true,
-  clarifyTimeoutError: false
+  clarifyTimeoutError: false,
 };

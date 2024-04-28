@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { FieldValues, FormProviderProps, UseFormReturn } from './types';
+import { FieldValues, FormProviderProps, UseFormReturn } from "./types";
 
 const HookFormContext = React.createContext<UseFormReturn | null>(null);
 
@@ -37,7 +37,7 @@ const HookFormContext = React.createContext<UseFormReturn | null>(null);
 export const useFormContext = <
   TFieldValues extends FieldValues,
   TContext = any,
-  TransformedValues extends FieldValues | undefined = undefined,
+  TransformedValues extends FieldValues | undefined = undefined
 >(): UseFormReturn<TFieldValues, TContext, TransformedValues> =>
   React.useContext(HookFormContext) as UseFormReturn<
     TFieldValues,
@@ -78,9 +78,9 @@ export const useFormContext = <
 export const FormProvider = <
   TFieldValues extends FieldValues,
   TContext = any,
-  TTransformedValues extends FieldValues | undefined = undefined,
+  TTransformedValues extends FieldValues | undefined = undefined
 >(
-  props: FormProviderProps<TFieldValues, TContext, TTransformedValues>,
+  props: FormProviderProps<TFieldValues, TContext, TTransformedValues>
 ) => {
   const { children, ...data } = props;
   return (

@@ -3,15 +3,15 @@ import {
   SystemProps,
   forwardRef,
   HTMLChakraProps,
-} from "@chakra-ui/system"
-import { omit } from "@chakra-ui/object-utils"
+} from "@chakra-ui/system";
+import { omit } from "@chakra-ui/object-utils";
 import {
   FallbackStrategy,
   shouldShowFallbackImage,
   useImage,
   UseImageProps,
-} from "./use-image"
-import { NativeImage, NativeImageOptions } from "./native-image"
+} from "./use-image";
+import { NativeImage, NativeImageOptions } from "./native-image";
 
 interface ImageOptions extends NativeImageOptions {
   /**
@@ -19,34 +19,34 @@ interface ImageOptions extends NativeImageOptions {
    *
    * Note 🚨: We recommend you use a local image
    */
-  fallbackSrc?: string
+  fallbackSrc?: string;
   /**
    * Fallback element to show if image is loading or image fails.
    * @type React.ReactElement
    */
-  fallback?: React.ReactElement
+  fallback?: React.ReactElement;
   /**
    * Defines loading strategy
    */
-  loading?: "eager" | "lazy"
+  loading?: "eager" | "lazy";
   /**
    * How the image to fit within its bounds.
    * It maps to css `object-fit` property.
    * @type SystemProps["objectFit"]
    */
-  fit?: SystemProps["objectFit"]
+  fit?: SystemProps["objectFit"];
   /**
    * How to align the image within its bounds.
    * It maps to css `object-position` property.
    * @type SystemProps["objectPosition"]
    */
-  align?: SystemProps["objectPosition"]
+  align?: SystemProps["objectPosition"];
   /**
    * If `true`, opt out of the `fallbackSrc` logic and use as `img`
    *
    * @default false
    */
-  ignoreFallback?: boolean
+  ignoreFallback?: boolean;
 
   /**
    * - beforeLoadOrError(default): loads the fallbackImage while loading the src
@@ -55,12 +55,12 @@ interface ImageOptions extends NativeImageOptions {
    * @default "beforeLoadOrError"
    * @see Issue https://github.com/chakra-ui/chakra-ui/issues/5581
    */
-  fallbackStrategy?: FallbackStrategy
+  fallbackStrategy?: FallbackStrategy;
   /**
    * Defining which referrer is sent when fetching the resource.
    * @type React.HTMLAttributeReferrerPolicy
    */
-  referrerPolicy?: React.HTMLAttributeReferrerPolicy
+  referrerPolicy?: React.HTMLAttributeReferrerPolicy;
 }
 
 export interface ImageProps
@@ -88,9 +88,9 @@ export const Image = forwardRef<ImageProps, "img">(function Image(props, ref) {
     fallbackStrategy = "beforeLoadOrError",
     referrerPolicy,
     ...rest
-  } = props
+  } = props;
 
-  const providedFallback = fallbackSrc !== undefined || fallback !== undefined
+  const providedFallback = fallbackSrc !== undefined || fallback !== undefined;
   /**
    * Defer to native `img` tag if `loading` prop is passed
    * @see https://github.com/chakra-ui/chakra-ui/issues/1027
@@ -102,7 +102,7 @@ export const Image = forwardRef<ImageProps, "img">(function Image(props, ref) {
     // use can opt out of fallback image
     ignoreFallback ||
     // if the user doesn't provide any kind of fallback we should ignore it
-    !providedFallback
+    !providedFallback;
 
   /**
    * returns `loaded` if fallback is ignored
@@ -111,23 +111,23 @@ export const Image = forwardRef<ImageProps, "img">(function Image(props, ref) {
     ...props,
     crossOrigin,
     ignoreFallback: shouldIgnoreFallbackImage,
-  })
+  });
 
-  const showFallbackImage = shouldShowFallbackImage(status, fallbackStrategy)
+  const showFallbackImage = shouldShowFallbackImage(status, fallbackStrategy);
 
   const shared = {
     ref,
     objectFit: fit,
     objectPosition: align,
     ...(shouldIgnoreFallbackImage ? rest : omit(rest, ["onError", "onLoad"])),
-  }
+  };
 
   if (showFallbackImage) {
     /**
      * If user passed a custom fallback component,
      * let's render it here.
      */
-    if (fallback) return fallback
+    if (fallback) return fallback;
 
     return (
       <chakra.img
@@ -136,7 +136,7 @@ export const Image = forwardRef<ImageProps, "img">(function Image(props, ref) {
         src={fallbackSrc}
         {...shared}
       />
-    )
+    );
   }
 
   return (
@@ -150,7 +150,7 @@ export const Image = forwardRef<ImageProps, "img">(function Image(props, ref) {
       className="chakra-image"
       {...shared}
     />
-  )
-})
+  );
+});
 
-Image.displayName = "Image"
+Image.displayName = "Image";

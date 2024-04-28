@@ -1,8 +1,8 @@
-import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system"
-import { cssVar } from "@chakra-ui/theme-tools"
+import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system";
+import { cssVar } from "@chakra-ui/theme-tools";
 
-const $size = cssVar("close-button-size")
-const $bg = cssVar("close-button-bg")
+const $size = cssVar("close-button-size");
+const $bg = cssVar("close-button-bg");
 
 const baseStyle = defineStyle({
   w: [$size.reference],
@@ -31,7 +31,7 @@ const baseStyle = defineStyle({
     boxShadow: "outline",
   },
   bg: $bg.reference,
-})
+});
 
 const sizes = {
   lg: defineStyle({
@@ -46,7 +46,7 @@ const sizes = {
     [$size.variable]: "sizes.6",
     fontSize: "2xs",
   }),
-}
+};
 
 export const closeButtonTheme = defineStyleConfig({
   baseStyle,
@@ -54,4 +54,4 @@ export const closeButtonTheme = defineStyleConfig({
   defaultProps: {
     size: "md",
   },
-})
+});

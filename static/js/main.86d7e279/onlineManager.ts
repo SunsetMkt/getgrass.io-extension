@@ -1,71 +1,71 @@
-import { Subscribable } from './subscribable'
-import { isServer } from './utils'
+import { Subscribable } from "./subscribable";
+import { isServer } from "./utils";
 
-type Listener = (online: boolean) => void
-type SetupFn = (setOnline: Listener) => (() => void) | undefined
+type Listener = (online: boolean) => void;
+type SetupFn = (setOnline: Listener) => (() => void) | undefined;
 
 export class OnlineManager extends Subscribable<Listener> {
-  #online = true
-  #cleanup?: () => void
+  #online = true;
+  #cleanup?: () => void;
 
-  #setup: SetupFn
+  #setup: SetupFn;
 
   constructor() {
-    super()
+    super();
     this.#setup = (onOnline) => {
       // addEventListener does not exist in React Native, but window does
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!isServer && window.addEventListener) {
-        const onlineListener = () => onOnline(true)
-        const offlineListener = () => onOnline(false)
+        const onlineListener = () => onOnline(true);
+        const offlineListener = () => onOnline(false);
         // Listen to online
-        window.addEventListener('online', onlineListener, false)
-        window.addEventListener('offline', offlineListener, false)
+        window.addEventListener("online", onlineListener, false);
+        window.addEventListener("offline", offlineListener, false);
 
         return () => {
           // Be sure to unsubscribe if a new handler is set
-          window.removeEventListener('online', onlineListener)
-          window.removeEventListener('offline', offlineListener)
-        }
+          window.removeEventListener("online", onlineListener);
+          window.removeEventListener("offline", offlineListener);
+        };
       }
 
-      return
-    }
+      return;
+    };
   }
 
   protected onSubscribe(): void {
     if (!this.#cleanup) {
-      this.setEventListener(this.#setup)
+      this.setEventListener(this.#setup);
     }
   }
 
   protected onUnsubscribe() {
     if (!this.hasListeners()) {
-      this.#cleanup?.()
-      this.#cleanup = undefined
+      this.#cleanup?.();
+      this.#cleanup = undefined;
     }
   }
 
   setEventListener(setup: SetupFn): void {
-    this.#setup = setup
-    this.#cleanup?.()
-    this.#cleanup = setup(this.setOnline.bind(this))
+    this.#setup = setup;
+    this.#cleanup?.();
+    this.#cleanup = setup(this.setOnline.bind(this));
   }
 
   setOnline(online: boolean): void {
-    const changed = this.#online !== online
+    const changed = this.#online !== online;
 
     if (changed) {
-      this.#online = online
+      this.#online = online;
       this.listeners.forEach((listener) => {
-        listener(online)
-      })
+        listener(online);
+      });
     }
   }
 
   isOnline(): boolean {
-    return this.#online
+    return this.#online;
   }
 }
 
-export const onlineManager = new OnlineManager()
+export const onlineManager = new OnlineManager();

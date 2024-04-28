@@ -1,28 +1,36 @@
-import * as React from 'react';
-import { useContext, forwardRef } from 'react';
-import createCache from '@emotion/cache';
-import _extends from '@babel/runtime/helpers/esm/extends';
-import weakMemoize from '@emotion/weak-memoize';
-import hoistNonReactStatics from '../_isolated-hnrs/dist/emotion-react-_isolated-hnrs.browser.esm.js';
-import { getRegisteredStyles, registerStyles, insertStyles } from '@emotion/utils';
-import { serializeStyles } from '@emotion/serialize';
-import { useInsertionEffectAlwaysWithSyncFallback } from '@emotion/use-insertion-effect-with-fallbacks';
+import * as React from "react";
+import { useContext, forwardRef } from "react";
+import createCache from "@emotion/cache";
+import _extends from "@babel/runtime/helpers/esm/extends";
+import weakMemoize from "@emotion/weak-memoize";
+import hoistNonReactStatics from "../_isolated-hnrs/dist/emotion-react-_isolated-hnrs.browser.esm.js";
+import {
+  getRegisteredStyles,
+  registerStyles,
+  insertStyles,
+} from "@emotion/utils";
+import { serializeStyles } from "@emotion/serialize";
+import { useInsertionEffectAlwaysWithSyncFallback } from "@emotion/use-insertion-effect-with-fallbacks";
 
-var isBrowser = "object" !== 'undefined';
+var isBrowser = "object" !== "undefined";
 var hasOwn = {}.hasOwnProperty;
 
-var EmotionCacheContext = /* #__PURE__ */React.createContext( // we're doing this to avoid preconstruct's dead code elimination in this one case
-// because this module is primarily intended for the browser and node
-// but it's also required in react native and similar environments sometimes
-// and we could have a special build just for that
-// but this is much easier and the native packages
-// might use a different theme context in the future anyway
-typeof HTMLElement !== 'undefined' ? /* #__PURE__ */createCache({
-  key: 'css'
-}) : null);
+var EmotionCacheContext = /* #__PURE__ */ React.createContext(
+  // we're doing this to avoid preconstruct's dead code elimination in this one case
+  // because this module is primarily intended for the browser and node
+  // but it's also required in react native and similar environments sometimes
+  // and we could have a special build just for that
+  // but this is much easier and the native packages
+  // might use a different theme context in the future anyway
+  typeof HTMLElement !== "undefined"
+    ? /* #__PURE__ */ createCache({
+        key: "css",
+      })
+    : null
+);
 
-if (process.env.NODE_ENV !== 'production') {
-  EmotionCacheContext.displayName = 'EmotionCacheContext';
+if (process.env.NODE_ENV !== "production") {
+  EmotionCacheContext.displayName = "EmotionCacheContext";
 }
 
 var CacheProvider = EmotionCacheContext.Provider;
@@ -32,7 +40,7 @@ var __unsafe_useEmotionCache = function useEmotionCache() {
 
 var withEmotionCache = function withEmotionCache(func) {
   // $FlowFixMe
-  return /*#__PURE__*/forwardRef(function (props, ref) {
+  return /*#__PURE__*/ forwardRef(function (props, ref) {
     // the cache will never be null in the browser
     var cache = useContext(EmotionCacheContext);
     return func(props, cache, ref);
@@ -51,11 +59,15 @@ if (!isBrowser) {
         // that could change in the future because of suspense and etc. but for now,
         // this works and i don't want to optimise for a future thing that we aren't sure about
         cache = createCache({
-          key: 'css'
+          key: "css",
         });
-        return /*#__PURE__*/React.createElement(EmotionCacheContext.Provider, {
-          value: cache
-        }, func(props, cache));
+        return /*#__PURE__*/ React.createElement(
+          EmotionCacheContext.Provider,
+          {
+            value: cache,
+          },
+          func(props, cache)
+        );
       } else {
         return func(props, cache);
       }
@@ -63,10 +75,10 @@ if (!isBrowser) {
   };
 }
 
-var ThemeContext = /* #__PURE__ */React.createContext({});
+var ThemeContext = /* #__PURE__ */ React.createContext({});
 
-if (process.env.NODE_ENV !== 'production') {
-  ThemeContext.displayName = 'EmotionThemeContext';
+if (process.env.NODE_ENV !== "production") {
+  ThemeContext.displayName = "EmotionThemeContext";
 }
 
 var useTheme = function useTheme() {
@@ -74,24 +86,36 @@ var useTheme = function useTheme() {
 };
 
 var getTheme = function getTheme(outerTheme, theme) {
-  if (typeof theme === 'function') {
+  if (typeof theme === "function") {
     var mergedTheme = theme(outerTheme);
 
-    if (process.env.NODE_ENV !== 'production' && (mergedTheme == null || typeof mergedTheme !== 'object' || Array.isArray(mergedTheme))) {
-      throw new Error('[ThemeProvider] Please return an object from your theme function, i.e. theme={() => ({})}!');
+    if (
+      process.env.NODE_ENV !== "production" &&
+      (mergedTheme == null ||
+        typeof mergedTheme !== "object" ||
+        Array.isArray(mergedTheme))
+    ) {
+      throw new Error(
+        "[ThemeProvider] Please return an object from your theme function, i.e. theme={() => ({})}!"
+      );
     }
 
     return mergedTheme;
   }
 
-  if (process.env.NODE_ENV !== 'production' && (theme == null || typeof theme !== 'object' || Array.isArray(theme))) {
-    throw new Error('[ThemeProvider] Please make your theme prop a plain object');
+  if (
+    process.env.NODE_ENV !== "production" &&
+    (theme == null || typeof theme !== "object" || Array.isArray(theme))
+  ) {
+    throw new Error(
+      "[ThemeProvider] Please make your theme prop a plain object"
+    );
   }
 
   return _extends({}, outerTheme, theme);
 };
 
-var createCacheWithTheme = /* #__PURE__ */weakMemoize(function (outerTheme) {
+var createCacheWithTheme = /* #__PURE__ */ weakMemoize(function (outerTheme) {
   return weakMemoize(function (theme) {
     return getTheme(outerTheme, theme);
   });
@@ -103,23 +127,32 @@ var ThemeProvider = function ThemeProvider(props) {
     theme = createCacheWithTheme(theme)(props.theme);
   }
 
-  return /*#__PURE__*/React.createElement(ThemeContext.Provider, {
-    value: theme
-  }, props.children);
+  return /*#__PURE__*/ React.createElement(
+    ThemeContext.Provider,
+    {
+      value: theme,
+    },
+    props.children
+  );
 };
 function withTheme(Component) {
-  var componentName = Component.displayName || Component.name || 'Component';
+  var componentName = Component.displayName || Component.name || "Component";
 
   var render = function render(props, ref) {
     var theme = React.useContext(ThemeContext);
-    return /*#__PURE__*/React.createElement(Component, _extends({
-      theme: theme,
-      ref: ref
-    }, props));
+    return /*#__PURE__*/ React.createElement(
+      Component,
+      _extends(
+        {
+          theme: theme,
+          ref: ref,
+        },
+        props
+      )
+    );
   }; // $FlowFixMe
 
-
-  var WithTheme = /*#__PURE__*/React.forwardRef(render);
+  var WithTheme = /*#__PURE__*/ React.forwardRef(render);
   WithTheme.displayName = "WithTheme(" + componentName + ")";
   return hoistNonReactStatics(WithTheme, Component);
 }
@@ -127,31 +160,37 @@ function withTheme(Component) {
 var getLastPart = function getLastPart(functionName) {
   // The match may be something like 'Object.createEmotionProps' or
   // 'Loader.prototype.render'
-  var parts = functionName.split('.');
+  var parts = functionName.split(".");
   return parts[parts.length - 1];
 };
 
-var getFunctionNameFromStackTraceLine = function getFunctionNameFromStackTraceLine(line) {
-  // V8
-  var match = /^\s+at\s+([A-Za-z0-9$.]+)\s/.exec(line);
-  if (match) return getLastPart(match[1]); // Safari / Firefox
+var getFunctionNameFromStackTraceLine =
+  function getFunctionNameFromStackTraceLine(line) {
+    // V8
+    var match = /^\s+at\s+([A-Za-z0-9$.]+)\s/.exec(line);
+    if (match) return getLastPart(match[1]); // Safari / Firefox
 
-  match = /^([A-Za-z0-9$.]+)@/.exec(line);
-  if (match) return getLastPart(match[1]);
-  return undefined;
-};
+    match = /^([A-Za-z0-9$.]+)@/.exec(line);
+    if (match) return getLastPart(match[1]);
+    return undefined;
+  };
 
-var internalReactFunctionNames = /* #__PURE__ */new Set(['renderWithHooks', 'processChild', 'finishClassComponent', 'renderToString']); // These identifiers come from error stacks, so they have to be valid JS
+var internalReactFunctionNames = /* #__PURE__ */ new Set([
+  "renderWithHooks",
+  "processChild",
+  "finishClassComponent",
+  "renderToString",
+]); // These identifiers come from error stacks, so they have to be valid JS
 // identifiers, thus we only need to replace what is a valid character for JS,
 // but not for CSS.
 
 var sanitizeIdentifier = function sanitizeIdentifier(identifier) {
-  return identifier.replace(/\$/g, '-');
+  return identifier.replace(/\$/g, "-");
 };
 
 var getLabelFromStackTrace = function getLabelFromStackTrace(stackTrace) {
   if (!stackTrace) return undefined;
-  var lines = stackTrace.split('\n');
+  var lines = stackTrace.split("\n");
 
   for (var i = 0; i < lines.length; i++) {
     var functionName = getFunctionNameFromStackTraceLine(lines[i]); // The first line of V8 stack traces is just "Error"
@@ -167,12 +206,19 @@ var getLabelFromStackTrace = function getLabelFromStackTrace(stackTrace) {
   return undefined;
 };
 
-var typePropName = '__EMOTION_TYPE_PLEASE_DO_NOT_USE__';
-var labelPropName = '__EMOTION_LABEL_PLEASE_DO_NOT_USE__';
+var typePropName = "__EMOTION_TYPE_PLEASE_DO_NOT_USE__";
+var labelPropName = "__EMOTION_LABEL_PLEASE_DO_NOT_USE__";
 var createEmotionProps = function createEmotionProps(type, props) {
-  if (process.env.NODE_ENV !== 'production' && typeof props.css === 'string' && // check if there is a css declaration
-  props.css.indexOf(':') !== -1) {
-    throw new Error("Strings are not allowed as css prop values, please wrap it in a css template literal from '@emotion/react' like this: css`" + props.css + "`");
+  if (
+    process.env.NODE_ENV !== "production" &&
+    typeof props.css === "string" && // check if there is a css declaration
+    props.css.indexOf(":") !== -1
+  ) {
+    throw new Error(
+      "Strings are not allowed as css prop values, please wrap it in a css template literal from '@emotion/react' like this: css`" +
+        props.css +
+        "`"
+    );
   }
 
   var newProps = {};
@@ -186,7 +232,13 @@ var createEmotionProps = function createEmotionProps(type, props) {
   newProps[typePropName] = type; // For performance, only call getLabelFromStackTrace in development and when
   // the label hasn't already been computed
 
-  if (process.env.NODE_ENV !== 'production' && !!props.css && (typeof props.css !== 'object' || typeof props.css.name !== 'string' || props.css.name.indexOf('-') === -1)) {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    !!props.css &&
+    (typeof props.css !== "object" ||
+      typeof props.css.name !== "string" ||
+      props.css.name.indexOf("-") === -1)
+  ) {
     var label = getLabelFromStackTrace(new Error().stack);
     if (label) newProps[labelPropName] = label;
   }
@@ -196,8 +248,8 @@ var createEmotionProps = function createEmotionProps(type, props) {
 
 var Insertion = function Insertion(_ref) {
   var cache = _ref.cache,
-      serialized = _ref.serialized,
-      isStringTag = _ref.isStringTag;
+    serialized = _ref.serialized,
+    isStringTag = _ref.isStringTag;
   registerStyles(cache, serialized, isStringTag);
   useInsertionEffectAlwaysWithSyncFallback(function () {
     return insertStyles(cache, serialized, isStringTag);
@@ -206,32 +258,46 @@ var Insertion = function Insertion(_ref) {
   return null;
 };
 
-var Emotion = /* #__PURE__ */withEmotionCache(function (props, cache, ref) {
+var Emotion = /* #__PURE__ */ withEmotionCache(function (props, cache, ref) {
   var cssProp = props.css; // so that using `css` from `emotion` and passing the result to the css prop works
   // not passing the registered cache to serializeStyles because it would
   // make certain babel optimisations not possible
 
-  if (typeof cssProp === 'string' && cache.registered[cssProp] !== undefined) {
+  if (typeof cssProp === "string" && cache.registered[cssProp] !== undefined) {
     cssProp = cache.registered[cssProp];
   }
 
   var WrappedComponent = props[typePropName];
   var registeredStyles = [cssProp];
-  var className = '';
+  var className = "";
 
-  if (typeof props.className === 'string') {
-    className = getRegisteredStyles(cache.registered, registeredStyles, props.className);
+  if (typeof props.className === "string") {
+    className = getRegisteredStyles(
+      cache.registered,
+      registeredStyles,
+      props.className
+    );
   } else if (props.className != null) {
     className = props.className + " ";
   }
 
-  var serialized = serializeStyles(registeredStyles, undefined, React.useContext(ThemeContext));
+  var serialized = serializeStyles(
+    registeredStyles,
+    undefined,
+    React.useContext(ThemeContext)
+  );
 
-  if (process.env.NODE_ENV !== 'production' && serialized.name.indexOf('-') === -1) {
+  if (
+    process.env.NODE_ENV !== "production" &&
+    serialized.name.indexOf("-") === -1
+  ) {
     var labelFromStack = props[labelPropName];
 
     if (labelFromStack) {
-      serialized = serializeStyles([serialized, 'label:' + labelFromStack + ';']);
+      serialized = serializeStyles([
+        serialized,
+        "label:" + labelFromStack + ";",
+      ]);
     }
   }
 
@@ -239,24 +305,46 @@ var Emotion = /* #__PURE__ */withEmotionCache(function (props, cache, ref) {
   var newProps = {};
 
   for (var key in props) {
-    if (hasOwn.call(props, key) && key !== 'css' && key !== typePropName && (process.env.NODE_ENV === 'production' || key !== labelPropName)) {
+    if (
+      hasOwn.call(props, key) &&
+      key !== "css" &&
+      key !== typePropName &&
+      (process.env.NODE_ENV === "production" || key !== labelPropName)
+    ) {
       newProps[key] = props[key];
     }
   }
 
   newProps.ref = ref;
   newProps.className = className;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Insertion, {
-    cache: cache,
-    serialized: serialized,
-    isStringTag: typeof WrappedComponent === 'string'
-  }), /*#__PURE__*/React.createElement(WrappedComponent, newProps));
+  return /*#__PURE__*/ React.createElement(
+    React.Fragment,
+    null,
+    /*#__PURE__*/ React.createElement(Insertion, {
+      cache: cache,
+      serialized: serialized,
+      isStringTag: typeof WrappedComponent === "string",
+    }),
+    /*#__PURE__*/ React.createElement(WrappedComponent, newProps)
+  );
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  Emotion.displayName = 'EmotionCssPropInternal';
+if (process.env.NODE_ENV !== "production") {
+  Emotion.displayName = "EmotionCssPropInternal";
 }
 
 var Emotion$1 = Emotion;
 
-export { CacheProvider as C, Emotion$1 as E, ThemeContext as T, __unsafe_useEmotionCache as _, ThemeProvider as a, withTheme as b, createEmotionProps as c, hasOwn as h, isBrowser as i, useTheme as u, withEmotionCache as w };
+export {
+  CacheProvider as C,
+  Emotion$1 as E,
+  ThemeContext as T,
+  __unsafe_useEmotionCache as _,
+  ThemeProvider as a,
+  withTheme as b,
+  createEmotionProps as c,
+  hasOwn as h,
+  isBrowser as i,
+  useTheme as u,
+  withEmotionCache as w,
+};

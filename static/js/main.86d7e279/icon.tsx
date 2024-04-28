@@ -4,8 +4,8 @@ import {
   forwardRef,
   SystemStyleObject,
   useStyleConfig,
-} from "@chakra-ui/system"
-import { cx } from "@chakra-ui/shared-utils"
+} from "@chakra-ui/system";
+import { cx } from "@chakra-ui/shared-utils";
 
 const fallbackIcon = {
   path: (
@@ -24,14 +24,14 @@ const fallbackIcon = {
     </g>
   ),
   viewBox: "0 0 24 24",
-}
+};
 
-type Orientation = "vertical" | "horizontal"
+type Orientation = "vertical" | "horizontal";
 
 export interface IconProps
   extends Omit<React.SVGAttributes<SVGElement>, keyof ChakraProps>,
     ChakraProps {
-  orientation?: Orientation
+  orientation?: Orientation;
 }
 
 /**
@@ -49,10 +49,10 @@ export const Icon = forwardRef<IconProps, "svg">((props, ref) => {
     className,
     __css,
     ...rest
-  } = props
+  } = props;
 
-  const _className = cx("chakra-icon", className)
-  const customStyles = useStyleConfig("Icon", props)
+  const _className = cx("chakra-icon", className);
+  const customStyles = useStyleConfig("Icon", props);
 
   const styles: SystemStyleObject = {
     w: "1em",
@@ -63,34 +63,34 @@ export const Icon = forwardRef<IconProps, "svg">((props, ref) => {
     color,
     ...__css,
     ...customStyles,
-  }
+  };
 
   const shared: any = {
     ref,
     focusable,
     className: _className,
     __css: styles,
-  }
+  };
 
-  const _viewBox = viewBox ?? fallbackIcon.viewBox
+  const _viewBox = viewBox ?? fallbackIcon.viewBox;
 
   /**
    * If you're using an icon library like `react-icons`.
    * Note: anyone passing the `as` prop, should manage the `viewBox` from the external component
    */
   if (element && typeof element !== "string") {
-    return <chakra.svg as={element} {...shared} {...rest} />
+    return <chakra.svg as={element} {...shared} {...rest} />;
   }
 
-  const _path = (children ?? fallbackIcon.path) as React.ReactNode
+  const _path = (children ?? fallbackIcon.path) as React.ReactNode;
 
   return (
     <chakra.svg verticalAlign="middle" viewBox={_viewBox} {...shared} {...rest}>
       {_path}
     </chakra.svg>
-  )
-})
+  );
+});
 
-Icon.displayName = "Icon"
+Icon.displayName = "Icon";
 
-export default Icon
+export default Icon;

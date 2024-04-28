@@ -1,9 +1,9 @@
-import { InternalFieldName, Names } from '../types';
+import { InternalFieldName, Names } from "../types";
 
 export default (
   name: InternalFieldName,
   _names: Names,
-  isBlurEvent?: boolean,
+  isBlurEvent?: boolean
 ) =>
   !isBlurEvent &&
   (_names.watchAll ||
@@ -11,5 +11,5 @@ export default (
     [..._names.watch].some(
       (watchName) =>
         name.startsWith(watchName) &&
-        /^\.\w+/.test(name.slice(watchName.length)),
+        /^\.\w+/.test(name.slice(watchName.length))
     ));

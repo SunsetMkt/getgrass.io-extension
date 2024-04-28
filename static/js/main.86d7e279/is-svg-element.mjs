@@ -1,5 +1,5 @@
 function isSVGElement(element) {
-    return element instanceof SVGElement && element.tagName !== "svg";
+  return element instanceof SVGElement && element.tagName !== "svg";
 }
 
 export { isSVGElement };

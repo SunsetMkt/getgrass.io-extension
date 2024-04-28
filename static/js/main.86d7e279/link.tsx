@@ -5,8 +5,8 @@ import {
   ThemingProps,
   useStyleConfig,
   HTMLChakraProps,
-} from "@chakra-ui/system"
-import { cx } from "@chakra-ui/shared-utils"
+} from "@chakra-ui/system";
+import { cx } from "@chakra-ui/shared-utils";
 
 export interface LinkProps extends HTMLChakraProps<"a">, ThemingProps<"Link"> {
   /**
@@ -14,7 +14,7 @@ export interface LinkProps extends HTMLChakraProps<"a">, ThemingProps<"Link"> {
    *
    * @default false
    */
-  isExternal?: boolean
+  isExternal?: boolean;
 }
 
 /**
@@ -32,8 +32,8 @@ export interface LinkProps extends HTMLChakraProps<"a">, ThemingProps<"Link"> {
  * @see Docs https://chakra-ui.com/link
  */
 export const Link = forwardRef<LinkProps, "a">(function Link(props, ref) {
-  const styles = useStyleConfig("Link", props)
-  const { className, isExternal, ...rest } = omitThemingProps(props)
+  const styles = useStyleConfig("Link", props);
+  const { className, isExternal, ...rest } = omitThemingProps(props);
 
   return (
     <chakra.a
@@ -44,7 +44,7 @@ export const Link = forwardRef<LinkProps, "a">(function Link(props, ref) {
       {...rest}
       __css={styles}
     />
-  )
-})
+  );
+});
 
-Link.displayName = "Link"
+Link.displayName = "Link";

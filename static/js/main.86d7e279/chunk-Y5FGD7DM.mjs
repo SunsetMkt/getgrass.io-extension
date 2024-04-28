@@ -3,7 +3,9 @@ function isNumber(value) {
   return typeof value === "number";
 }
 function isNotNumber(value) {
-  return typeof value !== "number" || Number.isNaN(value) || !Number.isFinite(value);
+  return (
+    typeof value !== "number" || Number.isNaN(value) || !Number.isFinite(value)
+  );
 }
 function isNumeric(value) {
   return value != null && value - parseFloat(value) + 1 >= 0;
@@ -25,7 +27,11 @@ function isUndefined(value) {
 }
 function isObject(value) {
   const type = typeof value;
-  return value != null && (type === "object" || type === "function") && !isArray(value);
+  return (
+    value != null &&
+    (type === "object" || type === "function") &&
+    !isArray(value)
+  );
 }
 function isEmptyObject(value) {
   return isObject(value) && Object.keys(value).length === 0;
@@ -43,12 +49,9 @@ function isCssVar(value) {
   return /^var\(--.+\)$/.test(value);
 }
 function isEmpty(value) {
-  if (isArray(value))
-    return isEmptyArray(value);
-  if (isObject(value))
-    return isEmptyObject(value);
-  if (value == null || value === "")
-    return true;
+  if (isArray(value)) return isEmptyArray(value);
+  if (isObject(value)) return isEmptyObject(value);
+  if (value == null || value === "") return true;
   return false;
 }
 var __DEV__ = process.env.NODE_ENV !== "production";
@@ -79,5 +82,5 @@ export {
   __DEV__,
   __TEST__,
   isRefObject,
-  isInputEvent
+  isInputEvent,
 };

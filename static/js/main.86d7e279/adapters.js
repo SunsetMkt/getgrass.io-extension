@@ -1,33 +1,34 @@
-import utils from '../utils.js';
-import httpAdapter from './http.js';
-import xhrAdapter from './xhr.js';
+import utils from "../utils.js";
+import httpAdapter from "./http.js";
+import xhrAdapter from "./xhr.js";
 import AxiosError from "../core/AxiosError.js";
 
 const knownAdapters = {
   http: httpAdapter,
-  xhr: xhrAdapter
-}
+  xhr: xhrAdapter,
+};
 
 utils.forEach(knownAdapters, (fn, value) => {
   if (fn) {
     try {
-      Object.defineProperty(fn, 'name', {value});
+      Object.defineProperty(fn, "name", { value });
     } catch (e) {
       // eslint-disable-next-line no-empty
     }
-    Object.defineProperty(fn, 'adapterName', {value});
+    Object.defineProperty(fn, "adapterName", { value });
   }
 });
 
 const renderReason = (reason) => `- ${reason}`;
 
-const isResolvedHandle = (adapter) => utils.isFunction(adapter) || adapter === null || adapter === false;
+const isResolvedHandle = (adapter) =>
+  utils.isFunction(adapter) || adapter === null || adapter === false;
 
 export default {
   getAdapter: (adapters) => {
     adapters = utils.isArray(adapters) ? adapters : [adapters];
 
-    const {length} = adapters;
+    const { length } = adapters;
     let nameOrAdapter;
     let adapter;
 
@@ -51,27 +52,31 @@ export default {
         break;
       }
 
-      rejectedReasons[id || '#' + i] = adapter;
+      rejectedReasons[id || "#" + i] = adapter;
     }
 
     if (!adapter) {
+      const reasons = Object.entries(rejectedReasons).map(
+        ([id, state]) =>
+          `adapter ${id} ` +
+          (state === false
+            ? "is not supported by the environment"
+            : "is not available in the build")
+      );
 
-      const reasons = Object.entries(rejectedReasons)
-        .map(([id, state]) => `adapter ${id} ` +
-          (state === false ? 'is not supported by the environment' : 'is not available in the build')
-        );
-
-      let s = length ?
-        (reasons.length > 1 ? 'since :\n' + reasons.map(renderReason).join('\n') : ' ' + renderReason(reasons[0])) :
-        'as no adapter specified';
+      let s = length
+        ? reasons.length > 1
+          ? "since :\n" + reasons.map(renderReason).join("\n")
+          : " " + renderReason(reasons[0])
+        : "as no adapter specified";
 
       throw new AxiosError(
         `There is no suitable adapter to dispatch the request ` + s,
-        'ERR_NOT_SUPPORT'
+        "ERR_NOT_SUPPORT"
       );
     }
 
     return adapter;
   },
-  adapters: knownAdapters
-}
+  adapters: knownAdapters,
+};

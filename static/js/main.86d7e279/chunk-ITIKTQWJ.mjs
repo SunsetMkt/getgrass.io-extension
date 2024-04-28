@@ -1,13 +1,13 @@
 // src/context.ts
 import {
   createContext as createReactContext,
-  useContext as useReactContext
+  useContext as useReactContext,
 } from "react";
 function createContext(options = {}) {
   const {
     strict = true,
     errorMessage = "useContext: `context` is undefined. Seems you forgot to wrap component within the Provider",
-    name
+    name,
   } = options;
   const Context = createReactContext(void 0);
   Context.displayName = name;
@@ -17,18 +17,14 @@ function createContext(options = {}) {
     if (!context && strict) {
       const error = new Error(errorMessage);
       error.name = "ContextError";
-      (_a = Error.captureStackTrace) == null ? void 0 : _a.call(Error, error, useContext);
+      (_a = Error.captureStackTrace) == null
+        ? void 0
+        : _a.call(Error, error, useContext);
       throw error;
     }
     return context;
   }
-  return [
-    Context.Provider,
-    useContext,
-    Context
-  ];
+  return [Context.Provider, useContext, Context];
 }
 
-export {
-  createContext
-};
+export { createContext };

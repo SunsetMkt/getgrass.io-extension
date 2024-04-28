@@ -1,9 +1,9 @@
-import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system"
+import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system";
 
 const baseStyle = defineStyle({
   fontFamily: "heading",
   fontWeight: "bold",
-})
+});
 
 const sizes = {
   "4xl": defineStyle({
@@ -38,7 +38,7 @@ const sizes = {
     fontSize: "sm",
     lineHeight: 1.2,
   }),
-}
+};
 
 export const headingTheme = defineStyleConfig({
   baseStyle,
@@ -46,4 +46,4 @@ export const headingTheme = defineStyleConfig({
   defaultProps: {
     size: "xl",
   },
-})
+});

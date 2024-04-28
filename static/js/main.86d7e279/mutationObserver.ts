@@ -1,21 +1,21 @@
-import { getDefaultState } from './mutation'
-import { notifyManager } from './notifyManager'
-import { Subscribable } from './subscribable'
-import { hashKey, shallowEqualObjects } from './utils'
-import type { QueryClient } from './queryClient'
+import { getDefaultState } from "./mutation";
+import { notifyManager } from "./notifyManager";
+import { Subscribable } from "./subscribable";
+import { hashKey, shallowEqualObjects } from "./utils";
+import type { QueryClient } from "./queryClient";
 import type {
   DefaultError,
   MutateOptions,
   MutationObserverOptions,
   MutationObserverResult,
-} from './types'
-import type { Action, Mutation } from './mutation'
+} from "./types";
+import type { Action, Mutation } from "./mutation";
 
 // TYPES
 
 type MutationObserverListener<TData, TError, TVariables, TContext> = (
-  result: MutationObserverResult<TData, TError, TVariables, TContext>,
-) => void
+  result: MutationObserverResult<TData, TError, TVariables, TContext>
+) => void;
 
 // CLASS
 
@@ -23,48 +23,48 @@ export class MutationObserver<
   TData = unknown,
   TError = DefaultError,
   TVariables = void,
-  TContext = unknown,
+  TContext = unknown
 > extends Subscribable<
   MutationObserverListener<TData, TError, TVariables, TContext>
 > {
-  options!: MutationObserverOptions<TData, TError, TVariables, TContext>
+  options!: MutationObserverOptions<TData, TError, TVariables, TContext>;
 
-  #client: QueryClient
+  #client: QueryClient;
   #currentResult: MutationObserverResult<TData, TError, TVariables, TContext> =
-    undefined!
-  #currentMutation?: Mutation<TData, TError, TVariables, TContext>
-  #mutateOptions?: MutateOptions<TData, TError, TVariables, TContext>
+    undefined!;
+  #currentMutation?: Mutation<TData, TError, TVariables, TContext>;
+  #mutateOptions?: MutateOptions<TData, TError, TVariables, TContext>;
 
   constructor(
     client: QueryClient,
-    options: MutationObserverOptions<TData, TError, TVariables, TContext>,
+    options: MutationObserverOptions<TData, TError, TVariables, TContext>
   ) {
-    super()
+    super();
 
-    this.#client = client
-    this.setOptions(options)
-    this.bindMethods()
-    this.#updateResult()
+    this.#client = client;
+    this.setOptions(options);
+    this.bindMethods();
+    this.#updateResult();
   }
 
   protected bindMethods(): void {
-    this.mutate = this.mutate.bind(this)
-    this.reset = this.reset.bind(this)
+    this.mutate = this.mutate.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   setOptions(
-    options: MutationObserverOptions<TData, TError, TVariables, TContext>,
+    options: MutationObserverOptions<TData, TError, TVariables, TContext>
   ) {
     const prevOptions = this.options as
       | MutationObserverOptions<TData, TError, TVariables, TContext>
-      | undefined
-    this.options = this.#client.defaultMutationOptions(options)
+      | undefined;
+    this.options = this.#client.defaultMutationOptions(options);
     if (!shallowEqualObjects(this.options, prevOptions)) {
       this.#client.getMutationCache().notify({
-        type: 'observerOptionsUpdated',
+        type: "observerOptionsUpdated",
         mutation: this.#currentMutation,
         observer: this,
-      })
+      });
     }
 
     if (
@@ -72,22 +72,22 @@ export class MutationObserver<
       this.options.mutationKey &&
       hashKey(prevOptions.mutationKey) !== hashKey(this.options.mutationKey)
     ) {
-      this.reset()
-    } else if (this.#currentMutation?.state.status === 'pending') {
-      this.#currentMutation.setOptions(this.options)
+      this.reset();
+    } else if (this.#currentMutation?.state.status === "pending") {
+      this.#currentMutation.setOptions(this.options);
     }
   }
 
   protected onUnsubscribe(): void {
     if (!this.hasListeners()) {
-      this.#currentMutation?.removeObserver(this)
+      this.#currentMutation?.removeObserver(this);
     }
   }
 
   onMutationUpdate(action: Action<TData, TError, TVariables, TContext>): void {
-    this.#updateResult()
+    this.#updateResult();
 
-    this.#notify(action)
+    this.#notify(action);
   }
 
   getCurrentResult(): MutationObserverResult<
@@ -96,76 +96,81 @@ export class MutationObserver<
     TVariables,
     TContext
   > {
-    return this.#currentResult
+    return this.#currentResult;
   }
 
   reset(): void {
     // reset needs to remove the observer from the mutation because there is no way to "get it back"
     // another mutate call will yield a new mutation!
-    this.#currentMutation?.removeObserver(this)
-    this.#currentMutation = undefined
-    this.#updateResult()
-    this.#notify()
+    this.#currentMutation?.removeObserver(this);
+    this.#currentMutation = undefined;
+    this.#updateResult();
+    this.#notify();
   }
 
   mutate(
     variables: TVariables,
-    options?: MutateOptions<TData, TError, TVariables, TContext>,
+    options?: MutateOptions<TData, TError, TVariables, TContext>
   ): Promise<TData> {
-    this.#mutateOptions = options
+    this.#mutateOptions = options;
 
-    this.#currentMutation?.removeObserver(this)
+    this.#currentMutation?.removeObserver(this);
 
     this.#currentMutation = this.#client
       .getMutationCache()
-      .build(this.#client, this.options)
+      .build(this.#client, this.options);
 
-    this.#currentMutation.addObserver(this)
+    this.#currentMutation.addObserver(this);
 
-    return this.#currentMutation.execute(variables)
+    return this.#currentMutation.execute(variables);
   }
 
   #updateResult(): void {
     const state =
       this.#currentMutation?.state ??
-      getDefaultState<TData, TError, TVariables, TContext>()
+      getDefaultState<TData, TError, TVariables, TContext>();
 
     this.#currentResult = {
       ...state,
-      isPending: state.status === 'pending',
-      isSuccess: state.status === 'success',
-      isError: state.status === 'error',
-      isIdle: state.status === 'idle',
+      isPending: state.status === "pending",
+      isSuccess: state.status === "success",
+      isError: state.status === "error",
+      isIdle: state.status === "idle",
       mutate: this.mutate,
       reset: this.reset,
-    } as MutationObserverResult<TData, TError, TVariables, TContext>
+    } as MutationObserverResult<TData, TError, TVariables, TContext>;
   }
 
   #notify(action?: Action<TData, TError, TVariables, TContext>): void {
     notifyManager.batch(() => {
       // First trigger the mutate callbacks
       if (this.#mutateOptions && this.hasListeners()) {
-        const variables = this.#currentResult.variables!
-        const context = this.#currentResult.context
+        const variables = this.#currentResult.variables!;
+        const context = this.#currentResult.context;
 
-        if (action?.type === 'success') {
-          this.#mutateOptions.onSuccess?.(action.data, variables, context!)
-          this.#mutateOptions.onSettled?.(action.data, null, variables, context)
-        } else if (action?.type === 'error') {
-          this.#mutateOptions.onError?.(action.error, variables, context)
+        if (action?.type === "success") {
+          this.#mutateOptions.onSuccess?.(action.data, variables, context!);
+          this.#mutateOptions.onSettled?.(
+            action.data,
+            null,
+            variables,
+            context
+          );
+        } else if (action?.type === "error") {
+          this.#mutateOptions.onError?.(action.error, variables, context);
           this.#mutateOptions.onSettled?.(
             undefined,
             action.error,
             variables,
-            context,
-          )
+            context
+          );
         }
       }
 
       // Then trigger the listeners
       this.listeners.forEach((listener) => {
-        listener(this.#currentResult)
-      })
-    })
+        listener(this.#currentResult);
+      });
+    });
   }
 }

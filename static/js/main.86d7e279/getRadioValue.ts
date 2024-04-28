@@ -18,6 +18,6 @@ export default (options?: HTMLInputElement[]): RadioFieldResult =>
                 value: option.value,
               }
             : previous,
-        defaultReturn,
+        defaultReturn
       )
     : defaultReturn;

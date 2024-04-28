@@ -15,28 +15,38 @@ function isElementScaled(element) {
 } // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
 
-
-export default function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
+export default function getCompositeRect(
+  elementOrVirtualElement,
+  offsetParent,
+  isFixed
+) {
   if (isFixed === void 0) {
     isFixed = false;
   }
 
   var isOffsetParentAnElement = isHTMLElement(offsetParent);
-  var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
+  var offsetParentIsScaled =
+    isHTMLElement(offsetParent) && isElementScaled(offsetParent);
   var documentElement = getDocumentElement(offsetParent);
-  var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled, isFixed);
+  var rect = getBoundingClientRect(
+    elementOrVirtualElement,
+    offsetParentIsScaled,
+    isFixed
+  );
   var scroll = {
     scrollLeft: 0,
-    scrollTop: 0
+    scrollTop: 0,
   };
   var offsets = {
     x: 0,
-    y: 0
+    y: 0,
   };
 
-  if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
-    if (getNodeName(offsetParent) !== 'body' || // https://github.com/popperjs/popper-core/issues/1078
-    isScrollParent(documentElement)) {
+  if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
+    if (
+      getNodeName(offsetParent) !== "body" || // https://github.com/popperjs/popper-core/issues/1078
+      isScrollParent(documentElement)
+    ) {
       scroll = getNodeScroll(offsetParent);
     }
 
@@ -53,6 +63,6 @@ export default function getCompositeRect(elementOrVirtualElement, offsetParent, 
     x: rect.left + scroll.scrollLeft - offsets.x,
     y: rect.top + scroll.scrollTop - offsets.y,
     width: rect.width,
-    height: rect.height
+    height: rect.height,
   };
 }

@@ -1,4 +1,4 @@
-import { ValidationModeFlags } from '../types';
+import { ValidationModeFlags } from "../types";
 
 export default (
   isBlurEvent: boolean,
@@ -8,7 +8,7 @@ export default (
     isOnBlur: boolean;
     isOnChange: boolean;
   },
-  mode: Partial<ValidationModeFlags>,
+  mode: Partial<ValidationModeFlags>
 ) => {
   if (mode.isOnAll) {
     return false;

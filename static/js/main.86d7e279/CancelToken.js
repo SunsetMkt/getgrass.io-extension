@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import CanceledError from './CanceledError.js';
+import CanceledError from "./CanceledError.js";
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -11,8 +11,8 @@ import CanceledError from './CanceledError.js';
  */
 class CancelToken {
   constructor(executor) {
-    if (typeof executor !== 'function') {
-      throw new TypeError('executor must be a function.');
+    if (typeof executor !== "function") {
+      throw new TypeError("executor must be a function.");
     }
 
     let resolvePromise;
@@ -24,7 +24,7 @@ class CancelToken {
     const token = this;
 
     // eslint-disable-next-line func-names
-    this.promise.then(cancel => {
+    this.promise.then((cancel) => {
       if (!token._listeners) return;
 
       let i = token._listeners.length;
@@ -36,10 +36,10 @@ class CancelToken {
     });
 
     // eslint-disable-next-line func-names
-    this.promise.then = onfulfilled => {
+    this.promise.then = (onfulfilled) => {
       let _resolve;
       // eslint-disable-next-line func-names
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         token.subscribe(resolve);
         _resolve = resolve;
       }).then(onfulfilled);
@@ -113,7 +113,7 @@ class CancelToken {
     });
     return {
       token,
-      cancel
+      cancel,
     };
   }
 }

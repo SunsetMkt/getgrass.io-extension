@@ -17,10 +17,20 @@ export default function listScrollParents(element, list) {
   }
 
   var scrollParent = getScrollParent(element);
-  var isBody = scrollParent === ((_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body);
+  var isBody =
+    scrollParent ===
+    ((_element$ownerDocumen = element.ownerDocument) == null
+      ? void 0
+      : _element$ownerDocumen.body);
   var win = getWindow(scrollParent);
-  var target = isBody ? [win].concat(win.visualViewport || [], isScrollParent(scrollParent) ? scrollParent : []) : scrollParent;
+  var target = isBody
+    ? [win].concat(
+        win.visualViewport || [],
+        isScrollParent(scrollParent) ? scrollParent : []
+      )
+    : scrollParent;
   var updatedList = list.concat(target);
-  return isBody ? updatedList : // $FlowFixMe[incompatible-call]: isBody tells us target will be an HTMLElement here
-  updatedList.concat(listScrollParents(getParentNode(target)));
+  return isBody
+    ? updatedList // $FlowFixMe[incompatible-call]: isBody tells us target will be an HTMLElement here
+    : updatedList.concat(listScrollParents(getParentNode(target)));
 }

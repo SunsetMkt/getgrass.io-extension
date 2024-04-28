@@ -1,6 +1,6 @@
-import { Global } from "@emotion/react"
+import { Global } from "@emotion/react";
 
-const css = String.raw
+const css = String.raw;
 
 const vhPolyfill = css`
   :root,
@@ -28,16 +28,16 @@ const vhPolyfill = css`
       --chakra-vh: 100dvh;
     }
   }
-`
+`;
 
-export const CSSPolyfill = () => <Global styles={vhPolyfill} />
+export const CSSPolyfill = () => <Global styles={vhPolyfill} />;
 
 export type CSSResetProps = {
   /**
    * The selector to scope the css reset styles to.
    */
-  scope?: string
-}
+  scope?: string;
+};
 
 export const CSSReset = ({ scope = "" }: CSSResetProps) => (
   <Global
@@ -296,6 +296,6 @@ export const CSSReset = ({ scope = "" }: CSSResetProps) => (
       ${vhPolyfill}
     `}
   />
-)
+);
 
-export default CSSReset
+export default CSSReset;

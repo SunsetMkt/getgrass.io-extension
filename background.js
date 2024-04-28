@@ -28,28 +28,28 @@ let retries = 0;
 const PING_INTERVAL = 20 * 1000;
 
 const HEADERS_TO_REPLACE = [
-  'origin',
-  'referer',
-//  'accept-charset',
-//  'accept-encoding',
-  'access-control-request-headers',
-  'access-control-request-method',
-  'access-control-allow-origin', // TODO it's not a forbidden header. Consider removing
-//  'connection',
-//  'content-length',
-  'cookie',
-  'date',
-  'dnt',
-//  'expect',
-//  'host',
-//  'keep-alive',
-//  'permissions-policy',
-//  'te',
-  'trailer',
-//  'transfer-encoding',
-  'upgrade',
-//  'via',
-//  'user-agent'
+  "origin",
+  "referer",
+  //  'accept-charset',
+  //  'accept-encoding',
+  "access-control-request-headers",
+  "access-control-request-method",
+  "access-control-allow-origin", // TODO it's not a forbidden header. Consider removing
+  //  'connection',
+  //  'content-length',
+  "cookie",
+  "date",
+  "dnt",
+  //  'expect',
+  //  'host',
+  //  'keep-alive',
+  //  'permissions-policy',
+  //  'te',
+  "trailer",
+  //  'transfer-encoding',
+  "upgrade",
+  //  'via',
+  //  'user-agent'
 ];
 
 const DEFAULT_STORAGE_KEY_EXPIRE_MS = 10 * 60 * 1000; // 10 mins
@@ -84,7 +84,7 @@ const POPUP_STATE_KEY = "wynd:popup";
 const PERMISSIONS_KEY = "wynd:permissions";
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
-const USERNAME_KEY = "username"
+const USERNAME_KEY = "username";
 
 const STATUSES = {
   CONNECTED: "CONNECTED",
@@ -108,7 +108,7 @@ class Mutex {
 
   /**
    * Enqueue a function to be run serially.
-   * 
+   *
    * This ensures no other functions will start running
    * until `callback` finishes running.
    * @param callback Function to be run exclusively.
@@ -129,7 +129,7 @@ class Mutex {
    */
   #acquire() {
     return new Promise((resolve) => {
-      this.#queue.push({resolve});
+      this.#queue.push({ resolve });
       this.#dispatch();
     });
   }
@@ -172,7 +172,7 @@ class Mutex {
       this.#isLocked = false;
       // and call dispatch.
       this.#dispatch();
-    }
+    };
   }
 }
 
@@ -199,7 +199,8 @@ class CustomStorage {
     this.#storage = {};
     const clearExpiredInterval = setInterval(() => {
       this.#clearExpired();
-    }, DEFAULT_STORAGE_EXPIRATION_CHECK);  }
+    }, DEFAULT_STORAGE_EXPIRATION_CHECK);
+  }
 
   /**
    * @returns stored value or null (if key does not exist)
@@ -218,9 +219,9 @@ class CustomStorage {
     const data = {
       value,
       metainfo: {
-        expire_at: Date.now() + expirationTimeMs
-      }
-    }
+        expire_at: Date.now() + expirationTimeMs,
+      },
+    };
     this.#storage[key] = data;
   }
 
@@ -241,7 +242,11 @@ class CustomStorage {
 
   #checkKeyIsExpired(key) {
     const data = this.#storage[key];
-    if (data === null || data === undefined || Date.now() > data.metainfo.expire_at) {
+    if (
+      data === null ||
+      data === undefined ||
+      Date.now() > data.metainfo.expire_at
+    ) {
       delete this.#storage[key];
     }
   }
@@ -269,13 +274,16 @@ class ResponseProcessor {
 
   async getResponseCookies(requestId, timeoutMs) {
     return new Promise(async (resolve, reject) => {
-      const timeout = setTimeout(
-        async () => {
-          await this.#cookieMutex.runExclusive(() => {
-            this.#waitCookieTasks.del(requestId);
-            LogsTransporter.sendLogs(`Timeout Error: Could not get Cookies from response to request ${requestId}`);
-            reject(`Timeout Error: Could not get Cookies from response to request ${requestId}`);
-          });
+      const timeout = setTimeout(async () => {
+        await this.#cookieMutex.runExclusive(() => {
+          this.#waitCookieTasks.del(requestId);
+          LogsTransporter.sendLogs(
+            `Timeout Error: Could not get Cookies from response to request ${requestId}`
+          );
+          reject(
+            `Timeout Error: Could not get Cookies from response to request ${requestId}`
+          );
+        });
       }, timeoutMs);
 
       await this.#cookieMutex.runExclusive(() => {
@@ -301,7 +309,7 @@ class ResponseProcessor {
       const resolve = this.#waitCookieTasks.get(requestId);
       if (resolve) {
         resolve(cookies);
-        this.#waitCookieTasks.del(requestId)
+        this.#waitCookieTasks.del(requestId);
       } else {
         this.#cookieStorage.set(requestId, cookies);
       }
@@ -313,7 +321,7 @@ class ResponseProcessor {
       const resolve = this.#waitRedirectTasks.get(requestId);
       if (resolve) {
         resolve(redirectData);
-        this.#waitRedirectTasks.del(requestId)
+        this.#waitRedirectTasks.del(requestId);
       } else {
         this.#redirectDataStorage.set(requestId, redirectData);
       }
@@ -322,13 +330,16 @@ class ResponseProcessor {
 
   async getRedirectData(requestId, timeoutMs) {
     return new Promise(async (resolve, reject) => {
-      const timeout = setTimeout(
-        async () => {
-          await this.#redirectMutex.runExclusive(() => {
-            this.#waitRedirectTasks.del(requestId);
-            LogsTransporter.sendLogs(`Timeout Error: Could not get Redirect data from response to request ${requestId}`);
-            reject(`Timeout Error: Could not get Redirect data from response to request ${requestId}`);
-          });
+      const timeout = setTimeout(async () => {
+        await this.#redirectMutex.runExclusive(() => {
+          this.#waitRedirectTasks.del(requestId);
+          LogsTransporter.sendLogs(
+            `Timeout Error: Could not get Redirect data from response to request ${requestId}`
+          );
+          reject(
+            `Timeout Error: Could not get Redirect data from response to request ${requestId}`
+          );
+        });
       }, timeoutMs);
 
       await this.#redirectMutex.runExclusive(() => {
@@ -347,7 +358,7 @@ class ResponseProcessor {
   }
 
   async registerOnErrorOccuredEvent(requestId) {
-    return this.setResponseCookies(requestId, '');
+    return this.setResponseCookies(requestId, "");
   }
 }
 
@@ -372,36 +383,46 @@ class RequestFetcher {
     return this.#fetchMutex.runExclusive(() => {
       return new Promise(async (resolve, reject) => {
         let responsePromise = null;
-        const timeout = setTimeout(
-          async () => {
-            await this.#webRequestMutex.runExclusive(() => {
-              // for unknown reason, sometimes fetch request ignores all webRequest listeners
-              // so we won't be able to propagate Set-Cookie from the response
-              this.#resolve = null;
-              LogsTransporter.sendLogs(`Resolved WITHOUT REQUEST ID: ${url}, ${JSON.stringify(requestOptions)}`);
-              resolve({
-                requestId: null,
-                responsePromise
-              });
+        const timeout = setTimeout(async () => {
+          await this.#webRequestMutex.runExclusive(() => {
+            // for unknown reason, sometimes fetch request ignores all webRequest listeners
+            // so we won't be able to propagate Set-Cookie from the response
+            this.#resolve = null;
+            LogsTransporter.sendLogs(
+              `Resolved WITHOUT REQUEST ID: ${url}, ${JSON.stringify(
+                requestOptions
+              )}`
+            );
+            resolve({
+              requestId: null,
+              responsePromise,
             });
-          },
-          FETCH_TIMEOUT
-        );
+          });
+        }, FETCH_TIMEOUT);
         await this.#webRequestMutex.runExclusive(() => {
           if (this.#resolve) {
             this.#resolve = null;
             clearTimeout(timeout);
-            LogsTransporter.sendLogs(`Inconsistency detected. Waiting for more than 1 requestId: ${url}, ${JSON.stringify(requestOptions)}`);
-            reject(`Inconsistency detected. Waiting for more than 1 requestId.`);
+            LogsTransporter.sendLogs(
+              `Inconsistency detected. Waiting for more than 1 requestId: ${url}, ${JSON.stringify(
+                requestOptions
+              )}`
+            );
+            reject(
+              `Inconsistency detected. Waiting for more than 1 requestId.`
+            );
           }
-          responsePromise = fetch(url, requestOptions)
-            .catch((e) => {
-              LogsTransporter.sendLogs(`Fetch error for ${url} ${JSON.stringify(requestOptions)} : ${e}, ${e.stack}`);
-              throw e;
-            })
+          responsePromise = fetch(url, requestOptions).catch((e) => {
+            LogsTransporter.sendLogs(
+              `Fetch error for ${url} ${JSON.stringify(
+                requestOptions
+              )} : ${e}, ${e.stack}`
+            );
+            throw e;
+          });
           this.#resolve = (requestId) => {
             clearTimeout(timeout);
-            return resolve({requestId, responsePromise});
+            return resolve({ requestId, responsePromise });
           };
         });
       });
@@ -425,7 +446,7 @@ class RequestFetcher {
   }
 
   // @note
-  // usually, fetch() triggers onBeforeRequest listener. But in some rare cases 
+  // usually, fetch() triggers onBeforeRequest listener. But in some rare cases
   // request skips all previous events (onBeforeRequest, onResponseStarted, etc...)
   // so we may notice that SOMETHING was fetched only when fetch() is already completed
   async registerOnCompletedEvent(requestId) {
@@ -630,10 +651,10 @@ async function performHttpRequest(params) {
         requestHeaders: replacedRequestHeaders,
       },
       condition: {
-        urlFilter: `${params.url.replace(/\/$/, '')}`,
+        urlFilter: `${params.url.replace(/\/$/, "")}`,
         tabIds: [chrome.tabs.TAB_ID_NONE],
       },
-    }
+    };
     chrome.declarativeNetRequest.updateSessionRules({
       addRules: [newRule],
     });
@@ -657,31 +678,36 @@ async function performHttpRequest(params) {
     request_options.body = await fetchResp.blob();
   }
 
-  const { requestId, responsePromise } = await REQUEST_FETCHER.fetch(params.url, request_options)
-    .catch((e) => {
-      console.error(`Error occurred while extracting requestId: ${e}`);
-      LogsTransporter.sendLogs(
-        `Error occurred while extracting requestId ${params.url}, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
-      );
-      return { requestId: undefined, responsePromise: undefined }
-    });
+  const { requestId, responsePromise } = await REQUEST_FETCHER.fetch(
+    params.url,
+    request_options
+  ).catch((e) => {
+    console.error(`Error occurred while extracting requestId: ${e}`);
+    LogsTransporter.sendLogs(
+      `Error occurred while extracting requestId ${
+        params.url
+      }, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
+    );
+    return { requestId: undefined, responsePromise: undefined };
+  });
 
   if (responsePromise === undefined) {
     // Empty response.
     return null;
   }
 
-  const response = await responsePromise
-    .catch((e) => {
-      console.error(`Error occurred while performing fetch: ${e}`);
-      LogsTransporter.sendLogs(
-        `Error occurred while performing fetch <${requestId}> ${params.url}, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
-      );
-    });
+  const response = await responsePromise.catch((e) => {
+    console.error(`Error occurred while performing fetch: ${e}`);
+    LogsTransporter.sendLogs(
+      `Error occurred while performing fetch <${requestId}> ${
+        params.url
+      }, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
+    );
+  });
 
   if (newRuleIds) {
     chrome.declarativeNetRequest.updateSessionRules({
-      removeRuleIds : newRuleIds
+      removeRuleIds: newRuleIds,
     });
   }
 
@@ -689,9 +715,9 @@ async function performHttpRequest(params) {
     return {
       url: params.url,
       status: 400,
-      status_text: 'Bad Request',
+      status_text: "Bad Request",
       headers: {},
-      body: '',
+      body: "",
     };
   }
 
@@ -700,29 +726,40 @@ async function performHttpRequest(params) {
     if (!requestId) {
       console.error(`No requestId for redirect.`);
       LogsTransporter.sendLogs(
-        `Error occurred in redirect ${params.url}, ${JSON.stringify(request_options)}: No requestId for redirect`
+        `Error occurred in redirect ${params.url}, ${JSON.stringify(
+          request_options
+        )}: No requestId for redirect`
       );
       // Empty response.
       return null;
     }
-    const redirectResponse = await RESPONSE_PROCESSOR.getRedirectData(requestId, REDIRECT_DATA_TIMEOUT)
+    const redirectResponse = await RESPONSE_PROCESSOR.getRedirectData(
+      requestId,
+      REDIRECT_DATA_TIMEOUT
+    )
       .then((redirectData) => {
         const responseMetadata = JSON.parse(redirectData);
-        if (Object.hasOwn(responseMetadata.headers, 'Set-Cookie')) {
-          responseMetadata.headers['Set-Cookie'] = JSON.parse(responseMetadata.headers['Set-Cookie']);
+        if (Object.hasOwn(responseMetadata.headers, "Set-Cookie")) {
+          responseMetadata.headers["Set-Cookie"] = JSON.parse(
+            responseMetadata.headers["Set-Cookie"]
+          );
         }
         return {
-          'url': response.url,
-          'status': responseMetadata.statusCode,
-          'status_text': 'Redirect',
-          'headers': responseMetadata.headers,
-          'body': '',
-        }
+          url: response.url,
+          status: responseMetadata.statusCode,
+          status_text: "Redirect",
+          headers: responseMetadata.headers,
+          body: "",
+        };
       })
       .catch((e) => {
-        console.error(`Error occured while processing redirect metadata : ${e}`);
+        console.error(
+          `Error occured while processing redirect metadata : ${e}`
+        );
         LogsTransporter.sendLogs(
-          `Error occured while processing redirect metadata <${requestId}> ${params.url}, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
+          `Error occured while processing redirect metadata <${requestId}> ${
+            params.url
+          }, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
         );
         // Empty response.
         return null;
@@ -735,16 +772,19 @@ async function performHttpRequest(params) {
   // so we must manually copy before returning
   response.headers.forEach((value, key) => {
     // remove Content-Encoding header
-    if (key.toLowerCase() !== 'content-encoding') {
+    if (key.toLowerCase() !== "content-encoding") {
       headers[key] = value;
     }
   });
 
   if (requestId) {
-    await RESPONSE_PROCESSOR.getResponseCookies(requestId, RESPONSE_COOKIE_TIMEOUT)
+    await RESPONSE_PROCESSOR.getResponseCookies(
+      requestId,
+      RESPONSE_COOKIE_TIMEOUT
+    )
       .then((responseCookies) => {
         // onErrorOccurred listener sets cookies = ''
-        if (responseCookies !== '') {
+        if (responseCookies !== "") {
           const cookies = JSON.parse(responseCookies);
           if (cookies.length !== 0) {
             headers["Set-Cookie"] = cookies;
@@ -755,7 +795,9 @@ async function performHttpRequest(params) {
         // could not extract response cookies. Just skip
         console.error(`Error occured while processing response cookies: ${e}`);
         LogsTransporter.sendLogs(
-          `Error occured while processing response cookies <${requestId}> ${params.url}, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
+          `Error occured while processing response cookies <${requestId}> ${
+            params.url
+          }, ${JSON.stringify(request_options)}: ${e}, ${e.stack}`
         );
       });
   }
@@ -785,9 +827,9 @@ function extractCookies(responseHeaders) {
   const cookies = [];
   responseHeaders.forEach((header) => {
     if (header.name.toLowerCase() === "set-cookie") {
-      if (Object.hasOwn(header, 'value')) {
+      if (Object.hasOwn(header, "value")) {
         cookies.push(header.value);
-      } else if (Object.hasOwn(header, 'binaryValue')) {
+      } else if (Object.hasOwn(header, "binaryValue")) {
         cookies.push(header.binaryValue);
       }
     }
@@ -800,16 +842,16 @@ function extractCookies(responseHeaders) {
 chrome.webRequest.onBeforeRedirect.addListener(
   async (details) => {
     // Ensure we only process requests done by the Chrome extension
-    if(details.initiator !== location.origin.toString()) {
+    if (details.initiator !== location.origin.toString()) {
       return;
     }
     const responseHeaders = {};
     details.responseHeaders.forEach((header) => {
       if (header.name.toLowerCase() !== "set-cookie") {
         // TODO any other non-unique headers?
-        if (Object.hasOwn(header, 'value')) {
+        if (Object.hasOwn(header, "value")) {
           responseHeaders[header.name] = header.value;
-        } else if (Object.hasOwn(header, 'binaryValue')) {
+        } else if (Object.hasOwn(header, "binaryValue")) {
           responseHeaders[header.name] = header.binaryValue;
         }
       }
@@ -818,15 +860,15 @@ chrome.webRequest.onBeforeRedirect.addListener(
     if (cookies.length !== 0) {
       // We pack array of cookies into string and depack later.
       // Otherwise multiple Set-Cookie headers would override each other.
-      responseHeaders['Set-Cookie'] = JSON.stringify(cookies);
+      responseHeaders["Set-Cookie"] = JSON.stringify(cookies);
     }
     await REQUEST_FETCHER.registerOnBeforeRedirectEvent(details.requestId);
     await RESPONSE_PROCESSOR.setRedirectData(
       details.requestId,
       JSON.stringify({
-//        'url': details.url,
-        'statusCode': details.statusCode,
-        'headers': responseHeaders
+        //        'url': details.url,
+        statusCode: details.statusCode,
+        headers: responseHeaders,
       })
     );
   },
@@ -843,7 +885,10 @@ chrome.webRequest.onCompleted.addListener(
     }
     const cookies = extractCookies(details.responseHeaders);
     await REQUEST_FETCHER.registerOnCompletedEvent(details.requestId);
-    await RESPONSE_PROCESSOR.setResponseCookies(details.requestId, JSON.stringify(cookies));
+    await RESPONSE_PROCESSOR.setResponseCookies(
+      details.requestId,
+      JSON.stringify(cookies)
+    );
   },
   { urls: ["<all_urls>"] },
   ["responseHeaders", "extraHeaders"]
@@ -855,12 +900,14 @@ chrome.webRequest.onErrorOccurred.addListener(
     if (details.initiator !== location.origin.toString()) {
       return;
     }
-    LogsTransporter.sendLogs(`onErrorOccured, ${details.requestId}, ${details.url}, ${details.error}`);
+    LogsTransporter.sendLogs(
+      `onErrorOccured, ${details.requestId}, ${details.url}, ${details.error}`
+    );
     await REQUEST_FETCHER.registerOnErrorOccuredEvent(details.requestId);
   },
   { urls: ["<all_urls>"] },
   []
-)
+);
 
 async function initialize() {
   // Replace the below connection URI with whatever
@@ -882,11 +929,12 @@ async function initialize() {
   }
 
   const hasPermissions = await getLocalStorage(PERMISSIONS_KEY);
-  if(!hasPermissions) {
-    console.warn("[INITIALIZE] Permissions is disabled. Cancelling connection...");
+  if (!hasPermissions) {
+    console.warn(
+      "[INITIALIZE] Permissions is disabled. Cancelling connection..."
+    );
     return;
   }
-
 
   // Loop through each websocketUrl in case the other does not work
   const websocketUrl = WEBSOCKET_URLS[retries % WEBSOCKET_URLS.length];
@@ -926,9 +974,14 @@ async function initialize() {
         );
       } catch (e) {
         LogsTransporter.sendLogs(
-          `RPC encountered error for message ${JSON.stringify(parsed_message)}: ${e}, ${e.stack}`
+          `RPC encountered error for message ${JSON.stringify(
+            parsed_message
+          )}: ${e}, ${e.stack}`
         );
-        console.error(`RPC action ${parsed_message.action} encountered error: `, e);
+        console.error(
+          `RPC action ${parsed_message.action} encountered error: `,
+          e
+        );
       }
     } else {
       console.error(`No RPC action ${parsed_message.action}!`);
@@ -995,10 +1048,10 @@ chrome.runtime.onMessageExternal.addListener(
       switch (type) {
         case "setAccessToken":
           await setLocalStorage(ACCESS_TOKEN_KEY, payload);
-          return
+          return;
         case "setRefreshToken":
           await setLocalStorage(REFRESH_TOKEN_KEY, payload);
-          return
+          return;
         case "getBrowserId":
           const browserId = await getLocalStorage(BROWSER_ID_KEY);
           sendResponse(browserId);
@@ -1033,12 +1086,12 @@ chrome.runtime.onMessageExternal.addListener(
           // clearStorage is commonly used when user logs out
           // from the dashboard app
           await setLocalStorage(USER_KEY, null);
-          await setLocalStorage(USERNAME_KEY, '');
+          await setLocalStorage(USERNAME_KEY, "");
           await setLocalStorage(AUTHENTICATED_KEY, false);
           await setLocalStorage(DEVICE_KEY, null);
           await setLocalStorage(SETTINGS_KEY, null);
-          await setLocalStorage(ACCESS_TOKEN_KEY, '');
-          await setLocalStorage(REFRESH_TOKEN_KEY, '');
+          await setLocalStorage(ACCESS_TOKEN_KEY, "");
+          await setLocalStorage(REFRESH_TOKEN_KEY, "");
           sendResponse("Storage has been cleared");
           return;
         default:

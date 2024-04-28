@@ -1,6 +1,4 @@
-import {
-  isHTMLElement
-} from "./chunk-3XANSPY5.mjs";
+import { isHTMLElement } from "./chunk-3XANSPY5.mjs";
 
 // src/scroll.ts
 function isScrollParent(el) {
@@ -9,9 +7,10 @@ function isScrollParent(el) {
   return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
 }
 function getParent(el) {
-  if (el.localName === "html")
-    return el;
-  return el.assignedSlot || el.parentElement || el.ownerDocument.documentElement;
+  if (el.localName === "html") return el;
+  return (
+    el.assignedSlot || el.parentElement || el.ownerDocument.documentElement
+  );
 }
 function getScrollParent(el) {
   if (["html", "body", "#document"].includes(el.localName)) {
@@ -23,6 +22,4 @@ function getScrollParent(el) {
   return getScrollParent(getParent(el));
 }
 
-export {
-  getScrollParent
-};
+export { getScrollParent };

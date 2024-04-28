@@ -1,27 +1,27 @@
-import { tabsAnatomy as parts } from "@chakra-ui/anatomy"
+import { tabsAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { getColor } from "@chakra-ui/theme-tools"
+} from "@chakra-ui/styled-system";
+import { getColor } from "@chakra-ui/theme-tools";
 
-const $fg = cssVar("tabs-color")
-const $bg = cssVar("tabs-bg")
-const $border = cssVar("tabs-border-color")
+const $fg = cssVar("tabs-color");
+const $bg = cssVar("tabs-bg");
+const $border = cssVar("tabs-border-color");
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
 const baseStyleRoot = defineStyle((props) => {
-  const { orientation } = props
+  const { orientation } = props;
   return {
     display: orientation === "vertical" ? "flex" : "block",
-  }
-})
+  };
+});
 
 const baseStyleTab = defineStyle((props) => {
-  const { isFitted } = props
+  const { isFitted } = props;
 
   return {
     flex: isFitted ? 1 : undefined,
@@ -35,34 +35,34 @@ const baseStyleTab = defineStyle((props) => {
       cursor: "not-allowed",
       opacity: 0.4,
     },
-  }
-})
+  };
+});
 
 const baseStyleTablist = defineStyle((props) => {
-  const { align = "start", orientation } = props
+  const { align = "start", orientation } = props;
 
   const alignments: Record<string, string> = {
     end: "flex-end",
     center: "center",
     start: "flex-start",
-  }
+  };
 
   return {
     justifyContent: alignments[align],
     flexDirection: orientation === "vertical" ? "column" : "row",
-  }
-})
+  };
+});
 
 const baseStyleTabpanel = defineStyle({
   p: 4,
-})
+});
 
 const baseStyle = definePartsStyle((props) => ({
   root: baseStyleRoot(props),
   tab: baseStyleTab(props),
   tablist: baseStyleTablist(props),
   tabpanel: baseStyleTabpanel,
-}))
+}));
 
 const sizes = {
   sm: definePartsStyle({
@@ -86,13 +86,13 @@ const sizes = {
       px: 4,
     },
   }),
-}
+};
 
 const variantLine = definePartsStyle((props) => {
-  const { colorScheme: c, orientation } = props
-  const isVertical = orientation === "vertical"
-  const borderProp = isVertical ? "borderStart" : "borderBottom"
-  const marginProp = isVertical ? "marginStart" : "marginBottom"
+  const { colorScheme: c, orientation } = props;
+  const isVertical = orientation === "vertical";
+  const borderProp = isVertical ? "borderStart" : "borderBottom";
+  const marginProp = isVertical ? "marginStart" : "marginBottom";
 
   return {
     tablist: {
@@ -122,11 +122,11 @@ const variantLine = definePartsStyle((props) => {
       color: $fg.reference,
       bg: $bg.reference,
     },
-  }
-})
+  };
+});
 
 const variantEnclosed = definePartsStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
   return {
     tab: {
       borderTopRadius: "md",
@@ -151,11 +151,11 @@ const variantEnclosed = definePartsStyle((props) => {
       borderBottom: "1px solid",
       borderColor: "inherit",
     },
-  }
-})
+  };
+});
 
 const variantEnclosedColored = definePartsStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
   return {
     tab: {
       border: "1px solid",
@@ -187,11 +187,11 @@ const variantEnclosedColored = definePartsStyle((props) => {
       borderBottom: "1px solid",
       borderColor: "inherit",
     },
-  }
-})
+  };
+});
 
 const variantSoftRounded = definePartsStyle((props) => {
-  const { colorScheme: c, theme } = props
+  const { colorScheme: c, theme } = props;
   return {
     tab: {
       borderRadius: "full",
@@ -202,11 +202,11 @@ const variantSoftRounded = definePartsStyle((props) => {
         bg: getColor(theme, `${c}.100`),
       },
     },
-  }
-})
+  };
+});
 
 const variantSolidRounded = definePartsStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
   return {
     tab: {
       borderRadius: "full",
@@ -226,10 +226,10 @@ const variantSolidRounded = definePartsStyle((props) => {
       color: $fg.reference,
       bg: $bg.reference,
     },
-  }
-})
+  };
+});
 
-const variantUnstyled = definePartsStyle({})
+const variantUnstyled = definePartsStyle({});
 
 const variants = {
   line: variantLine,
@@ -238,7 +238,7 @@ const variants = {
   "soft-rounded": variantSoftRounded,
   "solid-rounded": variantSolidRounded,
   unstyled: variantUnstyled,
-}
+};
 
 export const tabsTheme = defineMultiStyleConfig({
   baseStyle,
@@ -249,4 +249,4 @@ export const tabsTheme = defineMultiStyleConfig({
     variant: "line",
     colorScheme: "blue",
   },
-})
+});

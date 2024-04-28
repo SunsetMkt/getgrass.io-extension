@@ -1,4 +1,4 @@
-import { propNames } from "@chakra-ui/styled-system"
+import { propNames } from "@chakra-ui/styled-system";
 
 /**
  * List of props for emotion to omit from DOM.
@@ -16,7 +16,7 @@ const allPropNames = new Set([
   "__css",
   "css",
   "sx",
-])
+]);
 
 /**
  * htmlWidth and htmlHeight is used in the <Image />
@@ -29,8 +29,8 @@ const validHTMLProps = new Set([
   "htmlHeight",
   "htmlSize",
   "htmlTranslate",
-])
+]);
 
 export function shouldForwardProp(prop: string): boolean {
-  return validHTMLProps.has(prop) || !allPropNames.has(prop)
+  return validHTMLProps.has(prop) || !allPropNames.has(prop);
 }

@@ -1,5 +1,5 @@
 const MotionGlobalConfig = {
-    skipAnimations: false,
+  skipAnimations: false,
 };
 
 export { MotionGlobalConfig };

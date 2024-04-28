@@ -1,17 +1,17 @@
-import { getScrollParent } from "@chakra-ui/dom-utils"
-import { popperCSSVars, usePopper, UsePopperProps } from "@chakra-ui/popper"
-import { PropGetter } from "@chakra-ui/react-types"
-import { useDisclosure } from "@chakra-ui/react-use-disclosure"
-import { useEventListener } from "@chakra-ui/react-use-event-listener"
-import { mergeRefs } from "@chakra-ui/react-use-merge-refs"
-import { callAllHandlers } from "@chakra-ui/shared-utils"
+import { getScrollParent } from "@chakra-ui/dom-utils";
+import { popperCSSVars, usePopper, UsePopperProps } from "@chakra-ui/popper";
+import { PropGetter } from "@chakra-ui/react-types";
+import { useDisclosure } from "@chakra-ui/react-use-disclosure";
+import { useEventListener } from "@chakra-ui/react-use-event-listener";
+import { mergeRefs } from "@chakra-ui/react-use-merge-refs";
+import { callAllHandlers } from "@chakra-ui/shared-utils";
 import React, {
   useCallback,
   useEffect,
   useId,
   useRef,
   type RefObject,
-} from "react"
+} from "react";
 
 export interface UseTooltipProps
   extends Pick<
@@ -27,74 +27,74 @@ export interface UseTooltipProps
    * Delay (in ms) before showing the tooltip
    * @default 0ms
    */
-  openDelay?: number
+  openDelay?: number;
   /**
    * Delay (in ms) before hiding the tooltip
    * @default 0ms
    */
-  closeDelay?: number
+  closeDelay?: number;
   /**
    * If `true`, the tooltip will hide on click
    * @default true
    */
-  closeOnClick?: boolean
+  closeOnClick?: boolean;
   /**
    * If `true`, the tooltip will hide while the mouse is down
    * @deprecated - use `closeOnPointerDown` instead
    */
-  closeOnMouseDown?: boolean
+  closeOnMouseDown?: boolean;
   /**
    * If `true`, the tooltip will hide while the pointer is down
    * @default true
    */
-  closeOnPointerDown?: boolean
+  closeOnPointerDown?: boolean;
   /**
    * If `true`, the tooltip will hide on pressing Esc key
    * @default true
    */
-  closeOnEsc?: boolean
+  closeOnEsc?: boolean;
   /**
    * Callback to run when the tooltip shows
    */
-  onOpen?(): void
+  onOpen?(): void;
   /**
    * Callback to run when the tooltip hides
    */
-  onClose?(): void
+  onClose?(): void;
   /**
    * Custom `id` to use in place of `uuid`
    */
-  id?: string
+  id?: string;
   /**
    * If `true`, the tooltip will be shown (in controlled mode)
    * @default false
    */
-  isOpen?: boolean
+  isOpen?: boolean;
   /**
    * If `true`, the tooltip will be initially shown
    * @default false
    */
-  defaultIsOpen?: boolean
+  defaultIsOpen?: boolean;
   /**
    * @default false
    */
-  isDisabled?: boolean
+  isDisabled?: boolean;
   /**
    * @default false
    */
-  closeOnScroll?: boolean
+  closeOnScroll?: boolean;
   /**
    * @default 10
    */
-  arrowSize?: number
-  arrowShadowColor?: string
+  arrowSize?: number;
+  arrowShadowColor?: string;
 }
 
 const getDoc = (ref: React.RefObject<Element | null>) =>
-  ref.current?.ownerDocument || document
+  ref.current?.ownerDocument || document;
 
 const getWin = (ref: React.RefObject<Element | null>) =>
-  ref.current?.ownerDocument?.defaultView || window
+  ref.current?.ownerDocument?.defaultView || window;
 
 export function useTooltip(props: UseTooltipProps = {}) {
   const {
@@ -120,14 +120,14 @@ export function useTooltip(props: UseTooltipProps = {}) {
     offset,
     direction,
     ...htmlProps
-  } = props
+  } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure({
     isOpen: isOpenProp,
     defaultIsOpen,
     onOpen: onOpenProp,
     onClose: onCloseProp,
-  })
+  });
 
   const { referenceRef, getPopperProps, getArrowInnerProps, getArrowProps } =
     usePopper({
@@ -138,107 +138,107 @@ export function useTooltip(props: UseTooltipProps = {}) {
       gutter,
       offset,
       direction,
-    })
+    });
 
-  const uuid = useId()
-  const uid = id ?? uuid
-  const tooltipId = `tooltip-${uid}`
+  const uuid = useId();
+  const uid = id ?? uuid;
+  const tooltipId = `tooltip-${uid}`;
 
-  const ref = useRef<HTMLElement>(null)
+  const ref = useRef<HTMLElement>(null);
 
-  const enterTimeout = useRef<number>()
+  const enterTimeout = useRef<number>();
   const clearEnterTimeout = useCallback(() => {
     if (enterTimeout.current) {
-      clearTimeout(enterTimeout.current)
-      enterTimeout.current = undefined
+      clearTimeout(enterTimeout.current);
+      enterTimeout.current = undefined;
     }
-  }, [])
+  }, []);
 
-  const exitTimeout = useRef<number>()
+  const exitTimeout = useRef<number>();
   const clearExitTimeout = useCallback(() => {
     if (exitTimeout.current) {
-      clearTimeout(exitTimeout.current)
-      exitTimeout.current = undefined
+      clearTimeout(exitTimeout.current);
+      exitTimeout.current = undefined;
     }
-  }, [])
+  }, []);
 
   const closeNow = useCallback(() => {
-    clearExitTimeout()
-    onClose()
-  }, [onClose, clearExitTimeout])
+    clearExitTimeout();
+    onClose();
+  }, [onClose, clearExitTimeout]);
 
-  const dispatchCloseEvent = useCloseEvent(ref, closeNow)
+  const dispatchCloseEvent = useCloseEvent(ref, closeNow);
 
   const openWithDelay = useCallback(() => {
     if (!isDisabled && !enterTimeout.current) {
-      if (isOpen) dispatchCloseEvent()
-      const win = getWin(ref)
-      enterTimeout.current = win.setTimeout(onOpen, openDelay)
+      if (isOpen) dispatchCloseEvent();
+      const win = getWin(ref);
+      enterTimeout.current = win.setTimeout(onOpen, openDelay);
     }
-  }, [dispatchCloseEvent, isDisabled, isOpen, onOpen, openDelay])
+  }, [dispatchCloseEvent, isDisabled, isOpen, onOpen, openDelay]);
 
   const closeWithDelay = useCallback(() => {
-    clearEnterTimeout()
-    const win = getWin(ref)
-    exitTimeout.current = win.setTimeout(closeNow, closeDelay)
-  }, [closeDelay, closeNow, clearEnterTimeout])
+    clearEnterTimeout();
+    const win = getWin(ref);
+    exitTimeout.current = win.setTimeout(closeNow, closeDelay);
+  }, [closeDelay, closeNow, clearEnterTimeout]);
 
   const onClick = useCallback(() => {
     if (isOpen && closeOnClick) {
-      closeWithDelay()
+      closeWithDelay();
     }
-  }, [closeOnClick, closeWithDelay, isOpen])
+  }, [closeOnClick, closeWithDelay, isOpen]);
 
   const onPointerDown = useCallback(() => {
     if (isOpen && closeOnPointerDown) {
-      closeWithDelay()
+      closeWithDelay();
     }
-  }, [closeOnPointerDown, closeWithDelay, isOpen])
+  }, [closeOnPointerDown, closeWithDelay, isOpen]);
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (isOpen && event.key === "Escape") {
-        closeWithDelay()
+        closeWithDelay();
       }
     },
-    [isOpen, closeWithDelay],
-  )
+    [isOpen, closeWithDelay]
+  );
 
   useEventListener(
     () => getDoc(ref),
     "keydown",
-    closeOnEsc ? onKeyDown : undefined,
-  )
+    closeOnEsc ? onKeyDown : undefined
+  );
 
   useEventListener(
     () => {
-      if (!closeOnScroll) return null
-      const node = ref.current
-      if (!node) return null
-      const scrollParent = getScrollParent(node)
-      return scrollParent.localName === "body" ? getWin(ref) : scrollParent
+      if (!closeOnScroll) return null;
+      const node = ref.current;
+      if (!node) return null;
+      const scrollParent = getScrollParent(node);
+      return scrollParent.localName === "body" ? getWin(ref) : scrollParent;
     },
     "scroll",
     () => {
       if (isOpen && closeOnScroll) {
-        closeNow()
+        closeNow();
       }
     },
-    { passive: true, capture: true },
-  )
+    { passive: true, capture: true }
+  );
 
   useEffect(() => {
-    if (!isDisabled) return
-    clearEnterTimeout()
-    if (isOpen) onClose()
-  }, [isDisabled, isOpen, onClose, clearEnterTimeout])
+    if (!isDisabled) return;
+    clearEnterTimeout();
+    if (isOpen) onClose();
+  }, [isDisabled, isOpen, onClose, clearEnterTimeout]);
 
   useEffect(() => {
     return () => {
-      clearEnterTimeout()
-      clearExitTimeout()
-    }
-  }, [clearEnterTimeout, clearExitTimeout])
+      clearEnterTimeout();
+      clearExitTimeout();
+    };
+  }, [clearEnterTimeout, clearExitTimeout]);
 
   /**
    * This allows for catching pointerleave events when the tooltip
@@ -246,7 +246,7 @@ export function useTooltip(props: UseTooltipProps = {}) {
    * React regarding the onPointerLeave polyfill.
    * @see https://github.com/facebook/react/issues/11972
    */
-  useEventListener(() => ref.current, "pointerleave", closeWithDelay)
+  useEventListener(() => ref.current, "pointerleave", closeWithDelay);
 
   const getTriggerProps: PropGetter = useCallback(
     (props = {}, _ref = null) => {
@@ -254,17 +254,17 @@ export function useTooltip(props: UseTooltipProps = {}) {
         ...props,
         ref: mergeRefs(ref, _ref, referenceRef),
         onPointerEnter: callAllHandlers(props.onPointerEnter, (e) => {
-          if (e.pointerType === "touch") return
-          openWithDelay()
+          if (e.pointerType === "touch") return;
+          openWithDelay();
         }),
         onClick: callAllHandlers(props.onClick, onClick),
         onPointerDown: callAllHandlers(props.onPointerDown, onPointerDown),
         onFocus: callAllHandlers(props.onFocus, openWithDelay),
         onBlur: callAllHandlers(props.onBlur, closeWithDelay),
         "aria-describedby": isOpen ? tooltipId : undefined,
-      }
+      };
 
-      return triggerProps
+      return triggerProps;
     },
     [
       openWithDelay,
@@ -274,8 +274,8 @@ export function useTooltip(props: UseTooltipProps = {}) {
       tooltipId,
       onClick,
       referenceRef,
-    ],
-  )
+    ]
+  );
 
   const getTooltipPositionerProps: PropGetter = useCallback(
     (props = {}, forwardedRef = null) =>
@@ -290,10 +290,10 @@ export function useTooltip(props: UseTooltipProps = {}) {
             [popperCSSVars.arrowShadowColor.var]: arrowShadowColor,
           },
         },
-        forwardedRef,
+        forwardedRef
       ),
-    [getPopperProps, arrowSize, arrowShadowColor],
-  )
+    [getPopperProps, arrowSize, arrowShadowColor]
+  );
 
   const getTooltipProps: PropGetter = useCallback(
     (props = {}, ref = null) => {
@@ -301,7 +301,7 @@ export function useTooltip(props: UseTooltipProps = {}) {
         ...props.style,
         position: "relative",
         transformOrigin: popperCSSVars.transformOrigin.varRef,
-      }
+      };
 
       return {
         ref,
@@ -310,10 +310,10 @@ export function useTooltip(props: UseTooltipProps = {}) {
         id: tooltipId,
         role: "tooltip",
         style: styles,
-      }
+      };
     },
-    [htmlProps, tooltipId],
-  )
+    [htmlProps, tooltipId]
+  );
 
   return {
     isOpen,
@@ -324,23 +324,23 @@ export function useTooltip(props: UseTooltipProps = {}) {
     getTooltipPositionerProps,
     getArrowProps,
     getArrowInnerProps,
-  }
+  };
 }
 
-export type UseTooltipReturn = ReturnType<typeof useTooltip>
+export type UseTooltipReturn = ReturnType<typeof useTooltip>;
 
-const closeEventName = "chakra-ui:close-tooltip"
+const closeEventName = "chakra-ui:close-tooltip";
 
 function useCloseEvent(ref: RefObject<Element>, close: () => void) {
   useEffect(() => {
-    const doc = getDoc(ref)
-    doc.addEventListener(closeEventName, close)
-    return () => doc.removeEventListener(closeEventName, close)
-  }, [close, ref])
+    const doc = getDoc(ref);
+    doc.addEventListener(closeEventName, close);
+    return () => doc.removeEventListener(closeEventName, close);
+  }, [close, ref]);
 
   return () => {
-    const doc = getDoc(ref)
-    const win = getWin(ref)
-    doc.dispatchEvent(new win.CustomEvent(closeEventName))
-  }
+    const doc = getDoc(ref);
+    const win = getWin(ref);
+    doc.dispatchEvent(new win.CustomEvent(closeEventName));
+  };
 }

@@ -1,5 +1,5 @@
-import { Placement, Modifier, State } from "@popperjs/core"
-import { getBoxShadow, toTransformOrigin, cssVars } from "./utils"
+import { Placement, Modifier, State } from "@popperjs/core";
+import { getBoxShadow, toTransformOrigin, cssVars } from "./utils";
 
 /* -------------------------------------------------------------------------------------------------
  The match width modifier sets the popper width to match the reference.
@@ -12,15 +12,15 @@ export const matchWidth: Modifier<"matchWidth", any> = {
   phase: "beforeWrite",
   requires: ["computeStyles"],
   fn: ({ state }) => {
-    state.styles.popper.width = `${state.rects.reference.width}px`
+    state.styles.popper.width = `${state.rects.reference.width}px`;
   },
   effect:
     ({ state }) =>
     () => {
-      const reference = state.elements.reference as HTMLElement
-      state.elements.popper.style.width = `${reference.offsetWidth}px`
+      const reference = state.elements.reference as HTMLElement;
+      state.elements.popper.style.width = `${reference.offsetWidth}px`;
     },
-}
+};
 
 /* -------------------------------------------------------------------------------------------------
   The transform origin modifier sets the css `transformOrigin` value of the popper
@@ -34,21 +34,21 @@ export const transformOrigin: Modifier<"transformOrigin", any> = {
   enabled: true,
   phase: "write",
   fn: ({ state }) => {
-    setTransformOrigin(state)
+    setTransformOrigin(state);
   },
   effect:
     ({ state }) =>
     () => {
-      setTransformOrigin(state)
+      setTransformOrigin(state);
     },
-}
+};
 
 const setTransformOrigin = (state: State) => {
   state.elements.popper.style.setProperty(
     cssVars.transformOrigin.var,
-    toTransformOrigin(state.placement),
-  )
-}
+    toTransformOrigin(state.placement)
+  );
+};
 
 /* -------------------------------------------------------------------------------------------------
   The position arrow modifier adds width, height and overrides the `top/left/right/bottom`
@@ -60,13 +60,13 @@ export const positionArrow: Modifier<"positionArrow", any> = {
   enabled: true,
   phase: "afterWrite",
   fn: ({ state }) => {
-    setArrowStyles(state)
+    setArrowStyles(state);
   },
-}
+};
 
 const setArrowStyles = (state: Partial<State>) => {
-  if (!state.placement) return
-  const overrides = getArrowStyle(state.placement)
+  if (!state.placement) return;
+  const overrides = getArrowStyle(state.placement);
 
   if (state.elements?.arrow && overrides) {
     Object.assign(state.elements.arrow.style, {
@@ -74,34 +74,34 @@ const setArrowStyles = (state: Partial<State>) => {
       width: cssVars.arrowSize.varRef,
       height: cssVars.arrowSize.varRef,
       zIndex: -1,
-    })
+    });
 
     const vars = {
       [cssVars.arrowSizeHalf
         .var]: `calc(${cssVars.arrowSize.varRef} / 2 - 1px)`,
       [cssVars.arrowOffset.var]: `calc(${cssVars.arrowSizeHalf.varRef} * -1)`,
-    }
+    };
 
     for (const property in vars) {
-      state.elements.arrow.style.setProperty(property, vars[property])
+      state.elements.arrow.style.setProperty(property, vars[property]);
     }
   }
-}
+};
 
 const getArrowStyle = (placement: Placement) => {
   if (placement.startsWith("top")) {
-    return { property: "bottom", value: cssVars.arrowOffset.varRef }
+    return { property: "bottom", value: cssVars.arrowOffset.varRef };
   }
   if (placement.startsWith("bottom")) {
-    return { property: "top", value: cssVars.arrowOffset.varRef }
+    return { property: "top", value: cssVars.arrowOffset.varRef };
   }
   if (placement.startsWith("left")) {
-    return { property: "right", value: cssVars.arrowOffset.varRef }
+    return { property: "right", value: cssVars.arrowOffset.varRef };
   }
   if (placement.startsWith("right")) {
-    return { property: "left", value: cssVars.arrowOffset.varRef }
+    return { property: "left", value: cssVars.arrowOffset.varRef };
   }
-}
+};
 
 /* -------------------------------------------------------------------------------------------------
   The inner arrow modifier, sets the placement styles for the inner arrow that forms
@@ -114,26 +114,26 @@ export const innerArrow: Modifier<"innerArrow", any> = {
   phase: "main",
   requires: ["arrow"],
   fn: ({ state }) => {
-    setInnerArrowStyles(state)
+    setInnerArrowStyles(state);
   },
   effect:
     ({ state }) =>
     () => {
-      setInnerArrowStyles(state)
+      setInnerArrowStyles(state);
     },
-}
+};
 
 const setInnerArrowStyles = (state: State) => {
-  if (!state.elements.arrow) return
+  if (!state.elements.arrow) return;
 
   const inner = state.elements.arrow.querySelector(
-    "[data-popper-arrow-inner]",
-  ) as HTMLElement | null
+    "[data-popper-arrow-inner]"
+  ) as HTMLElement | null;
 
-  if (!inner) return
-  const boxShadow = getBoxShadow(state.placement)
+  if (!inner) return;
+  const boxShadow = getBoxShadow(state.placement);
   if (boxShadow) {
-    inner.style.setProperty("--popper-arrow-default-shadow", boxShadow)
+    inner.style.setProperty("--popper-arrow-default-shadow", boxShadow);
   }
 
   Object.assign(inner.style, {
@@ -146,5 +146,5 @@ const setInnerArrowStyles = (state: State) => {
     position: "absolute",
     zIndex: "inherit",
     boxShadow: `var(--popper-arrow-shadow, var(--popper-arrow-default-shadow))`,
-  })
-}
+  });
+};

@@ -12,7 +12,7 @@ function isHTMLElement(node) {
 
 function isShadowRoot(node) {
   // IE 11 has no ShadowRoot
-  if (typeof ShadowRoot === 'undefined') {
+  if (typeof ShadowRoot === "undefined") {
     return false;
   }
 

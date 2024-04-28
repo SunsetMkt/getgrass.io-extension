@@ -1,5 +1,5 @@
-import { popperCSSVars } from "@chakra-ui/popper"
-import { Portal, PortalProps } from "@chakra-ui/portal"
+import { popperCSSVars } from "@chakra-ui/popper";
+import { Portal, PortalProps } from "@chakra-ui/portal";
 import {
   chakra,
   forwardRef,
@@ -9,12 +9,12 @@ import {
   useStyleConfig,
   useTheme,
   getCSSVar,
-} from "@chakra-ui/system"
-import { omit, pick } from "@chakra-ui/object-utils"
-import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion"
-import { Children, cloneElement } from "react"
-import { scale } from "./tooltip.transition"
-import { useTooltip, UseTooltipProps } from "./use-tooltip"
+} from "@chakra-ui/system";
+import { omit, pick } from "@chakra-ui/object-utils";
+import { AnimatePresence, HTMLMotionProps, motion } from "framer-motion";
+import { Children, cloneElement } from "react";
+import { scale } from "./tooltip.transition";
+import { useTooltip, UseTooltipProps } from "./use-tooltip";
 
 export interface TooltipProps
   extends HTMLChakraProps<"div">,
@@ -24,11 +24,11 @@ export interface TooltipProps
    * The React component to use as the
    * trigger for the tooltip
    */
-  children: React.ReactNode
+  children: React.ReactNode;
   /**
    * The label of the tooltip
    */
-  label?: React.ReactNode
+  label?: React.ReactNode;
   /**
    * The accessible, human friendly label to use for
    * screen readers.
@@ -36,26 +36,26 @@ export interface TooltipProps
    * If passed, tooltip will show the content `label`
    * but expose only `aria-label` to assistive technologies
    */
-  "aria-label"?: string
+  "aria-label"?: string;
   /**
    * If `true`, the tooltip will wrap its children
    * in a `<span/>` with `tabIndex=0`
    * @default false
    */
-  shouldWrapChildren?: boolean
+  shouldWrapChildren?: boolean;
   /**
    * If `true`, the tooltip will show an arrow tip
    * @default false
    */
-  hasArrow?: boolean
+  hasArrow?: boolean;
   /**
    * Props to be forwarded to the portal component
    */
-  portalProps?: Pick<PortalProps, "appendToParentPortal" | "containerRef">
-  motionProps?: HTMLMotionProps<"div">
+  portalProps?: Pick<PortalProps, "appendToParentPortal" | "containerRef">;
+  motionProps?: HTMLMotionProps<"div">;
 }
 
-const MotionDiv = chakra(motion.div)
+const MotionDiv = chakra(motion.div);
 
 /**
  * Tooltips display informative text when users hover, focus on, or tap an element.
@@ -64,9 +64,9 @@ const MotionDiv = chakra(motion.div)
  * @see WAI-ARIA https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/
  */
 export const Tooltip = forwardRef<TooltipProps, "div">((props, ref) => {
-  const styles = useStyleConfig("Tooltip", props)
-  const ownProps = omitThemingProps(props)
-  const theme = useTheme()
+  const styles = useStyleConfig("Tooltip", props);
+  const ownProps = omitThemingProps(props);
+  const theme = useTheme();
 
   const {
     children,
@@ -81,20 +81,20 @@ export const Tooltip = forwardRef<TooltipProps, "div">((props, ref) => {
     bgColor,
     motionProps,
     ...rest
-  } = ownProps
+  } = ownProps;
 
-  const userDefinedBg = background ?? backgroundColor ?? bg ?? bgColor
+  const userDefinedBg = background ?? backgroundColor ?? bg ?? bgColor;
 
   if (userDefinedBg) {
-    styles.bg = userDefinedBg
-    const bgVar = getCSSVar(theme, "colors", userDefinedBg)
-    ;(styles as any)[popperCSSVars.arrowBg.var] = bgVar
+    styles.bg = userDefinedBg;
+    const bgVar = getCSSVar(theme, "colors", userDefinedBg);
+    (styles as any)[popperCSSVars.arrowBg.var] = bgVar;
   }
-  const tooltip = useTooltip({ ...rest, direction: theme.direction })
+  const tooltip = useTooltip({ ...rest, direction: theme.direction });
 
-  const shouldWrap = typeof children === "string" || shouldWrapChildren
+  const shouldWrap = typeof children === "string" || shouldWrapChildren;
 
-  let trigger: React.ReactElement
+  let trigger: React.ReactElement;
 
   if (shouldWrap) {
     trigger = (
@@ -105,36 +105,36 @@ export const Tooltip = forwardRef<TooltipProps, "div">((props, ref) => {
       >
         {children}
       </chakra.span>
-    )
+    );
   } else {
     /**
      * Ensure tooltip has only one child node
      */
     const child = Children.only(children) as React.ReactElement & {
-      ref?: React.Ref<any>
-    }
+      ref?: React.Ref<any>;
+    };
     trigger = cloneElement(
       child,
-      tooltip.getTriggerProps(child.props, child.ref),
-    )
+      tooltip.getTriggerProps(child.props, child.ref)
+    );
   }
 
-  const hasAriaLabel = !!ariaLabel
+  const hasAriaLabel = !!ariaLabel;
 
-  const _tooltipProps = tooltip.getTooltipProps({}, ref)
+  const _tooltipProps = tooltip.getTooltipProps({}, ref);
 
   const tooltipProps = hasAriaLabel
     ? omit(_tooltipProps, ["role", "id"])
-    : _tooltipProps
+    : _tooltipProps;
 
-  const srOnlyProps = pick(_tooltipProps, ["role", "id"])
+  const srOnlyProps = pick(_tooltipProps, ["role", "id"]);
 
   /**
    * If the `label` is empty, there's no point showing the tooltip.
    * Let's simply return the children
    */
   if (!label) {
-    return <>{children}</>
+    return <>{children}</>;
   }
 
   return (
@@ -183,7 +183,7 @@ export const Tooltip = forwardRef<TooltipProps, "div">((props, ref) => {
         )}
       </AnimatePresence>
     </>
-  )
-})
+  );
+});
 
-Tooltip.displayName = "Tooltip"
+Tooltip.displayName = "Tooltip";

@@ -1,4 +1,7 @@
-import { createMultiStyleConfigHelpers, cssVar } from "@chakra-ui/styled-system"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+} from "@chakra-ui/styled-system";
 
 const { defineMultiStyleConfig, definePartsStyle } =
   createMultiStyleConfigHelpers([
@@ -10,13 +13,13 @@ const { defineMultiStyleConfig, definePartsStyle } =
     "separator",
     "icon",
     "number",
-  ])
+  ]);
 
-const $size = cssVar("stepper-indicator-size")
-const $iconSize = cssVar("stepper-icon-size")
-const $titleFontSize = cssVar("stepper-title-font-size")
-const $descFontSize = cssVar("stepper-description-font-size")
-const $accentColor = cssVar("stepper-accent-color")
+const $size = cssVar("stepper-indicator-size");
+const $iconSize = cssVar("stepper-icon-size");
+const $titleFontSize = cssVar("stepper-title-font-size");
+const $descFontSize = cssVar("stepper-description-font-size");
+const $accentColor = cssVar("stepper-accent-color");
 
 const baseStyle = definePartsStyle(({ colorScheme: c }) => ({
   stepper: {
@@ -105,7 +108,7 @@ const baseStyle = definePartsStyle(({ colorScheme: c }) => ({
       insetStart: `calc(${$size.reference} / 2 - 1px)`,
     },
   },
-}))
+}));
 
 export const stepperTheme = defineMultiStyleConfig({
   baseStyle,
@@ -147,4 +150,4 @@ export const stepperTheme = defineMultiStyleConfig({
     size: "md",
     colorScheme: "blue",
   },
-})
+});

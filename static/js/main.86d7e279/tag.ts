@@ -1,21 +1,21 @@
-import { tagAnatomy as parts } from "@chakra-ui/anatomy"
+import { tagAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { badgeTheme, badgeVars } from "./badge"
+} from "@chakra-ui/styled-system";
+import { badgeTheme, badgeVars } from "./badge";
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $bg = cssVar("tag-bg")
-const $color = cssVar("tag-color")
-const $shadow = cssVar("tag-shadow")
-const $minH = cssVar("tag-min-height")
-const $minW = cssVar("tag-min-width")
-const $fontSize = cssVar("tag-font-size")
-const $paddingX = cssVar("tag-padding-inline")
+const $bg = cssVar("tag-bg");
+const $color = cssVar("tag-color");
+const $shadow = cssVar("tag-shadow");
+const $minH = cssVar("tag-min-height");
+const $minW = cssVar("tag-min-width");
+const $fontSize = cssVar("tag-font-size");
+const $paddingX = cssVar("tag-padding-inline");
 
 const baseStyleContainer = defineStyle({
   fontWeight: "medium",
@@ -35,12 +35,12 @@ const baseStyleContainer = defineStyle({
   _focusVisible: {
     [$shadow.variable]: "shadows.outline",
   },
-})
+});
 
 const baseStyleLabel = defineStyle({
   lineHeight: 1.2,
   overflow: "visible",
-})
+});
 
 const baseStyleCloseButton = defineStyle({
   fontSize: "lg",
@@ -65,13 +65,13 @@ const baseStyleCloseButton = defineStyle({
   _active: {
     opacity: 1,
   },
-})
+});
 
 const baseStyle = definePartsStyle({
   container: baseStyleContainer,
   label: baseStyleLabel,
   closeButton: baseStyleCloseButton,
-})
+});
 
 const sizes = {
   sm: definePartsStyle({
@@ -102,7 +102,7 @@ const sizes = {
       [$paddingX.variable]: "space.3",
     },
   }),
-}
+};
 
 const variants = {
   subtle: definePartsStyle((props) => ({
@@ -114,7 +114,7 @@ const variants = {
   outline: definePartsStyle((props) => ({
     container: badgeTheme.variants?.outline(props),
   })),
-}
+};
 
 export const tagTheme = defineMultiStyleConfig({
   variants,
@@ -125,4 +125,4 @@ export const tagTheme = defineMultiStyleConfig({
     variant: "subtle",
     colorScheme: "gray",
   },
-})
+});

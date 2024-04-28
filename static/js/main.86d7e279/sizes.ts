@@ -1,4 +1,4 @@
-import { spacing } from "./spacing"
+import { spacing } from "./spacing";
 
 const largeSizes = {
   max: "max-content",
@@ -19,19 +19,19 @@ const largeSizes = {
   "7xl": "80rem",
   "8xl": "90rem",
   prose: "60ch",
-}
+};
 
 const container = {
   sm: "640px",
   md: "768px",
   lg: "1024px",
   xl: "1280px",
-}
+};
 
 const sizes = {
   ...spacing,
   ...largeSizes,
   container,
-}
+};
 
-export default sizes
+export default sizes;

@@ -1,22 +1,22 @@
-import { switchAnatomy as parts } from "@chakra-ui/anatomy"
+import { switchAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { calc, cssVar } from "@chakra-ui/theme-tools"
+} from "@chakra-ui/styled-system";
+import { calc, cssVar } from "@chakra-ui/theme-tools";
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $width = cssVar("switch-track-width")
-const $height = cssVar("switch-track-height")
-const $diff = cssVar("switch-track-diff")
-const diffValue = calc.subtract($width, $height)
-const $translateX = cssVar("switch-thumb-x")
-const $bg = cssVar("switch-bg")
+const $width = cssVar("switch-track-width");
+const $height = cssVar("switch-track-height");
+const $diff = cssVar("switch-track-diff");
+const diffValue = calc.subtract($width, $height);
+const $translateX = cssVar("switch-thumb-x");
+const $bg = cssVar("switch-bg");
 
 const baseStyleTrack = defineStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
 
   return {
     borderRadius: "full",
@@ -43,8 +43,8 @@ const baseStyleTrack = defineStyle((props) => {
       },
     },
     bg: $bg.reference,
-  }
-})
+  };
+});
 
 const baseStyleThumb = defineStyle({
   bg: "white",
@@ -56,7 +56,7 @@ const baseStyleThumb = defineStyle({
   _checked: {
     transform: `translateX(${$translateX.reference})`,
   },
-})
+});
 
 const baseStyle = definePartsStyle((props) => ({
   container: {
@@ -68,7 +68,7 @@ const baseStyle = definePartsStyle((props) => ({
   },
   track: baseStyleTrack(props),
   thumb: baseStyleThumb,
-}))
+}));
 
 const sizes = {
   sm: definePartsStyle({
@@ -89,7 +89,7 @@ const sizes = {
       [$height.variable]: "sizes.6",
     },
   }),
-}
+};
 
 export const switchTheme = defineMultiStyleConfig({
   baseStyle,
@@ -98,4 +98,4 @@ export const switchTheme = defineMultiStyleConfig({
     size: "md",
     colorScheme: "blue",
   },
-})
+});

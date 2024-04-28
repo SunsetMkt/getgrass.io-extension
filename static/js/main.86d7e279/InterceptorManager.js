@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import utils from './../utils.js';
+import utils from "./../utils.js";
 
 class InterceptorManager {
   constructor() {
@@ -20,7 +20,7 @@ class InterceptorManager {
       fulfilled,
       rejected,
       synchronous: options ? options.synchronous : false,
-      runWhen: options ? options.runWhen : null
+      runWhen: options ? options.runWhen : null,
     });
     return this.handlers.length - 1;
   }

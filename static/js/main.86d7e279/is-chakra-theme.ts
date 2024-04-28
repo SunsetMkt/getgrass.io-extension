@@ -1,5 +1,5 @@
-import { isObject } from "@chakra-ui/shared-utils"
-import type { ChakraTheme } from "../theme.types"
+import { isObject } from "@chakra-ui/shared-utils";
+import type { ChakraTheme } from "../theme.types";
 
 export const requiredChakraThemeKeys: (keyof ChakraTheme)[] = [
   "borders",
@@ -20,14 +20,14 @@ export const requiredChakraThemeKeys: (keyof ChakraTheme)[] = [
   "styles",
   "transition",
   "zIndices",
-]
+];
 
 export function isChakraTheme(unit: unknown): unit is ChakraTheme {
   if (!isObject(unit)) {
-    return false
+    return false;
   }
 
   return requiredChakraThemeKeys.every((propertyName) =>
-    Object.prototype.hasOwnProperty.call(unit, propertyName),
-  )
+    Object.prototype.hasOwnProperty.call(unit, propertyName)
+  );
 }

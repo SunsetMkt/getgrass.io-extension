@@ -1,5 +1,5 @@
-import { useContext, useId, useEffect } from 'react';
-import { PresenceContext } from '../../context/PresenceContext.mjs';
+import { useContext, useId, useEffect } from "react";
+import { PresenceContext } from "../../context/PresenceContext.mjs";
 
 /**
  * When a component is the child of `AnimatePresence`, it can use `usePresence`
@@ -25,16 +25,15 @@ import { PresenceContext } from '../../context/PresenceContext.mjs';
  * @public
  */
 function usePresence() {
-    const context = useContext(PresenceContext);
-    if (context === null)
-        return [true, null];
-    const { isPresent, onExitComplete, register } = context;
-    // It's safe to call the following hooks conditionally (after an early return) because the context will always
-    // either be null or non-null for the lifespan of the component.
-    const id = useId();
-    useEffect(() => register(id), []);
-    const safeToRemove = () => onExitComplete && onExitComplete(id);
-    return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
+  const context = useContext(PresenceContext);
+  if (context === null) return [true, null];
+  const { isPresent, onExitComplete, register } = context;
+  // It's safe to call the following hooks conditionally (after an early return) because the context will always
+  // either be null or non-null for the lifespan of the component.
+  const id = useId();
+  useEffect(() => register(id), []);
+  const safeToRemove = () => onExitComplete && onExitComplete(id);
+  return !isPresent && onExitComplete ? [false, safeToRemove] : [true];
 }
 /**
  * Similar to `usePresence`, except `useIsPresent` simply returns whether or not the component is present.
@@ -57,10 +56,10 @@ function usePresence() {
  * @public
  */
 function useIsPresent() {
-    return isPresent(useContext(PresenceContext));
+  return isPresent(useContext(PresenceContext));
 }
 function isPresent(context) {
-    return context === null ? true : context.isPresent;
+  return context === null ? true : context.isPresent;
 }
 
 export { isPresent, useIsPresent, usePresence };

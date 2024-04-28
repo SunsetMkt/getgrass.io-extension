@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var reactIs = require('react-is');
+var reactIs = require("react-is");
 
 /**
  * Copyright 2015, Yahoo! Inc.
@@ -17,7 +17,7 @@ var REACT_STATICS = {
   getDerivedStateFromProps: true,
   mixins: true,
   propTypes: true,
-  type: true
+  type: true,
 };
 var KNOWN_STATICS = {
   name: true,
@@ -26,22 +26,22 @@ var KNOWN_STATICS = {
   caller: true,
   callee: true,
   arguments: true,
-  arity: true
+  arity: true,
 };
 var FORWARD_REF_STATICS = {
-  '$$typeof': true,
+  $$typeof: true,
   render: true,
   defaultProps: true,
   displayName: true,
-  propTypes: true
+  propTypes: true,
 };
 var MEMO_STATICS = {
-  '$$typeof': true,
+  $$typeof: true,
   compare: true,
   defaultProps: true,
   displayName: true,
   propTypes: true,
-  type: true
+  type: true,
 };
 var TYPE_STATICS = {};
 TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
@@ -53,8 +53,7 @@ function getStatics(component) {
     return MEMO_STATICS;
   } // React v16.12 and above
 
-
-  return TYPE_STATICS[component['$$typeof']] || REACT_STATICS;
+  return TYPE_STATICS[component["$$typeof"]] || REACT_STATICS;
 }
 
 var defineProperty = Object.defineProperty;
@@ -64,7 +63,7 @@ var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 var getPrototypeOf = Object.getPrototypeOf;
 var objectPrototype = Object.prototype;
 function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
-  if (typeof sourceComponent !== 'string') {
+  if (typeof sourceComponent !== "string") {
     // don't hoist over string (html) components
     if (objectPrototype) {
       var inheritedComponent = getPrototypeOf(sourceComponent);
@@ -86,7 +85,12 @@ function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
     for (var i = 0; i < keys.length; ++i) {
       var key = keys[i];
 
-      if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
+      if (
+        !KNOWN_STATICS[key] &&
+        !(blacklist && blacklist[key]) &&
+        !(sourceStatics && sourceStatics[key]) &&
+        !(targetStatics && targetStatics[key])
+      ) {
         var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
 
         try {

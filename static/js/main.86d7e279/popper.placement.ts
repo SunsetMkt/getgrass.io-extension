@@ -1,4 +1,4 @@
-import type { Placement } from "@popperjs/core"
+import type { Placement } from "@popperjs/core";
 
 type Logical =
   | "start-start"
@@ -6,11 +6,11 @@ type Logical =
   | "end-start"
   | "end-end"
   | "start"
-  | "end"
+  | "end";
 
-type PlacementWithLogical = Placement | Logical
+type PlacementWithLogical = Placement | Logical;
 
-export type { Placement, PlacementWithLogical }
+export type { Placement, PlacementWithLogical };
 
 const logicals: Record<Logical, { ltr: Placement; rtl: Placement }> = {
   "start-start": { ltr: "left-start", rtl: "right-start" },
@@ -19,7 +19,7 @@ const logicals: Record<Logical, { ltr: Placement; rtl: Placement }> = {
   "end-end": { ltr: "right-end", rtl: "left-end" },
   start: { ltr: "left", rtl: "right" },
   end: { ltr: "right", rtl: "left" },
-}
+};
 
 const opposites: Partial<Record<Placement, Placement>> = {
   "auto-start": "auto-end",
@@ -28,13 +28,13 @@ const opposites: Partial<Record<Placement, Placement>> = {
   "top-end": "top-start",
   "bottom-start": "bottom-end",
   "bottom-end": "bottom-start",
-}
+};
 
 export function getPopperPlacement(
   placement: PlacementWithLogical,
-  dir: "ltr" | "rtl" = "ltr",
+  dir: "ltr" | "rtl" = "ltr"
 ): Placement {
-  const value = ((logicals as any)[placement]?.[dir] || placement) as Placement
-  if (dir === "ltr") return value
-  return (opposites as any)[placement] ?? value
+  const value = ((logicals as any)[placement]?.[dir] || placement) as Placement;
+  if (dir === "ltr") return value;
+  return (opposites as any)[placement] ?? value;
 }

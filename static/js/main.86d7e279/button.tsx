@@ -1,4 +1,4 @@
-import { useMergeRefs } from "@chakra-ui/react-use-merge-refs"
+import { useMergeRefs } from "@chakra-ui/react-use-merge-refs";
 import {
   chakra,
   forwardRef,
@@ -7,15 +7,15 @@ import {
   SystemStyleObject,
   ThemingProps,
   useStyleConfig,
-} from "@chakra-ui/system"
-import { cx, dataAttr } from "@chakra-ui/shared-utils"
+} from "@chakra-ui/system";
+import { cx, dataAttr } from "@chakra-ui/shared-utils";
 
-import { useMemo } from "react"
-import { useButtonGroup } from "./button-context"
-import { ButtonIcon } from "./button-icon"
-import { ButtonSpinner } from "./button-spinner"
-import { ButtonOptions } from "./button-types"
-import { useButtonType } from "./use-button-type"
+import { useMemo } from "react";
+import { useButtonGroup } from "./button-context";
+import { ButtonIcon } from "./button-icon";
+import { ButtonSpinner } from "./button-spinner";
+import { ButtonOptions } from "./button-types";
+import { useButtonType } from "./use-button-type";
 
 export interface ButtonProps
   extends HTMLChakraProps<"button">,
@@ -29,8 +29,8 @@ export interface ButtonProps
  * @see WAI-ARIA https://www.w3.org/WAI/ARIA/apg/patterns/button/
  */
 export const Button = forwardRef<ButtonProps, "button">((props, ref) => {
-  const group = useButtonGroup()
-  const styles = useStyleConfig("Button", { ...group, ...props })
+  const group = useButtonGroup();
+  const styles = useStyleConfig("Button", { ...group, ...props });
 
   const {
     isDisabled = group?.isDisabled,
@@ -47,7 +47,7 @@ export const Button = forwardRef<ButtonProps, "button">((props, ref) => {
     className,
     as,
     ...rest
-  } = omitThemingProps(props)
+  } = omitThemingProps(props);
 
   /**
    * When button is used within ButtonGroup (i.e. flushed with sibling buttons),
@@ -57,7 +57,7 @@ export const Button = forwardRef<ButtonProps, "button">((props, ref) => {
    */
   const buttonStyles: SystemStyleObject = useMemo(() => {
     // @ts-ignore
-    const _focus = { ...styles?.["_focus"], zIndex: 1 }
+    const _focus = { ...styles?.["_focus"], zIndex: 1 };
     return {
       display: "inline-flex",
       appearance: "none",
@@ -70,12 +70,12 @@ export const Button = forwardRef<ButtonProps, "button">((props, ref) => {
       outline: "none",
       ...styles,
       ...(!!group && { _focus }),
-    }
-  }, [styles, group])
+    };
+  }, [styles, group]);
 
-  const { ref: _ref, type: defaultType } = useButtonType(as)
+  const { ref: _ref, type: defaultType } = useButtonType(as);
 
-  const contentProps = { rightIcon, leftIcon, iconSpacing, children }
+  const contentProps = { rightIcon, leftIcon, iconSpacing, children };
 
   return (
     <chakra.button
@@ -121,18 +121,18 @@ export const Button = forwardRef<ButtonProps, "button">((props, ref) => {
         </ButtonSpinner>
       )}
     </chakra.button>
-  )
-})
+  );
+});
 
-Button.displayName = "Button"
+Button.displayName = "Button";
 
 type ButtonContentProps = Pick<
   ButtonProps,
   "leftIcon" | "rightIcon" | "children" | "iconSpacing"
->
+>;
 
 function ButtonContent(props: ButtonContentProps) {
-  const { leftIcon, rightIcon, children, iconSpacing } = props
+  const { leftIcon, rightIcon, children, iconSpacing } = props;
   return (
     <>
       {leftIcon && <ButtonIcon marginEnd={iconSpacing}>{leftIcon}</ButtonIcon>}
@@ -141,5 +141,5 @@ function ButtonContent(props: ButtonContentProps) {
         <ButtonIcon marginStart={iconSpacing}>{rightIcon}</ButtonIcon>
       )}
     </>
-  )
+  );
 }

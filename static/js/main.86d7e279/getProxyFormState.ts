@@ -1,11 +1,11 @@
-import { VALIDATION_MODE } from '../constants';
-import { Control, FieldValues, FormState, ReadFormState } from '../types';
+import { VALIDATION_MODE } from "../constants";
+import { Control, FieldValues, FormState, ReadFormState } from "../types";
 
 export default <TFieldValues extends FieldValues, TContext = any>(
   formState: FormState<TFieldValues>,
   control: Control<TFieldValues, TContext>,
   localProxyFormState?: ReadFormState,
-  isRoot = true,
+  isRoot = true
 ) => {
   const result = {
     defaultValues: control._defaultValues,

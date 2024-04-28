@@ -1,46 +1,46 @@
-import { isObject } from "@chakra-ui/shared-utils"
-import { CSSVar } from "./css-var"
+import { isObject } from "@chakra-ui/shared-utils";
+import { CSSVar } from "./css-var";
 
-export type Operand = string | number | CSSVar
-type Operands = Operand[]
+export type Operand = string | number | CSSVar;
+type Operands = Operand[];
 
-type Operator = "+" | "-" | "*" | "/"
+type Operator = "+" | "-" | "*" | "/";
 
 function toRef(operand: Operand): string {
   if (isObject(operand) && operand.reference) {
-    return operand.reference
+    return operand.reference;
   }
-  return String(operand)
+  return String(operand);
 }
 
 const toExpr = (operator: Operator, ...operands: Operands) =>
-  operands.map(toRef).join(` ${operator} `).replace(/calc/g, "")
+  operands.map(toRef).join(` ${operator} `).replace(/calc/g, "");
 
-const add = (...operands: Operands) => `calc(${toExpr("+", ...operands)})`
+const add = (...operands: Operands) => `calc(${toExpr("+", ...operands)})`;
 
-const subtract = (...operands: Operands) => `calc(${toExpr("-", ...operands)})`
+const subtract = (...operands: Operands) => `calc(${toExpr("-", ...operands)})`;
 
-const multiply = (...operands: Operands) => `calc(${toExpr("*", ...operands)})`
+const multiply = (...operands: Operands) => `calc(${toExpr("*", ...operands)})`;
 
-const divide = (...operands: Operands) => `calc(${toExpr("/", ...operands)})`
+const divide = (...operands: Operands) => `calc(${toExpr("/", ...operands)})`;
 
 const negate = (x: Operand) => {
-  const value = toRef(x)
+  const value = toRef(x);
 
   if (value != null && !Number.isNaN(parseFloat(value))) {
-    return String(value).startsWith("-") ? String(value).slice(1) : `-${value}`
+    return String(value).startsWith("-") ? String(value).slice(1) : `-${value}`;
   }
 
-  return multiply(value, -1)
-}
+  return multiply(value, -1);
+};
 
 export interface CalcChain {
-  add: (...operands: Operands) => CalcChain
-  subtract: (...operands: Operands) => CalcChain
-  multiply: (...operands: Operands) => CalcChain
-  divide: (...operands: Operands) => CalcChain
-  negate: () => CalcChain
-  toString: () => string
+  add: (...operands: Operands) => CalcChain;
+  subtract: (...operands: Operands) => CalcChain;
+  multiply: (...operands: Operands) => CalcChain;
+  divide: (...operands: Operands) => CalcChain;
+  negate: () => CalcChain;
+  toString: () => string;
 }
 
 export const calc = Object.assign(
@@ -58,5 +58,5 @@ export const calc = Object.assign(
     multiply,
     divide,
     negate,
-  },
-)
+  }
+);

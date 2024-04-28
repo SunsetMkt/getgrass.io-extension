@@ -1,8 +1,8 @@
-import { Spinner } from "@chakra-ui/spinner"
-import { chakra, HTMLChakraProps, SystemStyleObject } from "@chakra-ui/system"
-import { cx } from "@chakra-ui/shared-utils"
-import { useMemo } from "react"
-import { ButtonSpinnerOptions } from "./button-types"
+import { Spinner } from "@chakra-ui/spinner";
+import { chakra, HTMLChakraProps, SystemStyleObject } from "@chakra-ui/system";
+import { cx } from "@chakra-ui/shared-utils";
+import { useMemo } from "react";
+import { ButtonSpinnerOptions } from "./button-types";
 
 interface ButtonSpinnerProps
   extends HTMLChakraProps<"div">,
@@ -17,11 +17,11 @@ export function ButtonSpinner(props: ButtonSpinnerProps) {
     className,
     __css,
     ...rest
-  } = props
+  } = props;
 
-  const _className = cx("chakra-button__spinner", className)
+  const _className = cx("chakra-button__spinner", className);
 
-  const marginProp = placement === "start" ? "marginEnd" : "marginStart"
+  const marginProp = placement === "start" ? "marginEnd" : "marginStart";
 
   const spinnerStyles: SystemStyleObject = useMemo(
     () => ({
@@ -33,13 +33,13 @@ export function ButtonSpinner(props: ButtonSpinnerProps) {
       lineHeight: "normal",
       ...__css,
     }),
-    [__css, label, marginProp, spacing],
-  )
+    [__css, label, marginProp, spacing]
+  );
 
   return (
     <chakra.div className={_className} {...rest} __css={spinnerStyles}>
       {children}
     </chakra.div>
-  )
+  );
 }
-ButtonSpinner.displayName = "ButtonSpinner"
+ButtonSpinner.displayName = "ButtonSpinner";

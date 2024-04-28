@@ -15,7 +15,6 @@ function applyStyles(_ref) {
     // effective way to apply styles to an HTMLElement
     // $FlowFixMe[cannot-write]
 
-
     Object.assign(element.style, style);
     Object.keys(attributes).forEach(function (name) {
       var value = attributes[name];
@@ -23,7 +22,7 @@ function applyStyles(_ref) {
       if (value === false) {
         element.removeAttribute(name);
       } else {
-        element.setAttribute(name, value === true ? '' : value);
+        element.setAttribute(name, value === true ? "" : value);
       }
     });
   });
@@ -34,14 +33,14 @@ function effect(_ref2) {
   var initialStyles = {
     popper: {
       position: state.options.strategy,
-      left: '0',
-      top: '0',
-      margin: '0'
+      left: "0",
+      top: "0",
+      margin: "0",
     },
     arrow: {
-      position: 'absolute'
+      position: "absolute",
     },
-    reference: {}
+    reference: {},
   };
   Object.assign(state.elements.popper.style, initialStyles.popper);
   state.styles = initialStyles;
@@ -54,10 +53,14 @@ function effect(_ref2) {
     Object.keys(state.elements).forEach(function (name) {
       var element = state.elements[name];
       var attributes = state.attributes[name] || {};
-      var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
+      var styleProperties = Object.keys(
+        state.styles.hasOwnProperty(name)
+          ? state.styles[name]
+          : initialStyles[name]
+      ); // Set all values to an empty string to unset them
 
       var style = styleProperties.reduce(function (style, property) {
-        style[property] = '';
+        style[property] = "";
         return style;
       }, {}); // arrow is optional + virtual elements
 
@@ -73,12 +76,11 @@ function effect(_ref2) {
   };
 } // eslint-disable-next-line import/no-unused-modules
 
-
 export default {
-  name: 'applyStyles',
+  name: "applyStyles",
   enabled: true,
-  phase: 'write',
+  phase: "write",
   fn: applyStyles,
   effect: effect,
-  requires: ['computeStyles']
+  requires: ["computeStyles"],
 };

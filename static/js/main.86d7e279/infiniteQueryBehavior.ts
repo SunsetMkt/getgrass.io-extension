@@ -1,129 +1,132 @@
-import { addToEnd, addToStart, skipToken } from './utils'
-import type { QueryBehavior } from './query'
+import { addToEnd, addToStart, skipToken } from "./utils";
+import type { QueryBehavior } from "./query";
 import type {
   InfiniteData,
   InfiniteQueryPageParamsOptions,
   OmitKeyof,
   QueryFunctionContext,
   QueryKey,
-} from './types'
+} from "./types";
 
 export function infiniteQueryBehavior<TQueryFnData, TError, TData, TPageParam>(
-  pages?: number,
+  pages?: number
 ): QueryBehavior<TQueryFnData, TError, InfiniteData<TData, TPageParam>> {
   return {
     onFetch: (context, query) => {
       const fetchFn = async () => {
-        const options = context.options as InfiniteQueryPageParamsOptions<TData>
-        const direction = context.fetchOptions?.meta?.fetchMore?.direction
-        const oldPages = context.state.data?.pages || []
-        const oldPageParams = context.state.data?.pageParams || []
-        const empty = { pages: [], pageParams: [] }
-        let cancelled = false
+        const options =
+          context.options as InfiniteQueryPageParamsOptions<TData>;
+        const direction = context.fetchOptions?.meta?.fetchMore?.direction;
+        const oldPages = context.state.data?.pages || [];
+        const oldPageParams = context.state.data?.pageParams || [];
+        const empty = { pages: [], pageParams: [] };
+        let cancelled = false;
 
         const addSignalProperty = (object: unknown) => {
-          Object.defineProperty(object, 'signal', {
+          Object.defineProperty(object, "signal", {
             enumerable: true,
             get: () => {
               if (context.signal.aborted) {
-                cancelled = true
+                cancelled = true;
               } else {
-                context.signal.addEventListener('abort', () => {
-                  cancelled = true
-                })
+                context.signal.addEventListener("abort", () => {
+                  cancelled = true;
+                });
               }
-              return context.signal
+              return context.signal;
             },
-          })
-        }
+          });
+        };
 
         // Get query function
         const queryFn =
           context.options.queryFn && context.options.queryFn !== skipToken
             ? context.options.queryFn
             : () => {
-                if (process.env.NODE_ENV !== 'production') {
+                if (process.env.NODE_ENV !== "production") {
                   if (context.options.queryFn === skipToken) {
                     console.error(
-                      `Attempted to invoke queryFn when set to skipToken. This is likely a configuration error. Query hash: '${context.options.queryHash}'`,
-                    )
+                      `Attempted to invoke queryFn when set to skipToken. This is likely a configuration error. Query hash: '${context.options.queryHash}'`
+                    );
                   }
                 }
                 return Promise.reject(
-                  new Error(`Missing queryFn: '${context.options.queryHash}'`),
-                )
-              }
+                  new Error(`Missing queryFn: '${context.options.queryHash}'`)
+                );
+              };
 
         // Create function to fetch a page
         const fetchPage = async (
           data: InfiniteData<unknown>,
           param: unknown,
-          previous?: boolean,
+          previous?: boolean
         ): Promise<InfiniteData<unknown>> => {
           if (cancelled) {
-            return Promise.reject()
+            return Promise.reject();
           }
 
           if (param == null && data.pages.length) {
-            return Promise.resolve(data)
+            return Promise.resolve(data);
           }
 
           const queryFnContext: OmitKeyof<
             QueryFunctionContext<QueryKey, unknown>,
-            'signal'
+            "signal"
           > = {
             queryKey: context.queryKey,
             pageParam: param,
-            direction: previous ? 'backward' : 'forward',
+            direction: previous ? "backward" : "forward",
             meta: context.options.meta,
-          }
+          };
 
-          addSignalProperty(queryFnContext)
+          addSignalProperty(queryFnContext);
 
           const page = await queryFn(
-            queryFnContext as QueryFunctionContext<QueryKey, unknown>,
-          )
+            queryFnContext as QueryFunctionContext<QueryKey, unknown>
+          );
 
-          const { maxPages } = context.options
-          const addTo = previous ? addToStart : addToEnd
+          const { maxPages } = context.options;
+          const addTo = previous ? addToStart : addToEnd;
 
           return {
             pages: addTo(data.pages, page, maxPages),
             pageParams: addTo(data.pageParams, param, maxPages),
-          }
-        }
+          };
+        };
 
-        let result: InfiniteData<unknown>
+        let result: InfiniteData<unknown>;
 
         // fetch next / previous page?
         if (direction && oldPages.length) {
-          const previous = direction === 'backward'
-          const pageParamFn = previous ? getPreviousPageParam : getNextPageParam
+          const previous = direction === "backward";
+          const pageParamFn = previous
+            ? getPreviousPageParam
+            : getNextPageParam;
           const oldData = {
             pages: oldPages,
             pageParams: oldPageParams,
-          }
-          const param = pageParamFn(options, oldData)
+          };
+          const param = pageParamFn(options, oldData);
 
-          result = await fetchPage(oldData, param, previous)
+          result = await fetchPage(oldData, param, previous);
         } else {
           // Fetch first page
           result = await fetchPage(
             empty,
-            oldPageParams[0] ?? options.initialPageParam,
-          )
+            oldPageParams[0] ?? options.initialPageParam
+          );
 
-          const remainingPages = pages ?? oldPages.length
+          const remainingPages = pages ?? oldPages.length;
 
           // Fetch remaining pages
           for (let i = 1; i < remainingPages; i++) {
-            const param = getNextPageParam(options, result)
-            result = await fetchPage(result, param)
+            const param = getNextPageParam(options, result);
+            result = await fetchPage(result, param);
           }
         }
 
-        return result
-      }
+        return result;
+      };
       if (context.options.persister) {
         context.fetchFn = () => {
           return context.options.persister?.(
@@ -133,39 +136,39 @@ export function infiniteQueryBehavior<TQueryFnData, TError, TData, TPageParam>(
               meta: context.options.meta,
               signal: context.signal,
             },
-            query,
-          )
-        }
+            query
+          );
+        };
       } else {
-        context.fetchFn = fetchFn
+        context.fetchFn = fetchFn;
       }
     },
-  }
+  };
 }
 
 function getNextPageParam(
   options: InfiniteQueryPageParamsOptions<any>,
-  { pages, pageParams }: InfiniteData<unknown>,
+  { pages, pageParams }: InfiniteData<unknown>
 ): unknown | undefined {
-  const lastIndex = pages.length - 1
+  const lastIndex = pages.length - 1;
   return options.getNextPageParam(
     pages[lastIndex],
     pages,
     pageParams[lastIndex],
-    pageParams,
-  )
+    pageParams
+  );
 }
 
 function getPreviousPageParam(
   options: InfiniteQueryPageParamsOptions<any>,
-  { pages, pageParams }: InfiniteData<unknown>,
+  { pages, pageParams }: InfiniteData<unknown>
 ): unknown | undefined {
   return options.getPreviousPageParam?.(
     pages[0],
     pages,
     pageParams[0],
-    pageParams,
-  )
+    pageParams
+  );
 }
 
 /**
@@ -173,10 +176,10 @@ function getPreviousPageParam(
  */
 export function hasNextPage(
   options: InfiniteQueryPageParamsOptions<any, any>,
-  data?: InfiniteData<unknown>,
+  data?: InfiniteData<unknown>
 ): boolean {
-  if (!data) return false
-  return getNextPageParam(options, data) != null
+  if (!data) return false;
+  return getNextPageParam(options, data) != null;
 }
 
 /**
@@ -184,8 +187,8 @@ export function hasNextPage(
  */
 export function hasPreviousPage(
   options: InfiniteQueryPageParamsOptions<any, any>,
-  data?: InfiniteData<unknown>,
+  data?: InfiniteData<unknown>
 ): boolean {
-  if (!data || !options.getPreviousPageParam) return false
-  return getPreviousPageParam(options, data) != null
+  if (!data || !options.getPreviousPageParam) return false;
+  return getPreviousPageParam(options, data) != null;
 }

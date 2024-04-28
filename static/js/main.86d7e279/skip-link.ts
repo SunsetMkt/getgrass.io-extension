@@ -2,9 +2,9 @@ import {
   cssVar,
   defineStyle,
   defineStyleConfig,
-} from "@chakra-ui/styled-system"
+} from "@chakra-ui/styled-system";
 
-const $bg = cssVar("skip-link-bg")
+const $bg = cssVar("skip-link-bg");
 
 const baseStyle = defineStyle({
   borderRadius: "md",
@@ -21,8 +21,8 @@ const baseStyle = defineStyle({
     },
     bg: $bg.reference,
   },
-})
+});
 
 export const skipLinkTheme = defineStyleConfig({
   baseStyle,
-})
+});

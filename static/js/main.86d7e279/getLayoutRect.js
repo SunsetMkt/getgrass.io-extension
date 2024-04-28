@@ -20,6 +20,6 @@ export default function getLayoutRect(element) {
     x: element.offsetLeft,
     y: element.offsetTop,
     width: width,
-    height: height
+    height: height,
   };
 }

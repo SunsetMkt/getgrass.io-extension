@@ -1,5 +1,5 @@
-import { usePrevious } from "@chakra-ui/react-use-previous"
-import { cx } from "@chakra-ui/shared-utils"
+import { usePrevious } from "@chakra-ui/react-use-previous";
+import { cx } from "@chakra-ui/shared-utils";
 import {
   chakra,
   cssVar,
@@ -10,41 +10,41 @@ import {
   ThemingProps,
   useStyleConfig,
   useToken,
-} from "@chakra-ui/system"
-import { useIsFirstRender } from "./use-is-first-render"
+} from "@chakra-ui/system";
+import { useIsFirstRender } from "./use-is-first-render";
 
 export interface SkeletonOptions {
   /**
    * The color at the animation start
    */
-  startColor?: string
+  startColor?: string;
   /**
    * The color at the animation end
    */
-  endColor?: string
+  endColor?: string;
   /**
    * If `true`, it'll render its children with a nice fade transition
    *
    * @default false
    */
-  isLoaded?: boolean
+  isLoaded?: boolean;
   /**
    * The animation speed in seconds
    *
    * @default 0.8
    */
-  speed?: number
+  speed?: number;
   /**
    * The fadeIn duration in seconds. Requires `isLoaded` toggled to `true` in order to see the transition.
    *
    * @default 0.4
    */
-  fadeDuration?: number
+  fadeDuration?: number;
   /**
    * If `true`, the skeleton will take the width of it's children
    * @default false
    */
-  fitContent?: boolean
+  fitContent?: boolean;
 }
 
 const StyledSkeleton = chakra("div", {
@@ -59,12 +59,12 @@ const StyledSkeleton = chakra("div", {
       visibility: "hidden",
     },
   },
-})
+});
 
-const $startColor = cssVar("skeleton-start-color")
-const $endColor = cssVar("skeleton-end-color")
+const $startColor = cssVar("skeleton-start-color");
+const $endColor = cssVar("skeleton-end-color");
 
-export type ISkeleton = SkeletonOptions
+export type ISkeleton = SkeletonOptions;
 
 export interface SkeletonProps
   extends HTMLChakraProps<"div">,
@@ -74,7 +74,7 @@ export interface SkeletonProps
 const fade = keyframes({
   from: { opacity: 0 },
   to: { opacity: 1 },
-})
+});
 
 const bgFade = keyframes({
   from: {
@@ -85,7 +85,7 @@ const bgFade = keyframes({
     borderColor: $endColor.reference,
     background: $endColor.reference,
   },
-})
+});
 
 /**
  * `Skeleton` is used to display the loading state of some component.
@@ -98,9 +98,9 @@ export const Skeleton = forwardRef<SkeletonProps, "div">((props, ref) => {
     fadeDuration:
       typeof props.fadeDuration === "number" ? props.fadeDuration : 0.4,
     speed: typeof props.speed === "number" ? props.speed : 0.8,
-  }
-  const styles = useStyleConfig("Skeleton", skeletonProps)
-  const isFirstRender = useIsFirstRender()
+  };
+  const styles = useStyleConfig("Skeleton", skeletonProps);
+  const isFirstRender = useIsFirstRender();
 
   const {
     startColor = "",
@@ -111,25 +111,27 @@ export const Skeleton = forwardRef<SkeletonProps, "div">((props, ref) => {
     className,
     fitContent,
     ...rest
-  } = omitThemingProps(skeletonProps)
+  } = omitThemingProps(skeletonProps);
 
   const [startColorVar, endColorVar] = useToken("colors", [
     startColor,
     endColor,
-  ])
+  ]);
 
-  const wasPreviouslyLoaded = usePrevious(isLoaded)
+  const wasPreviouslyLoaded = usePrevious(isLoaded);
 
-  const _className = cx("chakra-skeleton", className)
+  const _className = cx("chakra-skeleton", className);
 
   const cssVarStyles = {
     ...(startColorVar && { [$startColor.variable]: startColorVar }),
     ...(endColorVar && { [$endColor.variable]: endColorVar }),
-  }
+  };
 
   if (isLoaded) {
     const animation =
-      isFirstRender || wasPreviouslyLoaded ? "none" : `${fade} ${fadeDuration}s`
+      isFirstRender || wasPreviouslyLoaded
+        ? "none"
+        : `${fade} ${fadeDuration}s`;
 
     return (
       <chakra.div
@@ -138,7 +140,7 @@ export const Skeleton = forwardRef<SkeletonProps, "div">((props, ref) => {
         __css={{ animation }}
         {...rest}
       />
-    )
+    );
   }
 
   return (
@@ -154,7 +156,7 @@ export const Skeleton = forwardRef<SkeletonProps, "div">((props, ref) => {
         animation: `${speed}s linear infinite alternate ${bgFade}`,
       }}
     />
-  )
-})
+  );
+});
 
-Skeleton.displayName = "Skeleton"
+Skeleton.displayName = "Skeleton";

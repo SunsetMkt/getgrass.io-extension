@@ -1,4 +1,4 @@
-import { Styles } from "@chakra-ui/theme-tools"
+import { Styles } from "@chakra-ui/theme-tools";
 
 export const styles: Styles = {
   global: {
@@ -17,4 +17,4 @@ export const styles: Styles = {
       borderColor: "chakra-border-color",
     },
   },
-}
+};

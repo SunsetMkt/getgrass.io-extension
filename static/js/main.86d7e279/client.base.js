@@ -126,19 +126,19 @@
 //      client.isCanvas();
 //      client.getCanvasPrint();
 
-'use strict';
+"use strict";
 
-var globalThis = require('globalthis/polyfill')();
-var murmurhash3_32_gc = require('murmurhash-js/murmurhash3_gc');
-var UAParser = require('ua-parser-js');
-var Detector = require('./vendor/fontdetect');
+var globalThis = require("globalthis/polyfill")();
+var murmurhash3_32_gc = require("murmurhash-js/murmurhash3_gc");
+var UAParser = require("ua-parser-js");
+var Detector = require("./vendor/fontdetect");
 
 var browserData; // Global user agent browser object.
 var fontDetective; // Global font detective object.
 
 // ClientJS constructor which sets the browserData object and returs the client object.
-var ClientJS = function() {
-  var parser = new UAParser;
+var ClientJS = function () {
+  var parser = new UAParser();
   browserData = parser.getResult();
   fontDetective = new Detector();
   return this;
@@ -146,25 +146,24 @@ var ClientJS = function() {
 
 // ClientJS prototype which contains all methods.
 ClientJS.prototype = {
-
   //
   // MAIN METHODS
   //
 
   // Get Software Version.  Return a string containing this software version number.
-  getSoftwareVersion: function() {
+  getSoftwareVersion: function () {
     var version = "0.1.11";
     return version;
   },
 
   // Get Browser Data.  Return an object containing browser user agent.
-  getBrowserData: function() {
+  getBrowserData: function () {
     return browserData;
   },
 
   // Get Fingerprint.  Return a 32-bit integer representing the browsers fingerprint.
-  getFingerprint: function() {
-    var bar = '|';
+  getFingerprint: function () {
+    var bar = "|";
 
     var userAgent = browserData.ua;
     var screenPrint = this.getScreenPrint();
@@ -178,15 +177,36 @@ ClientJS.prototype = {
     var cookies = this.isCookie();
     var canvasPrint = this.getCanvasPrint();
 
-    var key = userAgent + bar + screenPrint + bar + pluginList + bar + fontList + bar + localStorage + bar + sessionStorage + bar + timeZone + bar + language + bar + systemLanguage + bar + cookies + bar + canvasPrint;
+    var key =
+      userAgent +
+      bar +
+      screenPrint +
+      bar +
+      pluginList +
+      bar +
+      fontList +
+      bar +
+      localStorage +
+      bar +
+      sessionStorage +
+      bar +
+      timeZone +
+      bar +
+      language +
+      bar +
+      systemLanguage +
+      bar +
+      cookies +
+      bar +
+      canvasPrint;
     var seed = 256;
 
     return murmurhash3_32_gc(key, seed);
   },
 
   // Get Custom Fingerprint.  Take a string of datapoints and eturn a 32-bit integer representing the browsers fingerprint.
-  getCustomFingerprint: function() {
-    var bar = '|';
+  getCustomFingerprint: function () {
+    var bar = "|";
     var key = "";
     for (var i = 0; i < arguments.length; i++) {
       key += arguments[i] + bar;
@@ -199,12 +219,12 @@ ClientJS.prototype = {
   //
 
   // Get User Agent.  Return a string containing unparsed user agent.
-  getUserAgent: function() {
+  getUserAgent: function () {
     return browserData.ua;
   },
 
   // Get User Agent Lower Case.  Return a lowercase string containing the user agent.
-  getUserAgentLowerCase: function() {
+  getUserAgentLowerCase: function () {
     return browserData.ua.toLowerCase();
   },
 
@@ -213,48 +233,48 @@ ClientJS.prototype = {
   //
 
   // Get Browser.  Return a string containing the browser name.
-  getBrowser: function() {
+  getBrowser: function () {
     return browserData.browser.name;
   },
 
   // Get Browser Version.  Return a string containing the browser version.
-  getBrowserVersion: function() {
+  getBrowserVersion: function () {
     return browserData.browser.version;
   },
 
   // Get Browser Major Version.  Return a string containing the major browser version.
-  getBrowserMajorVersion: function() {
+  getBrowserMajorVersion: function () {
     return browserData.browser.major;
   },
 
   // Is IE.  Check if the browser is IE.
-  isIE: function() {
-    return (/IE/i.test(browserData.browser.name));
+  isIE: function () {
+    return /IE/i.test(browserData.browser.name);
   },
 
   // Is Chrome.  Check if the browser is Chrome.
-  isChrome: function() {
-    return (/Chrome/i.test(browserData.browser.name));
+  isChrome: function () {
+    return /Chrome/i.test(browserData.browser.name);
   },
 
   // Is Firefox.  Check if the browser is Firefox.
-  isFirefox: function() {
-    return (/Firefox/i.test(browserData.browser.name));
+  isFirefox: function () {
+    return /Firefox/i.test(browserData.browser.name);
   },
 
   // Is Safari.  Check if the browser is Safari.
-  isSafari: function() {
-    return (/Safari/i.test(browserData.browser.name));
+  isSafari: function () {
+    return /Safari/i.test(browserData.browser.name);
   },
 
   // Is Mobile Safari.  Check if the browser is Safari.
-  isMobileSafari: function() {
-    return (/Mobile\sSafari/i.test(browserData.browser.name));
+  isMobileSafari: function () {
+    return /Mobile\sSafari/i.test(browserData.browser.name);
   },
 
   // Is Opera.  Check if the browser is Opera.
-  isOpera: function() {
-    return (/Opera/i.test(browserData.browser.name));
+  isOpera: function () {
+    return /Opera/i.test(browserData.browser.name);
   },
 
   //
@@ -262,12 +282,12 @@ ClientJS.prototype = {
   //
 
   // Get Engine.  Return a string containing the browser engine.
-  getEngine: function() {
+  getEngine: function () {
     return browserData.engine.name;
   },
 
   // Get Engine Version.  Return a string containing the browser engine version.
-  getEngineVersion: function() {
+  getEngineVersion: function () {
     return browserData.engine.version;
   },
 
@@ -276,38 +296,38 @@ ClientJS.prototype = {
   //
 
   // Get OS.  Return a string containing the OS.
-  getOS: function() {
+  getOS: function () {
     return browserData.os.name;
   },
 
   // Get OS Version.  Return a string containing the OS Version.
-  getOSVersion: function() {
+  getOSVersion: function () {
     return browserData.os.version;
   },
 
   // Is Windows.  Check if the OS is Windows.
-  isWindows: function() {
-    return (/Windows/i.test(browserData.os.name));
+  isWindows: function () {
+    return /Windows/i.test(browserData.os.name);
   },
 
   // Is Mac.  Check if the OS is Mac.
-  isMac: function() {
-    return (/Mac/i.test(browserData.os.name));
+  isMac: function () {
+    return /Mac/i.test(browserData.os.name);
   },
 
   // Is Linux.  Check if the OS is Linux.
-  isLinux: function() {
-    return (/Linux/i.test(browserData.os.name));
+  isLinux: function () {
+    return /Linux/i.test(browserData.os.name);
   },
 
   // Is Ubuntu.  Check if the OS is Ubuntu.
-  isUbuntu: function() {
-    return (/Ubuntu/i.test(browserData.os.name));
+  isUbuntu: function () {
+    return /Ubuntu/i.test(browserData.os.name);
   },
 
   // Is Solaris.  Check if the OS is Solaris.
-  isSolaris: function() {
-    return (/Solaris/i.test(browserData.os.name));
+  isSolaris: function () {
+    return /Solaris/i.test(browserData.os.name);
   },
 
   //
@@ -315,17 +335,17 @@ ClientJS.prototype = {
   //
 
   // Get Device.  Return a string containing the device.
-  getDevice: function() {
+  getDevice: function () {
     return browserData.device.model;
   },
 
   // Get Device Type.  Return a string containing the device type.
-  getDeviceType: function() {
+  getDeviceType: function () {
     return browserData.device.type;
   },
 
   // Get Device Vendor.  Return a string containing the device vendor.
-  getDeviceVendor: function() {
+  getDeviceVendor: function () {
     return browserData.device.vendor;
   },
 
@@ -334,7 +354,7 @@ ClientJS.prototype = {
   //
 
   // Get CPU.  Return a string containing the CPU architecture.
-  getCPU: function() {
+  getCPU: function () {
     return browserData.cpu.architecture;
   },
 
@@ -343,20 +363,33 @@ ClientJS.prototype = {
   //
 
   // Is Mobile.  Check if the browser is on a mobile device.
-  isMobile: function() {
+  isMobile: function () {
     // detectmobilebrowsers.com JavaScript Mobile Detection Script
     var dataString = browserData.ua || navigator.vendor || window.opera;
     // eslint-disable-next-line no-useless-escape
-    return (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(dataString) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(dataString.substr(0, 4)));
+    return (
+      /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(
+        dataString
+      ) ||
+      /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(
+        dataString.substr(0, 4)
+      )
+    );
   },
 
   // Is Mobile Major.  Check if the browser is on a major mobile device.
-  isMobileMajor: function() {
-    return (this.isMobileAndroid() || this.isMobileBlackBerry() || this.isMobileIOS() || this.isMobileOpera() || this.isMobileWindows());
+  isMobileMajor: function () {
+    return (
+      this.isMobileAndroid() ||
+      this.isMobileBlackBerry() ||
+      this.isMobileIOS() ||
+      this.isMobileOpera() ||
+      this.isMobileWindows()
+    );
   },
 
   // Is Mobile.  Check if the browser is on an android mobile device.
-  isMobileAndroid: function() {
+  isMobileAndroid: function () {
     if (browserData.ua.match(/Android/i)) {
       return true;
     }
@@ -364,7 +397,7 @@ ClientJS.prototype = {
   },
 
   // Is Mobile Opera.  Check if the browser is on an opera mobile device.
-  isMobileOpera: function() {
+  isMobileOpera: function () {
     if (browserData.ua.match(/Opera Mini/i)) {
       return true;
     }
@@ -372,7 +405,7 @@ ClientJS.prototype = {
   },
 
   // Is Mobile Windows.  Check if the browser is on a windows mobile device.
-  isMobileWindows: function() {
+  isMobileWindows: function () {
     if (browserData.ua.match(/IEMobile/i)) {
       return true;
     }
@@ -380,7 +413,7 @@ ClientJS.prototype = {
   },
 
   // Is Mobile BlackBerry.  Check if the browser is on a blackberry mobile device.
-  isMobileBlackBerry: function() {
+  isMobileBlackBerry: function () {
     if (browserData.ua.match(/BlackBerry/i)) {
       return true;
     }
@@ -392,7 +425,7 @@ ClientJS.prototype = {
   //
 
   // Is Mobile iOS.  Check if the browser is on an Apple iOS device.
-  isMobileIOS: function() {
+  isMobileIOS: function () {
     if (browserData.ua.match(/iPhone|iPad|iPod/i)) {
       return true;
     }
@@ -400,7 +433,7 @@ ClientJS.prototype = {
   },
 
   // Is Iphone.  Check if the browser is on an Apple iPhone.
-  isIphone: function() {
+  isIphone: function () {
     if (browserData.ua.match(/iPhone/i)) {
       return true;
     }
@@ -408,7 +441,7 @@ ClientJS.prototype = {
   },
 
   // Is Ipad.  Check if the browser is on an Apple iPad.
-  isIpad: function() {
+  isIpad: function () {
     if (browserData.ua.match(/iPad/i)) {
       return true;
     }
@@ -416,7 +449,7 @@ ClientJS.prototype = {
   },
 
   // Is Ipod.  Check if the browser is on an Apple iPod.
-  isIpod: function() {
+  isIpod: function () {
     if (browserData.ua.match(/iPod/i)) {
       return true;
     }
@@ -428,32 +461,43 @@ ClientJS.prototype = {
   //
 
   // Get Screen Print.  Return a string containing screen information.
-  getScreenPrint: function() {
-    return "Current Resolution: " + this.getCurrentResolution() + ", Available Resolution: " + this.getAvailableResolution() + ", Color Depth: " + this.getColorDepth() + ", Device XDPI: " + this.getDeviceXDPI() + ", Device YDPI: " + this.getDeviceYDPI();
+  getScreenPrint: function () {
+    return (
+      "Current Resolution: " +
+      this.getCurrentResolution() +
+      ", Available Resolution: " +
+      this.getAvailableResolution() +
+      ", Color Depth: " +
+      this.getColorDepth() +
+      ", Device XDPI: " +
+      this.getDeviceXDPI() +
+      ", Device YDPI: " +
+      this.getDeviceYDPI()
+    );
   },
 
   // Get Color Depth.  Return a string containing the color depth.
-  getColorDepth: function() {
+  getColorDepth: function () {
     return screen.colorDepth;
   },
 
   // Get Current Resolution.  Return a string containing the current resolution.
-  getCurrentResolution: function() {
+  getCurrentResolution: function () {
     return screen.width + "x" + screen.height;
   },
 
   // Get Available Resolution.  Return a string containing the available resolution.
-  getAvailableResolution: function() {
+  getAvailableResolution: function () {
     return screen.availWidth + "x" + screen.availHeight;
   },
 
   // Get Device XPDI.  Return a string containing the device XPDI.
-  getDeviceXDPI: function() {
+  getDeviceXDPI: function () {
     return screen.deviceXDPI;
   },
 
   // Get Device YDPI.  Return a string containing the device YDPI.
-  getDeviceYDPI: function() {
+  getDeviceYDPI: function () {
     return screen.deviceYDPI;
   },
 
@@ -462,7 +506,7 @@ ClientJS.prototype = {
   //
 
   // Get Plugins.  Return a string containing a list of installed plugins.
-  getPlugins: function() {
+  getPlugins: function () {
     var pluginsList = "";
 
     for (var i = 0; i < navigator.plugins.length; i++) {
@@ -476,17 +520,19 @@ ClientJS.prototype = {
   },
 
   // Is Java.  Check if Java is installed.
-  isJava: function() {
+  isJava: function () {
     return navigator.javaEnabled();
   },
 
   // Get Java Version.  Return a string containing the Java Version.
-  getJavaVersion: function() {
-    throw new Error('Please use client.java.js or client.js if you need this functionality!');
+  getJavaVersion: function () {
+    throw new Error(
+      "Please use client.java.js or client.js if you need this functionality!"
+    );
   },
 
   // Is Flash.  Check if Flash is installed.
-  isFlash: function() {
+  isFlash: function () {
     var objPlugin = navigator.plugins["Shockwave Flash"];
     if (objPlugin) {
       return true;
@@ -495,12 +541,14 @@ ClientJS.prototype = {
   },
 
   // Get Flash Version.  Return a string containing the Flash Version.
-  getFlashVersion: function() {
-    throw new Error('Please use client.flash.js or client.js if you need this functionality!');
+  getFlashVersion: function () {
+    throw new Error(
+      "Please use client.flash.js or client.js if you need this functionality!"
+    );
   },
 
   // Is Silverlight.  Check if Silverlight is installed.
-  isSilverlight: function() {
+  isSilverlight: function () {
     var objPlugin = navigator.plugins["Silverlight Plug-In"];
     if (objPlugin) {
       return true;
@@ -509,7 +557,7 @@ ClientJS.prototype = {
   },
 
   // Get Silverlight Version.  Return a string containing the Silverlight Version.
-  getSilverlightVersion: function() {
+  getSilverlightVersion: function () {
     if (this.isSilverlight()) {
       var objPlugin = navigator.plugins["Silverlight Plug-In"];
       return objPlugin.description;
@@ -522,7 +570,7 @@ ClientJS.prototype = {
   //
 
   // Is Mime Types.  Check if a mime type is installed.
-  isMimeTypes: function() {
+  isMimeTypes: function () {
     if (navigator.mimeTypes && navigator.mimeTypes.length) {
       return true;
     }
@@ -530,10 +578,10 @@ ClientJS.prototype = {
   },
 
   // Get Mime Types.  Return a string containing a list of installed mime types.
-  getMimeTypes: function() {
+  getMimeTypes: function () {
     var mimeTypeList = "";
 
-    if(navigator.mimeTypes) {
+    if (navigator.mimeTypes) {
       for (var i = 0; i < navigator.mimeTypes.length; i++) {
         if (i == navigator.mimeTypes.length - 1) {
           mimeTypeList += navigator.mimeTypes[i].description;
@@ -550,13 +598,245 @@ ClientJS.prototype = {
   //
 
   // Is Font.  Check if a font is installed.
-  isFont: function(font) {
+  isFont: function (font) {
     return fontDetective.detect(font);
   },
 
   // Get Fonts.  Return a string containing a list of installed fonts.
-  getFonts: function() {
-    var fontArray = ["Abadi MT Condensed Light", "Adobe Fangsong Std", "Adobe Hebrew", "Adobe Ming Std", "Agency FB", "Aharoni", "Andalus", "Angsana New", "AngsanaUPC", "Aparajita", "Arab", "Arabic Transparent", "Arabic Typesetting", "Arial Baltic", "Arial Black", "Arial CE", "Arial CYR", "Arial Greek", "Arial TUR", "Arial", "Batang", "BatangChe", "Bauhaus 93", "Bell MT", "Bitstream Vera Serif", "Bodoni MT", "Bookman Old Style", "Braggadocio", "Broadway", "Browallia New", "BrowalliaUPC", "Calibri Light", "Calibri", "Californian FB", "Cambria Math", "Cambria", "Candara", "Castellar", "Casual", "Centaur", "Century Gothic", "Chalkduster", "Colonna MT", "Comic Sans MS", "Consolas", "Constantia", "Copperplate Gothic Light", "Corbel", "Cordia New", "CordiaUPC", "Courier New Baltic", "Courier New CE", "Courier New CYR", "Courier New Greek", "Courier New TUR", "Courier New", "DFKai-SB", "DaunPenh", "David", "DejaVu LGC Sans Mono", "Desdemona", "DilleniaUPC", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Engravers MT", "Eras Bold ITC", "Estrangelo Edessa", "EucrosiaUPC", "Euphemia", "Eurostile", "FangSong", "Forte", "FrankRuehl", "Franklin Gothic Heavy", "Franklin Gothic Medium", "FreesiaUPC", "French Script MT", "Gabriola", "Gautami", "Georgia", "Gigi", "Gisha", "Goudy Old Style", "Gulim", "GulimChe", "GungSeo", "Gungsuh", "GungsuhChe", "Haettenschweiler", "Harrington", "Hei S", "HeiT", "Heisei Kaku Gothic", "Hiragino Sans GB", "Impact", "Informal Roman", "IrisUPC", "Iskoola Pota", "JasmineUPC", "KacstOne", "KaiTi", "Kalinga", "Kartika", "Khmer UI", "Kino MT", "KodchiangUPC", "Kokila", "Kozuka Gothic Pr6N", "Lao UI", "Latha", "Leelawadee", "Levenim MT", "LilyUPC", "Lohit Gujarati", "Loma", "Lucida Bright", "Lucida Console", "Lucida Fax", "Lucida Sans Unicode", "MS Gothic", "MS Mincho", "MS PGothic", "MS PMincho", "MS Reference Sans Serif", "MS UI Gothic", "MV Boli", "Magneto", "Malgun Gothic", "Mangal", "Marlett", "Matura MT Script Capitals", "Meiryo UI", "Meiryo", "Menlo", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Sans Serif", "Microsoft Tai Le", "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU-ExtB", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "Miriam Fixed", "Miriam", "Mongolian Baiti", "MoolBoran", "NSimSun", "Narkisim", "News Gothic MT", "Niagara Solid", "Nyala", "PMingLiU", "PMingLiU-ExtB", "Palace Script MT", "Palatino Linotype", "Papyrus", "Perpetua", "Plantagenet Cherokee", "Playbill", "Prelude Bold", "Prelude Condensed Bold", "Prelude Condensed Medium", "Prelude Medium", "PreludeCompressedWGL Black", "PreludeCompressedWGL Bold", "PreludeCompressedWGL Light", "PreludeCompressedWGL Medium", "PreludeCondensedWGL Black", "PreludeCondensedWGL Bold", "PreludeCondensedWGL Light", "PreludeCondensedWGL Medium", "PreludeWGL Black", "PreludeWGL Bold", "PreludeWGL Light", "PreludeWGL Medium", "Raavi", "Rachana", "Rockwell", "Rod", "Sakkal Majalla", "Sawasdee", "Script MT Bold", "Segoe Print", "Segoe Script", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol", "Segoe UI", "Shonar Bangla", "Showcard Gothic", "Shruti", "SimHei", "SimSun", "SimSun-ExtB", "Simplified Arabic Fixed", "Simplified Arabic", "Snap ITC", "Sylfaen", "Symbol", "Tahoma", "Times New Roman Baltic", "Times New Roman CE", "Times New Roman CYR", "Times New Roman Greek", "Times New Roman TUR", "Times New Roman", "TlwgMono", "Traditional Arabic", "Trebuchet MS", "Tunga", "Tw Cen MT Condensed Extra Bold", "Ubuntu", "Umpush", "Univers", "Utopia", "Utsaah", "Vani", "Verdana", "Vijaya", "Vladimir Script", "Vrinda", "Webdings", "Wide Latin", "Wingdings"];
+  getFonts: function () {
+    var fontArray = [
+      "Abadi MT Condensed Light",
+      "Adobe Fangsong Std",
+      "Adobe Hebrew",
+      "Adobe Ming Std",
+      "Agency FB",
+      "Aharoni",
+      "Andalus",
+      "Angsana New",
+      "AngsanaUPC",
+      "Aparajita",
+      "Arab",
+      "Arabic Transparent",
+      "Arabic Typesetting",
+      "Arial Baltic",
+      "Arial Black",
+      "Arial CE",
+      "Arial CYR",
+      "Arial Greek",
+      "Arial TUR",
+      "Arial",
+      "Batang",
+      "BatangChe",
+      "Bauhaus 93",
+      "Bell MT",
+      "Bitstream Vera Serif",
+      "Bodoni MT",
+      "Bookman Old Style",
+      "Braggadocio",
+      "Broadway",
+      "Browallia New",
+      "BrowalliaUPC",
+      "Calibri Light",
+      "Calibri",
+      "Californian FB",
+      "Cambria Math",
+      "Cambria",
+      "Candara",
+      "Castellar",
+      "Casual",
+      "Centaur",
+      "Century Gothic",
+      "Chalkduster",
+      "Colonna MT",
+      "Comic Sans MS",
+      "Consolas",
+      "Constantia",
+      "Copperplate Gothic Light",
+      "Corbel",
+      "Cordia New",
+      "CordiaUPC",
+      "Courier New Baltic",
+      "Courier New CE",
+      "Courier New CYR",
+      "Courier New Greek",
+      "Courier New TUR",
+      "Courier New",
+      "DFKai-SB",
+      "DaunPenh",
+      "David",
+      "DejaVu LGC Sans Mono",
+      "Desdemona",
+      "DilleniaUPC",
+      "DokChampa",
+      "Dotum",
+      "DotumChe",
+      "Ebrima",
+      "Engravers MT",
+      "Eras Bold ITC",
+      "Estrangelo Edessa",
+      "EucrosiaUPC",
+      "Euphemia",
+      "Eurostile",
+      "FangSong",
+      "Forte",
+      "FrankRuehl",
+      "Franklin Gothic Heavy",
+      "Franklin Gothic Medium",
+      "FreesiaUPC",
+      "French Script MT",
+      "Gabriola",
+      "Gautami",
+      "Georgia",
+      "Gigi",
+      "Gisha",
+      "Goudy Old Style",
+      "Gulim",
+      "GulimChe",
+      "GungSeo",
+      "Gungsuh",
+      "GungsuhChe",
+      "Haettenschweiler",
+      "Harrington",
+      "Hei S",
+      "HeiT",
+      "Heisei Kaku Gothic",
+      "Hiragino Sans GB",
+      "Impact",
+      "Informal Roman",
+      "IrisUPC",
+      "Iskoola Pota",
+      "JasmineUPC",
+      "KacstOne",
+      "KaiTi",
+      "Kalinga",
+      "Kartika",
+      "Khmer UI",
+      "Kino MT",
+      "KodchiangUPC",
+      "Kokila",
+      "Kozuka Gothic Pr6N",
+      "Lao UI",
+      "Latha",
+      "Leelawadee",
+      "Levenim MT",
+      "LilyUPC",
+      "Lohit Gujarati",
+      "Loma",
+      "Lucida Bright",
+      "Lucida Console",
+      "Lucida Fax",
+      "Lucida Sans Unicode",
+      "MS Gothic",
+      "MS Mincho",
+      "MS PGothic",
+      "MS PMincho",
+      "MS Reference Sans Serif",
+      "MS UI Gothic",
+      "MV Boli",
+      "Magneto",
+      "Malgun Gothic",
+      "Mangal",
+      "Marlett",
+      "Matura MT Script Capitals",
+      "Meiryo UI",
+      "Meiryo",
+      "Menlo",
+      "Microsoft Himalaya",
+      "Microsoft JhengHei",
+      "Microsoft New Tai Lue",
+      "Microsoft PhagsPa",
+      "Microsoft Sans Serif",
+      "Microsoft Tai Le",
+      "Microsoft Uighur",
+      "Microsoft YaHei",
+      "Microsoft Yi Baiti",
+      "MingLiU",
+      "MingLiU-ExtB",
+      "MingLiU_HKSCS",
+      "MingLiU_HKSCS-ExtB",
+      "Miriam Fixed",
+      "Miriam",
+      "Mongolian Baiti",
+      "MoolBoran",
+      "NSimSun",
+      "Narkisim",
+      "News Gothic MT",
+      "Niagara Solid",
+      "Nyala",
+      "PMingLiU",
+      "PMingLiU-ExtB",
+      "Palace Script MT",
+      "Palatino Linotype",
+      "Papyrus",
+      "Perpetua",
+      "Plantagenet Cherokee",
+      "Playbill",
+      "Prelude Bold",
+      "Prelude Condensed Bold",
+      "Prelude Condensed Medium",
+      "Prelude Medium",
+      "PreludeCompressedWGL Black",
+      "PreludeCompressedWGL Bold",
+      "PreludeCompressedWGL Light",
+      "PreludeCompressedWGL Medium",
+      "PreludeCondensedWGL Black",
+      "PreludeCondensedWGL Bold",
+      "PreludeCondensedWGL Light",
+      "PreludeCondensedWGL Medium",
+      "PreludeWGL Black",
+      "PreludeWGL Bold",
+      "PreludeWGL Light",
+      "PreludeWGL Medium",
+      "Raavi",
+      "Rachana",
+      "Rockwell",
+      "Rod",
+      "Sakkal Majalla",
+      "Sawasdee",
+      "Script MT Bold",
+      "Segoe Print",
+      "Segoe Script",
+      "Segoe UI Light",
+      "Segoe UI Semibold",
+      "Segoe UI Symbol",
+      "Segoe UI",
+      "Shonar Bangla",
+      "Showcard Gothic",
+      "Shruti",
+      "SimHei",
+      "SimSun",
+      "SimSun-ExtB",
+      "Simplified Arabic Fixed",
+      "Simplified Arabic",
+      "Snap ITC",
+      "Sylfaen",
+      "Symbol",
+      "Tahoma",
+      "Times New Roman Baltic",
+      "Times New Roman CE",
+      "Times New Roman CYR",
+      "Times New Roman Greek",
+      "Times New Roman TUR",
+      "Times New Roman",
+      "TlwgMono",
+      "Traditional Arabic",
+      "Trebuchet MS",
+      "Tunga",
+      "Tw Cen MT Condensed Extra Bold",
+      "Ubuntu",
+      "Umpush",
+      "Univers",
+      "Utopia",
+      "Utsaah",
+      "Vani",
+      "Verdana",
+      "Vijaya",
+      "Vladimir Script",
+      "Vrinda",
+      "Webdings",
+      "Wide Latin",
+      "Wingdings",
+    ];
     var fontString = "";
 
     for (var i = 0; i < fontArray.length; i++) {
@@ -577,7 +857,7 @@ ClientJS.prototype = {
   //
 
   // Is Local Storage.  Check if local storage is enabled.
-  isLocalStorage: function() {
+  isLocalStorage: function () {
     try {
       return !!globalThis.localStorage;
     } catch (e) {
@@ -586,7 +866,7 @@ ClientJS.prototype = {
   },
 
   // Is Session Storage.  Check if session storage is enabled.
-  isSessionStorage: function() {
+  isSessionStorage: function () {
     try {
       return !!globalThis.sessionStorage;
     } catch (e) {
@@ -595,7 +875,7 @@ ClientJS.prototype = {
   },
 
   // Is Cookie.  Check if cookies are enabled.
-  isCookie: function() {
+  isCookie: function () {
     return navigator.cookieEnabled;
   },
 
@@ -604,19 +884,19 @@ ClientJS.prototype = {
   //
 
   // Get Time Zone.  Return a string containing the time zone.
-  getTimeZone: function() {
+  getTimeZone: function () {
     var rightNow, myNumber, formattedNumber, result;
-      rightNow = new Date();
-      myNumber = String(-(rightNow.getTimezoneOffset() / 60));
-      if (myNumber < 0) {
-          myNumber = myNumber * -1;
-          formattedNumber = ("0" + myNumber).slice(-2);
-          result = "-" + formattedNumber;
-      } else {
-          formattedNumber = ("0" + myNumber).slice(-2);
-          result = "+" + formattedNumber;
-      }
-      return result;
+    rightNow = new Date();
+    myNumber = String(-(rightNow.getTimezoneOffset() / 60));
+    if (myNumber < 0) {
+      myNumber = myNumber * -1;
+      formattedNumber = ("0" + myNumber).slice(-2);
+      result = "-" + formattedNumber;
+    } else {
+      formattedNumber = ("0" + myNumber).slice(-2);
+      result = "+" + formattedNumber;
+    }
+    return result;
   },
 
   //
@@ -624,12 +904,12 @@ ClientJS.prototype = {
   //
 
   // Get Language.  Return a string containing the user language.
-  getLanguage: function() {
+  getLanguage: function () {
     return navigator.language;
   },
 
   // Get System Language.  Return a string containing the system language.
-  getSystemLanguage: function() {
+  getSystemLanguage: function () {
     return navigator.systemLanguage || window.navigator.language;
   },
 
@@ -638,48 +918,40 @@ ClientJS.prototype = {
   //
 
   // Is Canvas.  Check if the canvas element is enabled.
-  isCanvas: function() {
-
+  isCanvas: function () {
     // create a canvas element
-    var elem = document.createElement('canvas');
+    var elem = document.createElement("canvas");
 
     // try/catch for older browsers that don't support the canvas element
     try {
-
       // check if context and context 2d exists
-      return !!(elem.getContext && elem.getContext('2d'));
-
+      return !!(elem.getContext && elem.getContext("2d"));
     } catch (e) {
-
       // catch if older browser
       return false;
     }
   },
 
   // Get Canvas Print.  Return a string containing the canvas URI data.
-  getCanvasPrint: function() {
-
+  getCanvasPrint: function () {
     // create a canvas element
-    var canvas = document.createElement('canvas');
+    var canvas = document.createElement("canvas");
 
     // define a context var that will be used for browsers with canvas support
     var ctx;
 
     // try/catch for older browsers that don't support the canvas element
     try {
-
       // attempt to give ctx a 2d canvas context value
-      ctx = canvas.getContext('2d');
-
+      ctx = canvas.getContext("2d");
     } catch (e) {
-
       // return empty string if canvas element not supported
       return "";
     }
 
     // https://www.browserleaks.com/canvas#how-does-it-work
     // Text with lowercase/uppercase/punctuation symbols
-    var txt = 'ClientJS,org <canvas> 1.0';
+    var txt = "ClientJS,org <canvas> 1.0";
     ctx.textBaseline = "top";
     // The most common type
     ctx.font = "14px 'Arial'";
@@ -692,7 +964,7 @@ ClientJS.prototype = {
     ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
     ctx.fillText(txt, 4, 17);
     return canvas.toDataURL();
-  }
+  },
 };
 
 exports.ClientJS = ClientJS;

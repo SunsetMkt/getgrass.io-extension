@@ -1,4 +1,4 @@
-import { ChakraComponent, chakra } from "@chakra-ui/system"
+import { ChakraComponent, chakra } from "@chakra-ui/system";
 
 export const StackItem: ChakraComponent<"div"> = (props) => (
   <chakra.div
@@ -11,6 +11,6 @@ export const StackItem: ChakraComponent<"div"> = (props) => (
       ...props["__css"],
     }}
   />
-)
+);
 
-StackItem.displayName = "StackItem"
+StackItem.displayName = "StackItem";

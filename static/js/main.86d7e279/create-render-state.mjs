@@ -1,8 +1,8 @@
-import { createHtmlRenderState } from '../../html/utils/create-render-state.mjs';
+import { createHtmlRenderState } from "../../html/utils/create-render-state.mjs";
 
 const createSvgRenderState = () => ({
-    ...createHtmlRenderState(),
-    attrs: {},
+  ...createHtmlRenderState(),
+  attrs: {},
 });
 
 export { createSvgRenderState };

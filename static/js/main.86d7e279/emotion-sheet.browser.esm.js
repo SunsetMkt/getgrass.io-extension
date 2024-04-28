@@ -29,7 +29,6 @@ function sheetForTag(tag) {
 
   /* istanbul ignore next */
 
-
   for (var i = 0; i < document.styleSheets.length; i++) {
     if (document.styleSheets[i].ownerNode === tag) {
       // $FlowFixMe
@@ -39,19 +38,19 @@ function sheetForTag(tag) {
 }
 
 function createStyleElement(options) {
-  var tag = document.createElement('style');
-  tag.setAttribute('data-emotion', options.key);
+  var tag = document.createElement("style");
+  tag.setAttribute("data-emotion", options.key);
 
   if (options.nonce !== undefined) {
-    tag.setAttribute('nonce', options.nonce);
+    tag.setAttribute("nonce", options.nonce);
   }
 
-  tag.appendChild(document.createTextNode(''));
-  tag.setAttribute('data-s', '');
+  tag.appendChild(document.createTextNode(""));
+  tag.setAttribute("data-s", "");
   return tag;
 }
 
-var StyleSheet = /*#__PURE__*/function () {
+var StyleSheet = /*#__PURE__*/ (function () {
   // Using Node instead of HTMLElement since container may be a ShadowRoot
   function StyleSheet(options) {
     var _this = this;
@@ -76,7 +75,10 @@ var StyleSheet = /*#__PURE__*/function () {
       _this.tags.push(tag);
     };
 
-    this.isSpeedy = options.speedy === undefined ? process.env.NODE_ENV === 'production' : options.speedy;
+    this.isSpeedy =
+      options.speedy === undefined
+        ? process.env.NODE_ENV === "production"
+        : options.speedy;
     this.tags = [];
     this.ctr = 0;
     this.nonce = options.nonce; // key is the value of the data-emotion attribute, it's used to identify different sheets
@@ -104,16 +106,22 @@ var StyleSheet = /*#__PURE__*/function () {
 
     var tag = this.tags[this.tags.length - 1];
 
-    if (process.env.NODE_ENV !== 'production') {
-      var isImportRule = rule.charCodeAt(0) === 64 && rule.charCodeAt(1) === 105;
+    if (process.env.NODE_ENV !== "production") {
+      var isImportRule =
+        rule.charCodeAt(0) === 64 && rule.charCodeAt(1) === 105;
 
       if (isImportRule && this._alreadyInsertedOrderInsensitiveRule) {
         // this would only cause problem in speedy mode
         // but we don't want enabling speedy to affect the observable behavior
         // so we report this error at all times
-        console.error("You're attempting to insert the following rule:\n" + rule + '\n\n`@import` rules must be before all other types of rules in a stylesheet but other rules have already been inserted. Please ensure that `@import` rules are before all other rules.');
+        console.error(
+          "You're attempting to insert the following rule:\n" +
+            rule +
+            "\n\n`@import` rules must be before all other types of rules in a stylesheet but other rules have already been inserted. Please ensure that `@import` rules are before all other rules."
+        );
       }
-      this._alreadyInsertedOrderInsensitiveRule = this._alreadyInsertedOrderInsensitiveRule || !isImportRule;
+      this._alreadyInsertedOrderInsensitiveRule =
+        this._alreadyInsertedOrderInsensitiveRule || !isImportRule;
     }
 
     if (this.isSpeedy) {
@@ -124,8 +132,16 @@ var StyleSheet = /*#__PURE__*/function () {
         // the big drawback is that the css won't be editable in devtools
         sheet.insertRule(rule, sheet.cssRules.length);
       } catch (e) {
-        if (process.env.NODE_ENV !== 'production' && !/:(-moz-placeholder|-moz-focus-inner|-moz-focusring|-ms-input-placeholder|-moz-read-write|-moz-read-only|-ms-clear|-ms-expand|-ms-reveal){/.test(rule)) {
-          console.error("There was a problem inserting the following rule: \"" + rule + "\"", e);
+        if (
+          process.env.NODE_ENV !== "production" &&
+          !/:(-moz-placeholder|-moz-focus-inner|-moz-focusring|-ms-input-placeholder|-moz-read-write|-moz-read-only|-ms-clear|-ms-expand|-ms-reveal){/.test(
+            rule
+          )
+        ) {
+          console.error(
+            'There was a problem inserting the following rule: "' + rule + '"',
+            e
+          );
         }
       }
     } else {
@@ -143,12 +159,12 @@ var StyleSheet = /*#__PURE__*/function () {
     this.tags = [];
     this.ctr = 0;
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       this._alreadyInsertedOrderInsensitiveRule = false;
     }
   };
 
   return StyleSheet;
-}();
+})();
 
 export { StyleSheet };

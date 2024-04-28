@@ -1,4 +1,4 @@
-import { anatomy } from "./anatomy"
+import { anatomy } from "./anatomy";
 
 /**
  * **Accordion anatomy**
@@ -10,7 +10,7 @@ import { anatomy } from "./anatomy"
  */
 export const accordionAnatomy = anatomy("accordion")
   .parts("root", "container", "button", "panel")
-  .extend("icon")
+  .extend("icon");
 
 /**
  * **Alert anatomy**
@@ -20,7 +20,7 @@ export const accordionAnatomy = anatomy("accordion")
  */
 export const alertAnatomy = anatomy("alert")
   .parts("title", "description", "container")
-  .extend("icon", "spinner")
+  .extend("icon", "spinner");
 
 /**
  * **Avatar anatomy**
@@ -32,7 +32,7 @@ export const alertAnatomy = anatomy("alert")
  */
 export const avatarAnatomy = anatomy("avatar")
   .parts("label", "badge", "container")
-  .extend("excessLabel", "group")
+  .extend("excessLabel", "group");
 
 /**
  * **Breadcrumb anatomy**
@@ -43,102 +43,102 @@ export const avatarAnatomy = anatomy("avatar")
  */
 export const breadcrumbAnatomy = anatomy("breadcrumb")
   .parts("link", "item", "container")
-  .extend("separator")
+  .extend("separator");
 
-export const buttonAnatomy = anatomy("button").parts()
+export const buttonAnatomy = anatomy("button").parts();
 
 export const checkboxAnatomy = anatomy("checkbox")
   .parts("control", "icon", "container")
-  .extend("label")
+  .extend("label");
 
 export const circularProgressAnatomy = anatomy("progress")
   .parts("track", "filledTrack")
-  .extend("label")
+  .extend("label");
 
 export const drawerAnatomy = anatomy("drawer")
   .parts("overlay", "dialogContainer", "dialog")
-  .extend("header", "closeButton", "body", "footer")
+  .extend("header", "closeButton", "body", "footer");
 
 export const editableAnatomy = anatomy("editable").parts(
   "preview",
   "input",
-  "textarea",
-)
+  "textarea"
+);
 
 export const formAnatomy = anatomy("form").parts(
   "container",
   "requiredIndicator",
-  "helperText",
-)
+  "helperText"
+);
 
-export const formErrorAnatomy = anatomy("formError").parts("text", "icon")
+export const formErrorAnatomy = anatomy("formError").parts("text", "icon");
 
 export const inputAnatomy = anatomy("input").parts(
   "addon",
   "field",
   "element",
-  "group",
-)
+  "group"
+);
 
-export const listAnatomy = anatomy("list").parts("container", "item", "icon")
+export const listAnatomy = anatomy("list").parts("container", "item", "icon");
 
 export const menuAnatomy = anatomy("menu")
   .parts("button", "list", "item")
-  .extend("groupTitle", "icon", "command", "divider")
+  .extend("groupTitle", "icon", "command", "divider");
 
 export const modalAnatomy = anatomy("modal")
   .parts("overlay", "dialogContainer", "dialog")
-  .extend("header", "closeButton", "body", "footer")
+  .extend("header", "closeButton", "body", "footer");
 
 export const numberInputAnatomy = anatomy("numberinput").parts(
   "root",
   "field",
   "stepperGroup",
-  "stepper",
-)
+  "stepper"
+);
 
-export const pinInputAnatomy = anatomy("pininput").parts("field")
+export const pinInputAnatomy = anatomy("pininput").parts("field");
 
 export const popoverAnatomy = anatomy("popover")
   .parts("content", "header", "body", "footer")
-  .extend("popper", "arrow", "closeButton")
+  .extend("popper", "arrow", "closeButton");
 
 export const progressAnatomy = anatomy("progress").parts(
   "label",
   "filledTrack",
-  "track",
-)
+  "track"
+);
 
 export const radioAnatomy = anatomy("radio").parts(
   "container",
   "control",
-  "label",
-)
+  "label"
+);
 
-export const selectAnatomy = anatomy("select").parts("field", "icon")
+export const selectAnatomy = anatomy("select").parts("field", "icon");
 
 export const sliderAnatomy = anatomy("slider").parts(
   "container",
   "track",
   "thumb",
   "filledTrack",
-  "mark",
-)
+  "mark"
+);
 
 export const statAnatomy = anatomy("stat").parts(
   "container",
   "label",
   "helpText",
   "number",
-  "icon",
-)
+  "icon"
+);
 
 export const switchAnatomy = anatomy("switch").parts(
   "container",
   "track",
   "thumb",
-  "label",
-)
+  "label"
+);
 
 export const tableAnatomy = anatomy("table").parts(
   "table",
@@ -148,8 +148,8 @@ export const tableAnatomy = anatomy("table").parts(
   "th",
   "td",
   "tfoot",
-  "caption",
-)
+  "caption"
+);
 
 export const tabsAnatomy = anatomy("tabs").parts(
   "root",
@@ -157,8 +157,8 @@ export const tabsAnatomy = anatomy("tabs").parts(
   "tablist",
   "tabpanel",
   "tabpanels",
-  "indicator",
-)
+  "indicator"
+);
 
 /**
  * **Tag anatomy**
@@ -169,15 +169,15 @@ export const tabsAnatomy = anatomy("tabs").parts(
 export const tagAnatomy = anatomy("tag").parts(
   "container",
   "label",
-  "closeButton",
-)
+  "closeButton"
+);
 
 export const cardAnatomy = anatomy("card").parts(
   "container",
   "header",
   "body",
-  "footer",
-)
+  "footer"
+);
 
 export const stepperAnatomy = anatomy("stepper").parts(
   "stepper",
@@ -187,5 +187,5 @@ export const stepperAnatomy = anatomy("stepper").parts(
   "indicator",
   "separator",
   "icon",
-  "number",
-)
+  "number"
+);

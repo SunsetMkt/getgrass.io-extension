@@ -61,6 +61,6 @@ const typography = {
     "8xl": "6rem",
     "9xl": "8rem",
   },
-}
+};
 
-export default typography
+export default typography;

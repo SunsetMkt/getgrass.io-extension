@@ -1,27 +1,27 @@
-import { useSafeLayoutEffect } from "@chakra-ui/react-use-safe-layout-effect"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { ColorModeContext } from "./color-mode-context"
+import { useSafeLayoutEffect } from "@chakra-ui/react-use-safe-layout-effect";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ColorModeContext } from "./color-mode-context";
 import {
   ColorMode,
   ColorModeContextType,
   ColorModeOptions,
-} from "./color-mode-types"
-import { getColorModeUtils } from "./color-mode.utils"
-import { localStorageManager, StorageManager } from "./storage-manager"
+} from "./color-mode-types";
+import { getColorModeUtils } from "./color-mode.utils";
+import { localStorageManager, StorageManager } from "./storage-manager";
 
-const noop = () => {}
+const noop = () => {};
 
 export interface ColorModeProviderProps {
-  value?: ColorMode
-  children?: React.ReactNode
-  options?: ColorModeOptions
-  colorModeManager?: StorageManager
+  value?: ColorMode;
+  children?: React.ReactNode;
+  options?: ColorModeOptions;
+  colorModeManager?: StorageManager;
 }
 
 function getTheme(manager: StorageManager, fallback?: ColorMode) {
   return manager.type === "cookie" && manager.ssr
     ? manager.get(fallback)
-    : fallback
+    : fallback;
 }
 
 /**
@@ -38,71 +38,71 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
       disableTransitionOnChange,
     } = {},
     colorModeManager = localStorageManager,
-  } = props
+  } = props;
 
-  const defaultColorMode = initialColorMode === "dark" ? "dark" : "light"
+  const defaultColorMode = initialColorMode === "dark" ? "dark" : "light";
 
   const [colorMode, rawSetColorMode] = useState(() =>
-    getTheme(colorModeManager, defaultColorMode),
-  )
+    getTheme(colorModeManager, defaultColorMode)
+  );
 
   const [resolvedColorMode, setResolvedColorMode] = useState(() =>
-    getTheme(colorModeManager),
-  )
+    getTheme(colorModeManager)
+  );
 
   const { getSystemTheme, setClassName, setDataset, addListener } = useMemo(
     () => getColorModeUtils({ preventTransition: disableTransitionOnChange }),
-    [disableTransitionOnChange],
-  )
+    [disableTransitionOnChange]
+  );
 
   const resolvedValue =
-    initialColorMode === "system" && !colorMode ? resolvedColorMode : colorMode
+    initialColorMode === "system" && !colorMode ? resolvedColorMode : colorMode;
 
   const setColorMode = useCallback(
     (value: ColorMode | "system") => {
       //
-      const resolved = value === "system" ? getSystemTheme() : value
-      rawSetColorMode(resolved)
+      const resolved = value === "system" ? getSystemTheme() : value;
+      rawSetColorMode(resolved);
 
-      setClassName(resolved === "dark")
-      setDataset(resolved)
+      setClassName(resolved === "dark");
+      setDataset(resolved);
 
-      colorModeManager.set(resolved)
+      colorModeManager.set(resolved);
     },
-    [colorModeManager, getSystemTheme, setClassName, setDataset],
-  )
+    [colorModeManager, getSystemTheme, setClassName, setDataset]
+  );
 
   useSafeLayoutEffect(() => {
     if (initialColorMode === "system") {
-      setResolvedColorMode(getSystemTheme())
+      setResolvedColorMode(getSystemTheme());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const managerValue = colorModeManager.get()
+    const managerValue = colorModeManager.get();
 
     if (managerValue) {
-      setColorMode(managerValue)
-      return
+      setColorMode(managerValue);
+      return;
     }
 
     if (initialColorMode === "system") {
-      setColorMode("system")
-      return
+      setColorMode("system");
+      return;
     }
 
-    setColorMode(defaultColorMode)
-  }, [colorModeManager, defaultColorMode, initialColorMode, setColorMode])
+    setColorMode(defaultColorMode);
+  }, [colorModeManager, defaultColorMode, initialColorMode, setColorMode]);
 
   const toggleColorMode = useCallback(() => {
-    setColorMode(resolvedValue === "dark" ? "light" : "dark")
-  }, [resolvedValue, setColorMode])
+    setColorMode(resolvedValue === "dark" ? "light" : "dark");
+  }, [resolvedValue, setColorMode]);
 
   useEffect(() => {
-    if (!useSystemColorMode) return
-    return addListener(setColorMode)
-  }, [useSystemColorMode, addListener, setColorMode])
+    if (!useSystemColorMode) return;
+    return addListener(setColorMode);
+  }, [useSystemColorMode, addListener, setColorMode]);
 
   // presence of `value` indicates a controlled context
   const context = useMemo(
@@ -112,17 +112,17 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
       setColorMode: value ? noop : setColorMode,
       forced: value !== undefined,
     }),
-    [resolvedValue, toggleColorMode, setColorMode, value],
-  )
+    [resolvedValue, toggleColorMode, setColorMode, value]
+  );
 
   return (
     <ColorModeContext.Provider value={context}>
       {children}
     </ColorModeContext.Provider>
-  )
+  );
 }
 
-ColorModeProvider.displayName = "ColorModeProvider"
+ColorModeProvider.displayName = "ColorModeProvider";
 
 /**
  * Locks the color mode to `dark`, without any way to change it.
@@ -135,13 +135,13 @@ export function DarkMode(props: React.PropsWithChildren<{}>) {
       setColorMode: noop,
       forced: true,
     }),
-    [],
-  )
+    []
+  );
 
-  return <ColorModeContext.Provider value={context} {...props} />
+  return <ColorModeContext.Provider value={context} {...props} />;
 }
 
-DarkMode.displayName = "DarkMode"
+DarkMode.displayName = "DarkMode";
 
 /**
  * Locks the color mode to `light` without any way to change it.
@@ -154,10 +154,10 @@ export function LightMode(props: React.PropsWithChildren<{}>) {
       setColorMode: noop,
       forced: true,
     }),
-    [],
-  )
+    []
+  );
 
-  return <ColorModeContext.Provider value={context} {...props} />
+  return <ColorModeContext.Provider value={context} {...props} />;
 }
 
-LightMode.displayName = "LightMode"
+LightMode.displayName = "LightMode";

@@ -1,7 +1,7 @@
-import { color } from '../../../value/types/color/index.mjs';
-import { complex } from '../../../value/types/complex/index.mjs';
-import { dimensionValueTypes } from './dimensions.mjs';
-import { testValueType } from './test.mjs';
+import { color } from "../../../value/types/color/index.mjs";
+import { complex } from "../../../value/types/complex/index.mjs";
+import { dimensionValueTypes } from "./dimensions.mjs";
+import { testValueType } from "./test.mjs";
 
 /**
  * A list of all ValueTypes

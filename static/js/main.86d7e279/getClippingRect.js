@@ -14,7 +14,7 @@ import rectToClientRect from "../utils/rectToClientRect.js";
 import { max, min } from "../utils/math.js";
 
 function getInnerBoundingClientRect(element, strategy) {
-  var rect = getBoundingClientRect(element, false, strategy === 'fixed');
+  var rect = getBoundingClientRect(element, false, strategy === "fixed");
   rect.top = rect.top + element.clientTop;
   rect.left = rect.left + element.clientLeft;
   rect.bottom = rect.top + element.clientHeight;
@@ -27,31 +27,48 @@ function getInnerBoundingClientRect(element, strategy) {
 }
 
 function getClientRectFromMixedType(element, clippingParent, strategy) {
-  return clippingParent === viewport ? rectToClientRect(getViewportRect(element, strategy)) : isElement(clippingParent) ? getInnerBoundingClientRect(clippingParent, strategy) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
+  return clippingParent === viewport
+    ? rectToClientRect(getViewportRect(element, strategy))
+    : isElement(clippingParent)
+    ? getInnerBoundingClientRect(clippingParent, strategy)
+    : rectToClientRect(getDocumentRect(getDocumentElement(element)));
 } // A "clipping parent" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 
-
 function getClippingParents(element) {
   var clippingParents = listScrollParents(getParentNode(element));
-  var canEscapeClipping = ['absolute', 'fixed'].indexOf(getComputedStyle(element).position) >= 0;
-  var clipperElement = canEscapeClipping && isHTMLElement(element) ? getOffsetParent(element) : element;
+  var canEscapeClipping =
+    ["absolute", "fixed"].indexOf(getComputedStyle(element).position) >= 0;
+  var clipperElement =
+    canEscapeClipping && isHTMLElement(element)
+      ? getOffsetParent(element)
+      : element;
 
   if (!isElement(clipperElement)) {
     return [];
   } // $FlowFixMe[incompatible-return]: https://github.com/facebook/flow/issues/1414
 
-
   return clippingParents.filter(function (clippingParent) {
-    return isElement(clippingParent) && contains(clippingParent, clipperElement) && getNodeName(clippingParent) !== 'body';
+    return (
+      isElement(clippingParent) &&
+      contains(clippingParent, clipperElement) &&
+      getNodeName(clippingParent) !== "body"
+    );
   });
 } // Gets the maximum area that the element is visible in due to any number of
 // clipping parents
 
-
-export default function getClippingRect(element, boundary, rootBoundary, strategy) {
-  var mainClippingParents = boundary === 'clippingParents' ? getClippingParents(element) : [].concat(boundary);
+export default function getClippingRect(
+  element,
+  boundary,
+  rootBoundary,
+  strategy
+) {
+  var mainClippingParents =
+    boundary === "clippingParents"
+      ? getClippingParents(element)
+      : [].concat(boundary);
   var clippingParents = [].concat(mainClippingParents, [rootBoundary]);
   var firstClippingParent = clippingParents[0];
   var clippingRect = clippingParents.reduce(function (accRect, clippingParent) {

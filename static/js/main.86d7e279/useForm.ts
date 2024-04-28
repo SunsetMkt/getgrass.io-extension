@@ -1,18 +1,18 @@
-import React from 'react';
+import React from "react";
 
-import { createFormControl } from './logic/createFormControl';
-import getProxyFormState from './logic/getProxyFormState';
-import shouldRenderFormState from './logic/shouldRenderFormState';
-import deepEqual from './utils/deepEqual';
-import isFunction from './utils/isFunction';
+import { createFormControl } from "./logic/createFormControl";
+import getProxyFormState from "./logic/getProxyFormState";
+import shouldRenderFormState from "./logic/shouldRenderFormState";
+import deepEqual from "./utils/deepEqual";
+import isFunction from "./utils/isFunction";
 import {
   FieldValues,
   FormState,
   InternalFieldName,
   UseFormProps,
   UseFormReturn,
-} from './types';
-import { useSubscribe } from './useSubscribe';
+} from "./types";
+import { useSubscribe } from "./useSubscribe";
 
 /**
  * Custom hook to manage the entire form.
@@ -46,9 +46,9 @@ import { useSubscribe } from './useSubscribe';
 export function useForm<
   TFieldValues extends FieldValues = FieldValues,
   TContext = any,
-  TTransformedValues extends FieldValues | undefined = undefined,
+  TTransformedValues extends FieldValues | undefined = undefined
 >(
-  props: UseFormProps<TFieldValues, TContext> = {},
+  props: UseFormProps<TFieldValues, TContext> = {}
 ): UseFormReturn<TFieldValues, TContext, TTransformedValues> {
   const _formControl = React.useRef<
     UseFormReturn<TFieldValues, TContext, TTransformedValues> | undefined
@@ -86,14 +86,14 @@ export function useForm<
   useSubscribe({
     subject: control._subjects.state,
     next: (
-      value: Partial<FormState<TFieldValues>> & { name?: InternalFieldName },
+      value: Partial<FormState<TFieldValues>> & { name?: InternalFieldName }
     ) => {
       if (
         shouldRenderFormState(
           value,
           control._proxyFormState,
           control._updateFormState,
-          true,
+          true
         )
       ) {
         updateFormState({ ...control._formState });
@@ -103,7 +103,7 @@ export function useForm<
 
   React.useEffect(
     () => control._disableForm(props.disabled),
-    [control, props.disabled],
+    [control, props.disabled]
   );
 
   React.useEffect(() => {

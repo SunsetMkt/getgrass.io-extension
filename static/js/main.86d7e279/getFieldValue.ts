@@ -1,15 +1,15 @@
-import { Field } from '../types';
-import isCheckBox from '../utils/isCheckBoxInput';
-import isFileInput from '../utils/isFileInput';
-import isMultipleSelect from '../utils/isMultipleSelect';
-import isRadioInput from '../utils/isRadioInput';
-import isUndefined from '../utils/isUndefined';
+import { Field } from "../types";
+import isCheckBox from "../utils/isCheckBoxInput";
+import isFileInput from "../utils/isFileInput";
+import isMultipleSelect from "../utils/isMultipleSelect";
+import isRadioInput from "../utils/isRadioInput";
+import isUndefined from "../utils/isUndefined";
 
-import getCheckboxValue from './getCheckboxValue';
-import getFieldValueAs from './getFieldValueAs';
-import getRadioValue from './getRadioValue';
+import getCheckboxValue from "./getCheckboxValue";
+import getFieldValueAs from "./getFieldValueAs";
+import getRadioValue from "./getRadioValue";
 
-export default function getFieldValue(_f: Field['_f']) {
+export default function getFieldValue(_f: Field["_f"]) {
   const ref = _f.ref;
 
   if (_f.refs ? _f.refs.every((ref) => ref.disabled) : ref.disabled) {

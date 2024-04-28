@@ -5,8 +5,8 @@ import {
   ThemingProps,
   useStyleConfig,
   HTMLChakraProps,
-} from "@chakra-ui/system"
-import { cx } from "@chakra-ui/shared-utils"
+} from "@chakra-ui/system";
+import { cx } from "@chakra-ui/shared-utils";
 
 export interface HeadingProps
   extends HTMLChakraProps<"h2">,
@@ -21,10 +21,10 @@ export interface HeadingProps
  */
 export const Heading = forwardRef<HeadingProps, "h2">(function Heading(
   props,
-  ref,
+  ref
 ) {
-  const styles = useStyleConfig("Heading", props)
-  const { className, ...rest } = omitThemingProps(props)
+  const styles = useStyleConfig("Heading", props);
+  const { className, ...rest } = omitThemingProps(props);
 
   return (
     <chakra.h2
@@ -33,7 +33,7 @@ export const Heading = forwardRef<HeadingProps, "h2">(function Heading(
       {...rest}
       __css={styles}
     />
-  )
-})
+  );
+});
 
-Heading.displayName = "Heading"
+Heading.displayName = "Heading";

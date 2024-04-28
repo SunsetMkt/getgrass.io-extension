@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Checks if the key pressed is a printable character
  * and can be used for shortcut navigation
  */
 function isPrintableCharacter(event: React.KeyboardEvent) {
-  const { key } = event
-  return key.length === 1 || (key.length > 1 && /[^a-zA-Z0-9]/.test(key))
+  const { key } = event;
+  return key.length === 1 || (key.length > 1 && /[^a-zA-Z0-9]/.test(key));
 }
 
 export interface UseShortcutProps {
-  timeout?: number
-  preventDefault?: (event: React.KeyboardEvent) => boolean
+  timeout?: number;
+  preventDefault?: (event: React.KeyboardEvent) => boolean;
 }
 
 /**
@@ -19,54 +19,54 @@ export interface UseShortcutProps {
  * that's used for key navigation within menus, select dropdowns.
  */
 export function useShortcut(props: UseShortcutProps = {}) {
-  const { timeout = 300, preventDefault = () => true } = props
+  const { timeout = 300, preventDefault = () => true } = props;
 
-  const [keys, setKeys] = useState<string[]>([])
-  const timeoutRef = useRef<any>()
+  const [keys, setKeys] = useState<string[]>([]);
+  const timeoutRef = useRef<any>();
 
   const flush = () => {
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
-  }
+  };
 
   const clearKeysAfterDelay = () => {
-    flush()
+    flush();
     timeoutRef.current = setTimeout(() => {
-      setKeys([])
-      timeoutRef.current = null
-    }, timeout)
-  }
+      setKeys([]);
+      timeoutRef.current = null;
+    }, timeout);
+  };
 
-  useEffect(() => flush, [])
+  useEffect(() => flush, []);
 
-  type Callback = (keysSoFar: string) => void
+  type Callback = (keysSoFar: string) => void;
 
   function onKeyDown(fn: Callback) {
     return (event: React.KeyboardEvent) => {
       if (event.key === "Backspace") {
-        const keysCopy = [...keys]
-        keysCopy.pop()
-        setKeys(keysCopy)
-        return
+        const keysCopy = [...keys];
+        keysCopy.pop();
+        setKeys(keysCopy);
+        return;
       }
 
       if (isPrintableCharacter(event)) {
-        const keysCopy = keys.concat(event.key)
+        const keysCopy = keys.concat(event.key);
 
         if (preventDefault(event)) {
-          event.preventDefault()
-          event.stopPropagation()
+          event.preventDefault();
+          event.stopPropagation();
         }
 
-        setKeys(keysCopy)
-        fn(keysCopy.join(""))
+        setKeys(keysCopy);
+        fn(keysCopy.join(""));
 
-        clearKeysAfterDelay()
+        clearKeysAfterDelay();
       }
-    }
+    };
   }
 
-  return onKeyDown
+  return onKeyDown;
 }

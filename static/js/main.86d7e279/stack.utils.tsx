@@ -1,17 +1,17 @@
-import { ResponsiveValue, SystemProps } from "@chakra-ui/system"
-import { mapResponsive } from "@chakra-ui/breakpoint-utils"
+import { ResponsiveValue, SystemProps } from "@chakra-ui/system";
+import { mapResponsive } from "@chakra-ui/breakpoint-utils";
 
 export type StackDirection = ResponsiveValue<
   "row" | "column" | "row-reverse" | "column-reverse"
->
+>;
 
 interface Options {
-  spacing: SystemProps["margin"]
-  direction: StackDirection
+  spacing: SystemProps["margin"];
+  direction: StackDirection;
 }
 
 export function getDividerStyles(options: Options) {
-  const { spacing, direction } = options
+  const { spacing, direction } = options;
 
   const dividerStyles = {
     column: {
@@ -38,12 +38,12 @@ export function getDividerStyles(options: Options) {
       borderLeftWidth: "1px",
       borderBottomWidth: 0,
     },
-  }
+  };
 
   return {
     "&": mapResponsive(
       direction,
-      (value: keyof typeof dividerStyles) => dividerStyles[value],
+      (value: keyof typeof dividerStyles) => dividerStyles[value]
     ),
-  }
+  };
 }

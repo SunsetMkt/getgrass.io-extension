@@ -1,8 +1,4 @@
-import {
-  __DEV__,
-  isFunction,
-  isNumber
-} from "./chunk-Y5FGD7DM.mjs";
+import { __DEV__, isFunction, isNumber } from "./chunk-Y5FGD7DM.mjs";
 
 // src/function.ts
 function runIfFn(valueOrFn, ...args) {
@@ -23,10 +19,13 @@ function callAll(...fns) {
     });
   };
 }
-var compose = (fn1, ...fns) => fns.reduce(
-  (f1, f2) => (...args) => f1(f2(...args)),
-  fn1
-);
+var compose = (fn1, ...fns) =>
+  fns.reduce(
+    (f1, f2) =>
+      (...args) =>
+        f1(f2(...args)),
+    fn1
+  );
 function once(fn) {
   let result;
   return function func(...args) {
@@ -37,8 +36,7 @@ function once(fn) {
     return result;
   };
 }
-var noop = () => {
-};
+var noop = () => {};
 var warn = /* @__PURE__ */ once((options) => () => {
   const { condition, message } = options;
   if (condition && __DEV__) {
@@ -51,7 +49,10 @@ var error = /* @__PURE__ */ once((options) => () => {
     console.error(message);
   }
 });
-var pipe = (...fns) => (v) => fns.reduce((a, b) => b(a), v);
+var pipe =
+  (...fns) =>
+  (v) =>
+    fns.reduce((a, b) => b(a), v);
 var distance1D = (a, b) => Math.abs(a - b);
 var isPoint = (point) => "x" in point && "y" in point;
 function distance(a, b) {
@@ -76,5 +77,5 @@ export {
   warn,
   error,
   pipe,
-  distance
+  distance,
 };

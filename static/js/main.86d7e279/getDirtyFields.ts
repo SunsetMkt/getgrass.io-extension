@@ -1,9 +1,9 @@
-import deepEqual from '../utils/deepEqual';
-import isNullOrUndefined from '../utils/isNullOrUndefined';
-import isObject from '../utils/isObject';
-import isPrimitive from '../utils/isPrimitive';
-import isUndefined from '../utils/isUndefined';
-import objectHasFunction from '../utils/objectHasFunction';
+import deepEqual from "../utils/deepEqual";
+import isNullOrUndefined from "../utils/isNullOrUndefined";
+import isObject from "../utils/isObject";
+import isPrimitive from "../utils/isPrimitive";
+import isUndefined from "../utils/isUndefined";
+import objectHasFunction from "../utils/objectHasFunction";
 
 function markFieldsDirty<T>(data: T, fields: Record<string, any> = {}) {
   const isParentNodeArray = Array.isArray(data);
@@ -31,7 +31,7 @@ function getDirtyFieldsFromDefaultValues<T>(
   dirtyFieldsFromValues: Record<
     Extract<keyof T, string>,
     ReturnType<typeof markFieldsDirty> | boolean
-  >,
+  >
 ) {
   const isParentNodeArray = Array.isArray(data);
 
@@ -52,7 +52,7 @@ function getDirtyFieldsFromDefaultValues<T>(
           getDirtyFieldsFromDefaultValues(
             data[key],
             isNullOrUndefined(formValues) ? {} : formValues[key],
-            dirtyFieldsFromValues[key],
+            dirtyFieldsFromValues[key]
           );
         }
       } else {
@@ -68,5 +68,5 @@ export default <T>(defaultValues: T, formValues: T) =>
   getDirtyFieldsFromDefaultValues(
     defaultValues,
     formValues,
-    markFieldsDirty(formValues),
+    markFieldsDirty(formValues)
   );

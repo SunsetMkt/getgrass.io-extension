@@ -1,16 +1,16 @@
-import { radioAnatomy as parts } from "@chakra-ui/anatomy"
+import { radioAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { runIfFn } from "../utils/run-if-fn"
-import { checkboxTheme } from "./checkbox"
+} from "@chakra-ui/styled-system";
+import { runIfFn } from "../utils/run-if-fn";
+import { checkboxTheme } from "./checkbox";
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
 const baseStyleControl = defineStyle((props) => {
-  const controlStyle = runIfFn(checkboxTheme.baseStyle, props)?.control
+  const controlStyle = runIfFn(checkboxTheme.baseStyle, props)?.control;
 
   return {
     ...controlStyle,
@@ -27,14 +27,14 @@ const baseStyleControl = defineStyle((props) => {
         bg: "currentColor",
       },
     },
-  }
-})
+  };
+});
 
 const baseStyle = definePartsStyle((props) => ({
   label: checkboxTheme.baseStyle?.(props).label,
   container: checkboxTheme.baseStyle?.(props).container,
   control: baseStyleControl(props),
-}))
+}));
 
 const sizes = {
   md: definePartsStyle({
@@ -49,7 +49,7 @@ const sizes = {
     control: { width: "3", height: "3" },
     label: { fontSize: "sm" },
   }),
-}
+};
 
 export const radioTheme = defineMultiStyleConfig({
   baseStyle,
@@ -58,4 +58,4 @@ export const radioTheme = defineMultiStyleConfig({
     size: "md",
     colorScheme: "blue",
   },
-})
+});

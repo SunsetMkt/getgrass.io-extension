@@ -1,15 +1,15 @@
-import { menuAnatomy as parts } from "@chakra-ui/anatomy"
+import { menuAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   defineStyle,
-} from "@chakra-ui/styled-system"
+} from "@chakra-ui/styled-system";
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $bg = cssVar("menu-bg")
-const $shadow = cssVar("menu-shadow")
+const $bg = cssVar("menu-bg");
+const $shadow = cssVar("menu-shadow");
 
 const baseStyleList = defineStyle({
   [$bg.variable]: "#fff",
@@ -26,7 +26,7 @@ const baseStyleList = defineStyle({
   borderWidth: "1px",
   bg: $bg.reference,
   boxShadow: $shadow.reference,
-})
+});
 
 const baseStyleItem = defineStyle({
   py: "1.5",
@@ -57,25 +57,25 @@ const baseStyleItem = defineStyle({
     cursor: "not-allowed",
   },
   bg: $bg.reference,
-})
+});
 
 const baseStyleGroupTitle = defineStyle({
   mx: 4,
   my: 2,
   fontWeight: "semibold",
   fontSize: "sm",
-})
+});
 
 const baseStyleIcon = defineStyle({
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
   flexShrink: 0,
-})
+});
 
 const baseStyleCommand = defineStyle({
   opacity: 0.6,
-})
+});
 
 const baseStyleDivider = defineStyle({
   border: 0,
@@ -83,12 +83,12 @@ const baseStyleDivider = defineStyle({
   borderColor: "inherit",
   my: "2",
   opacity: 0.6,
-})
+});
 
 const baseStyleButton = defineStyle({
   transitionProperty: "common",
   transitionDuration: "normal",
-})
+});
 
 const baseStyle = definePartsStyle({
   button: baseStyleButton,
@@ -98,8 +98,8 @@ const baseStyle = definePartsStyle({
   icon: baseStyleIcon,
   command: baseStyleCommand,
   divider: baseStyleDivider,
-})
+});
 
 export const menuTheme = defineMultiStyleConfig({
   baseStyle,
-})
+});

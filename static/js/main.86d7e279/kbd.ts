@@ -2,9 +2,9 @@ import {
   cssVar,
   defineStyle,
   defineStyleConfig,
-} from "@chakra-ui/styled-system"
+} from "@chakra-ui/styled-system";
 
-const $bg = cssVar("kbd-bg")
+const $bg = cssVar("kbd-bg");
 
 const baseStyle = defineStyle({
   [$bg.variable]: "colors.gray.100",
@@ -20,8 +20,8 @@ const baseStyle = defineStyle({
   lineHeight: "normal",
   px: "0.4em",
   whiteSpace: "nowrap",
-})
+});
 
 export const kbdTheme = defineStyleConfig({
   baseStyle,
-})
+});

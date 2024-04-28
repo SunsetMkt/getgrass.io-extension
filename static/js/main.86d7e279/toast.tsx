@@ -4,19 +4,19 @@ import {
   AlertIcon,
   AlertProps,
   AlertTitle,
-} from "@chakra-ui/alert"
-import { chakra } from "@chakra-ui/system"
-import { CloseButton } from "@chakra-ui/close-button"
-import { runIfFn } from "@chakra-ui/shared-utils"
-import type { UseToastOptions } from "./use-toast"
-import type { RenderProps, ToastId } from "./toast.types"
-import { getToastPlacement } from "./toast.placement"
-import { toastStore } from "./toast.store"
+} from "@chakra-ui/alert";
+import { chakra } from "@chakra-ui/system";
+import { CloseButton } from "@chakra-ui/close-button";
+import { runIfFn } from "@chakra-ui/shared-utils";
+import type { UseToastOptions } from "./use-toast";
+import type { RenderProps, ToastId } from "./toast.types";
+import { getToastPlacement } from "./toast.placement";
+import { toastStore } from "./toast.store";
 
 export interface ToastProps
   extends UseToastOptions,
     Omit<AlertProps, keyof UseToastOptions> {
-  onClose?: () => void
+  onClose?: () => void;
 }
 
 /**
@@ -35,7 +35,7 @@ export const Toast: React.FC<ToastProps> = (props) => {
     description,
     colorScheme,
     icon,
-  } = props
+  } = props;
 
   const ids = id
     ? {
@@ -43,7 +43,7 @@ export const Toast: React.FC<ToastProps> = (props) => {
         title: `toast-${id}-title`,
         description: `toast-${id}-description`,
       }
-    : undefined
+    : undefined;
 
   return (
     <Alert
@@ -78,62 +78,62 @@ export const Toast: React.FC<ToastProps> = (props) => {
         />
       )}
     </Alert>
-  )
-}
+  );
+};
 
 export function createRenderToast(
   options: UseToastOptions & {
-    toastComponent?: React.FC<ToastProps>
-  } = {},
+    toastComponent?: React.FC<ToastProps>;
+  } = {}
 ) {
-  const { render, toastComponent: ToastComponent = Toast } = options
+  const { render, toastComponent: ToastComponent = Toast } = options;
   const renderToast: React.FC<RenderProps> = (props) => {
     if (typeof render === "function") {
-      return render({ ...props, ...options }) as JSX.Element
+      return render({ ...props, ...options }) as JSX.Element;
     }
-    return <ToastComponent {...props} {...options} />
-  }
-  return renderToast
+    return <ToastComponent {...props} {...options} />;
+  };
+  return renderToast;
 }
 
-type UseToastPromiseOption = Omit<UseToastOptions, "status">
+type UseToastPromiseOption = Omit<UseToastOptions, "status">;
 
 export function createToastFn(
   dir: "ltr" | "rtl",
-  defaultOptions?: UseToastOptions,
+  defaultOptions?: UseToastOptions
 ) {
   const normalizeToastOptions = (options?: UseToastOptions) => ({
     ...defaultOptions,
     ...options,
     position: getToastPlacement(
       options?.position ?? defaultOptions?.position,
-      dir,
+      dir
     ),
-  })
+  });
 
   const toast = (options?: UseToastOptions) => {
-    const normalizedToastOptions = normalizeToastOptions(options)
-    const Message = createRenderToast(normalizedToastOptions)
-    return toastStore.notify(Message, normalizedToastOptions)
-  }
+    const normalizedToastOptions = normalizeToastOptions(options);
+    const Message = createRenderToast(normalizedToastOptions);
+    return toastStore.notify(Message, normalizedToastOptions);
+  };
 
   toast.update = (id: ToastId, options: Omit<UseToastOptions, "id">) => {
-    toastStore.update(id, normalizeToastOptions(options))
-  }
+    toastStore.update(id, normalizeToastOptions(options));
+  };
 
   toast.promise = <Result extends any, Err extends Error = Error>(
     promise: Promise<Result>,
     options: {
-      success: MaybeFunction<UseToastPromiseOption, [Result]>
-      error: MaybeFunction<UseToastPromiseOption, [Err]>
-      loading: UseToastPromiseOption
-    },
+      success: MaybeFunction<UseToastPromiseOption, [Result]>;
+      error: MaybeFunction<UseToastPromiseOption, [Err]>;
+      loading: UseToastPromiseOption;
+    }
   ) => {
     const id = toast({
       ...options.loading,
       status: "loading",
       duration: null,
-    })
+    });
 
     promise
       .then((data) =>
@@ -141,24 +141,24 @@ export function createToastFn(
           status: "success",
           duration: 5_000,
           ...runIfFn(options.success, data),
-        }),
+        })
       )
       .catch((error) =>
         toast.update(id, {
           status: "error",
           duration: 5_000,
           ...runIfFn(options.error, error),
-        }),
-      )
-  }
+        })
+      );
+  };
 
-  toast.closeAll = toastStore.closeAll
-  toast.close = toastStore.close
-  toast.isActive = toastStore.isActive
+  toast.closeAll = toastStore.closeAll;
+  toast.close = toastStore.close;
+  toast.isActive = toastStore.isActive;
 
-  return toast
+  return toast;
 }
 
-export type CreateToastFnReturn = ReturnType<typeof createToastFn>
+export type CreateToastFnReturn = ReturnType<typeof createToastFn>;
 
-type MaybeFunction<T, Args extends unknown[] = []> = T | ((...args: Args) => T)
+type MaybeFunction<T, Args extends unknown[] = []> = T | ((...args: Args) => T);

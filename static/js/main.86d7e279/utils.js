@@ -1,4 +1,5 @@
-const hasBrowserEnv = typeof window !== 'undefined' && typeof document !== 'undefined';
+const hasBrowserEnv =
+  typeof window !== "undefined" && typeof document !== "undefined";
 
 /**
  * Determine if we're running in a standard browser environment
@@ -17,10 +18,11 @@ const hasBrowserEnv = typeof window !== 'undefined' && typeof document !== 'unde
  *
  * @returns {boolean}
  */
-const hasStandardBrowserEnv = (
-  (product) => {
-    return hasBrowserEnv && ['ReactNative', 'NativeScript', 'NS'].indexOf(product) < 0
-  })(typeof navigator !== 'undefined' && navigator.product);
+const hasStandardBrowserEnv = ((product) => {
+  return (
+    hasBrowserEnv && ["ReactNative", "NativeScript", "NS"].indexOf(product) < 0
+  );
+})(typeof navigator !== "undefined" && navigator.product);
 
 /**
  * Determine if we're running in a standard browser webWorker environment
@@ -33,15 +35,11 @@ const hasStandardBrowserEnv = (
  */
 const hasStandardBrowserWebWorkerEnv = (() => {
   return (
-    typeof WorkerGlobalScope !== 'undefined' &&
+    typeof WorkerGlobalScope !== "undefined" &&
     // eslint-disable-next-line no-undef
     self instanceof WorkerGlobalScope &&
-    typeof self.importScripts === 'function'
+    typeof self.importScripts === "function"
   );
 })();
 
-export {
-  hasBrowserEnv,
-  hasStandardBrowserWebWorkerEnv,
-  hasStandardBrowserEnv
-}
+export { hasBrowserEnv, hasStandardBrowserWebWorkerEnv, hasStandardBrowserEnv };

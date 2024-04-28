@@ -1,5 +1,5 @@
-import parseToRgba from './parseToRgba';
-import guard from './guard';
+import parseToRgba from "./parseToRgba";
+import guard from "./guard";
 
 /**
  * Takes in any color and returns it as a hex code.
@@ -14,7 +14,7 @@ function toHex(color: string): string {
     return h.length === 1 ? `0${h}` : h;
   };
 
-  return `#${hex(r)}${hex(g)}${hex(b)}${a < 1 ? hex(Math.round(a * 255)) : ''}`;
+  return `#${hex(r)}${hex(g)}${hex(b)}${a < 1 ? hex(Math.round(a * 255)) : ""}`;
 }
 
 export default toHex;

@@ -1,15 +1,15 @@
-import { ariaAttr, callAllHandlers } from "@chakra-ui/shared-utils"
-import { FormControlOptions, useFormControlContext } from "./form-control"
+import { ariaAttr, callAllHandlers } from "@chakra-ui/shared-utils";
+import { FormControlOptions, useFormControlContext } from "./form-control";
 
 export interface UseFormControlProps<T extends HTMLElement>
   extends FormControlOptions {
-  id?: string
-  onFocus?: React.FocusEventHandler<T>
-  onBlur?: React.FocusEventHandler<T>
-  disabled?: boolean
-  readOnly?: boolean
-  required?: boolean
-  "aria-describedby"?: string
+  id?: string;
+  onFocus?: React.FocusEventHandler<T>;
+  onBlur?: React.FocusEventHandler<T>;
+  disabled?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+  "aria-describedby"?: string;
 }
 
 /**
@@ -22,10 +22,10 @@ export interface UseFormControlProps<T extends HTMLElement>
  * @internal
  */
 export function useFormControl<T extends HTMLElement>(
-  props: UseFormControlProps<T>,
+  props: UseFormControlProps<T>
 ) {
   const { isDisabled, isInvalid, isReadOnly, isRequired, ...rest } =
-    useFormControlProps(props)
+    useFormControlProps(props);
 
   return {
     ...rest,
@@ -35,16 +35,16 @@ export function useFormControl<T extends HTMLElement>(
     "aria-invalid": ariaAttr(isInvalid),
     "aria-required": ariaAttr(isRequired),
     "aria-readonly": ariaAttr(isReadOnly),
-  }
+  };
 }
 
 /**
  * @internal
  */
 export function useFormControlProps<T extends HTMLElement>(
-  props: UseFormControlProps<T>,
+  props: UseFormControlProps<T>
 ) {
-  const field = useFormControlContext()
+  const field = useFormControlContext();
 
   const {
     id,
@@ -58,19 +58,19 @@ export function useFormControlProps<T extends HTMLElement>(
     onFocus,
     onBlur,
     ...rest
-  } = props
+  } = props;
 
   const labelIds: string[] = props["aria-describedby"]
     ? [props["aria-describedby"]]
-    : []
+    : [];
 
   // Error message must be described first in all scenarios.
   if (field?.hasFeedbackText && field?.isInvalid) {
-    labelIds.push(field.feedbackId)
+    labelIds.push(field.feedbackId);
   }
 
   if (field?.hasHelpText) {
-    labelIds.push(field.helpTextId)
+    labelIds.push(field.helpTextId);
   }
 
   return {
@@ -83,5 +83,5 @@ export function useFormControlProps<T extends HTMLElement>(
     isInvalid: isInvalid ?? field?.isInvalid,
     onFocus: callAllHandlers(field?.onFocus, onFocus),
     onBlur: callAllHandlers(field?.onBlur, onBlur),
-  }
+  };
 }

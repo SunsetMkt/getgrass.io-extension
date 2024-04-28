@@ -1,16 +1,16 @@
-import { alertAnatomy as parts } from "@chakra-ui/anatomy"
+import { alertAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   StyleFunctionProps,
-} from "@chakra-ui/styled-system"
-import { transparentize } from "@chakra-ui/theme-tools"
+} from "@chakra-ui/styled-system";
+import { transparentize } from "@chakra-ui/theme-tools";
 
 const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $fg = cssVar("alert-fg")
-const $bg = cssVar("alert-bg")
+const $fg = cssVar("alert-fg");
+const $bg = cssVar("alert-bg");
 
 const baseStyle = definePartsStyle({
   container: {
@@ -40,20 +40,20 @@ const baseStyle = definePartsStyle({
     w: "5",
     h: "5",
   },
-})
+});
 
 function getBg(props: StyleFunctionProps) {
-  const { theme, colorScheme: c } = props
-  const darkBg = transparentize(`${c}.200`, 0.16)(theme)
+  const { theme, colorScheme: c } = props;
+  const darkBg = transparentize(`${c}.200`, 0.16)(theme);
   return {
     light: `colors.${c}.100`,
     dark: darkBg,
-  }
+  };
 }
 
 const variantSubtle = definePartsStyle((props) => {
-  const { colorScheme: c } = props
-  const bg = getBg(props)
+  const { colorScheme: c } = props;
+  const bg = getBg(props);
   return {
     container: {
       [$fg.variable]: `colors.${c}.600`,
@@ -63,12 +63,12 @@ const variantSubtle = definePartsStyle((props) => {
         [$bg.variable]: bg.dark,
       },
     },
-  }
-})
+  };
+});
 
 const variantLeftAccent = definePartsStyle((props) => {
-  const { colorScheme: c } = props
-  const bg = getBg(props)
+  const { colorScheme: c } = props;
+  const bg = getBg(props);
   return {
     container: {
       [$fg.variable]: `colors.${c}.600`,
@@ -81,12 +81,12 @@ const variantLeftAccent = definePartsStyle((props) => {
       borderStartWidth: "4px",
       borderStartColor: $fg.reference,
     },
-  }
-})
+  };
+});
 
 const variantTopAccent = definePartsStyle((props) => {
-  const { colorScheme: c } = props
-  const bg = getBg(props)
+  const { colorScheme: c } = props;
+  const bg = getBg(props);
   return {
     container: {
       [$fg.variable]: `colors.${c}.600`,
@@ -99,11 +99,11 @@ const variantTopAccent = definePartsStyle((props) => {
       borderTopWidth: "4px",
       borderTopColor: $fg.reference,
     },
-  }
-})
+  };
+});
 
 const variantSolid = definePartsStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
   return {
     container: {
       [$fg.variable]: `colors.white`,
@@ -114,15 +114,15 @@ const variantSolid = definePartsStyle((props) => {
       },
       color: $fg.reference,
     },
-  }
-})
+  };
+});
 
 const variants = {
   subtle: variantSubtle,
   "left-accent": variantLeftAccent,
   "top-accent": variantTopAccent,
   solid: variantSolid,
-}
+};
 
 export const alertTheme = defineMultiStyleConfig({
   baseStyle,
@@ -131,4 +131,4 @@ export const alertTheme = defineMultiStyleConfig({
     variant: "subtle",
     colorScheme: "blue",
   },
-})
+});

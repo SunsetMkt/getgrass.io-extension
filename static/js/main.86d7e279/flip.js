@@ -12,44 +12,59 @@ function getExpandedFallbackPlacements(placement) {
   }
 
   var oppositePlacement = getOppositePlacement(placement);
-  return [getOppositeVariationPlacement(placement), oppositePlacement, getOppositeVariationPlacement(oppositePlacement)];
+  return [
+    getOppositeVariationPlacement(placement),
+    oppositePlacement,
+    getOppositeVariationPlacement(oppositePlacement),
+  ];
 }
 
 function flip(_ref) {
   var state = _ref.state,
-      options = _ref.options,
-      name = _ref.name;
+    options = _ref.options,
+    name = _ref.name;
 
   if (state.modifiersData[name]._skip) {
     return;
   }
 
   var _options$mainAxis = options.mainAxis,
-      checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
-      _options$altAxis = options.altAxis,
-      checkAltAxis = _options$altAxis === void 0 ? true : _options$altAxis,
-      specifiedFallbackPlacements = options.fallbackPlacements,
-      padding = options.padding,
-      boundary = options.boundary,
-      rootBoundary = options.rootBoundary,
-      altBoundary = options.altBoundary,
-      _options$flipVariatio = options.flipVariations,
-      flipVariations = _options$flipVariatio === void 0 ? true : _options$flipVariatio,
-      allowedAutoPlacements = options.allowedAutoPlacements;
+    checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
+    _options$altAxis = options.altAxis,
+    checkAltAxis = _options$altAxis === void 0 ? true : _options$altAxis,
+    specifiedFallbackPlacements = options.fallbackPlacements,
+    padding = options.padding,
+    boundary = options.boundary,
+    rootBoundary = options.rootBoundary,
+    altBoundary = options.altBoundary,
+    _options$flipVariatio = options.flipVariations,
+    flipVariations =
+      _options$flipVariatio === void 0 ? true : _options$flipVariatio,
+    allowedAutoPlacements = options.allowedAutoPlacements;
   var preferredPlacement = state.options.placement;
   var basePlacement = getBasePlacement(preferredPlacement);
   var isBasePlacement = basePlacement === preferredPlacement;
-  var fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipVariations ? [getOppositePlacement(preferredPlacement)] : getExpandedFallbackPlacements(preferredPlacement));
-  var placements = [preferredPlacement].concat(fallbackPlacements).reduce(function (acc, placement) {
-    return acc.concat(getBasePlacement(placement) === auto ? computeAutoPlacement(state, {
-      placement: placement,
-      boundary: boundary,
-      rootBoundary: rootBoundary,
-      padding: padding,
-      flipVariations: flipVariations,
-      allowedAutoPlacements: allowedAutoPlacements
-    }) : placement);
-  }, []);
+  var fallbackPlacements =
+    specifiedFallbackPlacements ||
+    (isBasePlacement || !flipVariations
+      ? [getOppositePlacement(preferredPlacement)]
+      : getExpandedFallbackPlacements(preferredPlacement));
+  var placements = [preferredPlacement]
+    .concat(fallbackPlacements)
+    .reduce(function (acc, placement) {
+      return acc.concat(
+        getBasePlacement(placement) === auto
+          ? computeAutoPlacement(state, {
+              placement: placement,
+              boundary: boundary,
+              rootBoundary: rootBoundary,
+              padding: padding,
+              flipVariations: flipVariations,
+              allowedAutoPlacements: allowedAutoPlacements,
+            })
+          : placement
+      );
+    }, []);
   var referenceRect = state.rects.reference;
   var popperRect = state.rects.popper;
   var checksMap = new Map();
@@ -63,15 +78,21 @@ function flip(_ref) {
 
     var isStartVariation = getVariation(placement) === start;
     var isVertical = [top, bottom].indexOf(_basePlacement) >= 0;
-    var len = isVertical ? 'width' : 'height';
+    var len = isVertical ? "width" : "height";
     var overflow = detectOverflow(state, {
       placement: placement,
       boundary: boundary,
       rootBoundary: rootBoundary,
       altBoundary: altBoundary,
-      padding: padding
+      padding: padding,
     });
-    var mainVariationSide = isVertical ? isStartVariation ? right : left : isStartVariation ? bottom : top;
+    var mainVariationSide = isVertical
+      ? isStartVariation
+        ? right
+        : left
+      : isStartVariation
+      ? bottom
+      : top;
 
     if (referenceRect[len] > popperRect[len]) {
       mainVariationSide = getOppositePlacement(mainVariationSide);
@@ -85,12 +106,17 @@ function flip(_ref) {
     }
 
     if (checkAltAxis) {
-      checks.push(overflow[mainVariationSide] <= 0, overflow[altVariationSide] <= 0);
+      checks.push(
+        overflow[mainVariationSide] <= 0,
+        overflow[altVariationSide] <= 0
+      );
     }
 
-    if (checks.every(function (check) {
-      return check;
-    })) {
+    if (
+      checks.every(function (check) {
+        return check;
+      })
+    ) {
       firstFittingPlacement = placement;
       makeFallbackChecks = false;
       break;
@@ -134,14 +160,13 @@ function flip(_ref) {
   }
 } // eslint-disable-next-line import/no-unused-modules
 
-
 export default {
-  name: 'flip',
+  name: "flip",
   enabled: true,
-  phase: 'main',
+  phase: "main",
   fn: flip,
-  requiresIfExists: ['offset'],
+  requiresIfExists: ["offset"],
   data: {
-    _skip: false
-  }
+    _skip: false,
+  },
 };

@@ -1,9 +1,43 @@
-import { StyleSheet } from '@emotion/sheet';
-import { dealloc, alloc, next, token, from, peek, delimit, slice, position, RULESET, combine, match, serialize, copy, replace, WEBKIT, MOZ, MS, KEYFRAMES, DECLARATION, hash, charat, strlen, indexof, stringify, COMMENT, rulesheet, middleware, compile } from 'stylis';
-import '@emotion/weak-memoize';
-import '@emotion/memoize';
+import { StyleSheet } from "@emotion/sheet";
+import {
+  dealloc,
+  alloc,
+  next,
+  token,
+  from,
+  peek,
+  delimit,
+  slice,
+  position,
+  RULESET,
+  combine,
+  match,
+  serialize,
+  copy,
+  replace,
+  WEBKIT,
+  MOZ,
+  MS,
+  KEYFRAMES,
+  DECLARATION,
+  hash,
+  charat,
+  strlen,
+  indexof,
+  stringify,
+  COMMENT,
+  rulesheet,
+  middleware,
+  compile,
+} from "stylis";
+import "@emotion/weak-memoize";
+import "@emotion/memoize";
 
-var identifierWithPointTracking = function identifierWithPointTracking(begin, points, index) {
+var identifierWithPointTracking = function identifierWithPointTracking(
+  begin,
+  points,
+  index
+) {
   var previous = 0;
   var character = 0;
 
@@ -42,7 +76,11 @@ var toRules = function toRules(parsed, points) {
           points[index] = 1;
         }
 
-        parsed[index] += identifierWithPointTracking(position - 1, points, index);
+        parsed[index] += identifierWithPointTracking(
+          position - 1,
+          points,
+          index
+        );
         break;
 
       case 2:
@@ -53,7 +91,7 @@ var toRules = function toRules(parsed, points) {
         // comma
         if (character === 44) {
           // colon
-          parsed[++index] = peek() === 58 ? '&\f' : '';
+          parsed[++index] = peek() === 58 ? "&\f" : "";
           points[index] = parsed[index].length;
           break;
         }
@@ -63,7 +101,7 @@ var toRules = function toRules(parsed, points) {
       default:
         parsed[index] += from(character);
     }
-  } while (character = next());
+  } while ((character = next()));
 
   return parsed;
 };
@@ -72,32 +110,36 @@ var getRules = function getRules(value, points) {
   return dealloc(toRules(alloc(value), points));
 }; // WeakSet would be more appropriate, but only WeakMap is supported in IE11
 
-
-var fixedElements = /* #__PURE__ */new WeakMap();
+var fixedElements = /* #__PURE__ */ new WeakMap();
 var compat = function compat(element) {
-  if (element.type !== 'rule' || !element.parent || // positive .length indicates that this rule contains pseudo
-  // negative .length indicates that this rule has been already prefixed
-  element.length < 1) {
+  if (
+    element.type !== "rule" ||
+    !element.parent || // positive .length indicates that this rule contains pseudo
+    // negative .length indicates that this rule has been already prefixed
+    element.length < 1
+  ) {
     return;
   }
 
   var value = element.value,
-      parent = element.parent;
-  var isImplicitRule = element.column === parent.column && element.line === parent.line;
+    parent = element.parent;
+  var isImplicitRule =
+    element.column === parent.column && element.line === parent.line;
 
-  while (parent.type !== 'rule') {
+  while (parent.type !== "rule") {
     parent = parent.parent;
     if (!parent) return;
   } // short-circuit for the simplest case
 
-
-  if (element.props.length === 1 && value.charCodeAt(0) !== 58
-  /* colon */
-  && !fixedElements.get(parent)) {
+  if (
+    element.props.length === 1 &&
+    value.charCodeAt(0) !== 58 &&
+    /* colon */
+    !fixedElements.get(parent)
+  ) {
     return;
   } // if this is an implicitly inserted rule (the one eagerly inserted at the each new nested level)
   // then the props has already been manipulated beforehand as they that array is shared between it and its "rule parent"
-
 
   if (isImplicitRule) {
     return;
@@ -110,33 +152,40 @@ var compat = function compat(element) {
 
   for (var i = 0, k = 0; i < rules.length; i++) {
     for (var j = 0; j < parentRules.length; j++, k++) {
-      element.props[k] = points[i] ? rules[i].replace(/&\f/g, parentRules[j]) : parentRules[j] + " " + rules[i];
+      element.props[k] = points[i]
+        ? rules[i].replace(/&\f/g, parentRules[j])
+        : parentRules[j] + " " + rules[i];
     }
   }
 };
 var removeLabel = function removeLabel(element) {
-  if (element.type === 'decl') {
+  if (element.type === "decl") {
     var value = element.value;
 
-    if ( // charcode for l
-    value.charCodeAt(0) === 108 && // charcode for b
-    value.charCodeAt(2) === 98) {
+    if (
+      // charcode for l
+      value.charCodeAt(0) === 108 && // charcode for b
+      value.charCodeAt(2) === 98
+    ) {
       // this ignores label
-      element["return"] = '';
-      element.value = '';
+      element["return"] = "";
+      element.value = "";
     }
   }
 };
-var ignoreFlag = 'emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-the-warning-exists-for-a-reason';
+var ignoreFlag =
+  "emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-the-warning-exists-for-a-reason";
 
 var isIgnoringComment = function isIgnoringComment(element) {
-  return element.type === 'comm' && element.children.indexOf(ignoreFlag) > -1;
+  return element.type === "comm" && element.children.indexOf(ignoreFlag) > -1;
 };
 
 var createUnsafeSelectorsAlarm = function createUnsafeSelectorsAlarm(cache) {
   return function (element, index, children) {
-    if (element.type !== 'rule' || cache.compat) return;
-    var unsafePseudoClasses = element.value.match(/(:first|:nth|:nth-last)-child/g);
+    if (element.type !== "rule" || cache.compat) return;
+    var unsafePseudoClasses = element.value.match(
+      /(:first|:nth|:nth-last)-child/g
+    );
 
     if (unsafePseudoClasses) {
       var isNested = !!element.parent; // in nested rules comments become children of the "auto-inserted" rule and that's always the `element.parent`
@@ -155,8 +204,9 @@ var createUnsafeSelectorsAlarm = function createUnsafeSelectorsAlarm(cache) {
       //   .b {}
       // }
 
-      var commentContainer = isNested ? element.parent.children : // global rule at the root level
-      children;
+      var commentContainer = isNested
+        ? element.parent.children // global rule at the root level
+        : children;
 
       for (var i = commentContainer.length - 1; i >= 0; i--) {
         var node = commentContainer[i];
@@ -180,7 +230,6 @@ var createUnsafeSelectorsAlarm = function createUnsafeSelectorsAlarm(cache) {
         // with such inputs we wouldn't have to search for the comment at all
         // TODO: consider changing this comment placement in the next major version
 
-
         if (node.column < element.column) {
           if (isIgnoringComment(node)) {
             return;
@@ -191,17 +240,28 @@ var createUnsafeSelectorsAlarm = function createUnsafeSelectorsAlarm(cache) {
       }
 
       unsafePseudoClasses.forEach(function (unsafePseudoClass) {
-        console.error("The pseudo class \"" + unsafePseudoClass + "\" is potentially unsafe when doing server-side rendering. Try changing it to \"" + unsafePseudoClass.split('-child')[0] + "-of-type\".");
+        console.error(
+          'The pseudo class "' +
+            unsafePseudoClass +
+            '" is potentially unsafe when doing server-side rendering. Try changing it to "' +
+            unsafePseudoClass.split("-child")[0] +
+            '-of-type".'
+        );
       });
     }
   };
 };
 
 var isImportRule = function isImportRule(element) {
-  return element.type.charCodeAt(1) === 105 && element.type.charCodeAt(0) === 64;
+  return (
+    element.type.charCodeAt(1) === 105 && element.type.charCodeAt(0) === 64
+  );
 };
 
-var isPrependedWithRegularRules = function isPrependedWithRegularRules(index, children) {
+var isPrependedWithRegularRules = function isPrependedWithRegularRules(
+  index,
+  children
+) {
   for (var i = index - 1; i >= 0; i--) {
     if (!isImportRule(children[i])) {
       return true;
@@ -213,25 +273,32 @@ var isPrependedWithRegularRules = function isPrependedWithRegularRules(index, ch
 // so they don't get handed to the `sheet` (or anything else)
 // as that could potentially lead to additional logs which in turn could be overhelming to the user
 
-
 var nullifyElement = function nullifyElement(element) {
-  element.type = '';
-  element.value = '';
-  element["return"] = '';
-  element.children = '';
-  element.props = '';
+  element.type = "";
+  element.value = "";
+  element["return"] = "";
+  element.children = "";
+  element.props = "";
 };
 
-var incorrectImportAlarm = function incorrectImportAlarm(element, index, children) {
+var incorrectImportAlarm = function incorrectImportAlarm(
+  element,
+  index,
+  children
+) {
   if (!isImportRule(element)) {
     return;
   }
 
   if (element.parent) {
-    console.error("`@import` rules can't be nested inside other rules. Please move it to the top level and put it before regular rules. Keep in mind that they can only be used within global styles.");
+    console.error(
+      "`@import` rules can't be nested inside other rules. Please move it to the top level and put it before regular rules. Keep in mind that they can only be used within global styles."
+    );
     nullifyElement(element);
   } else if (isPrependedWithRegularRules(index, children)) {
-    console.error("`@import` rules can't be after other rules. Please put your `@import` rules before your other rules.");
+    console.error(
+      "`@import` rules can't be after other rules. Please put your `@import` rules before your other rules."
+    );
     nullifyElement(element);
   }
 };
@@ -242,7 +309,7 @@ function prefix(value, length) {
   switch (hash(value, length)) {
     // color-adjust
     case 5103:
-      return WEBKIT + 'print-' + value + value;
+      return WEBKIT + "print-" + value + value;
     // animation, animation-(delay|direction|duration|fill-mode|iteration-count|name|play-state|timing-function)
 
     case 5737:
@@ -290,55 +357,116 @@ function prefix(value, length) {
     // order
 
     case 6165:
-      return WEBKIT + value + MS + 'flex-' + value + value;
+      return WEBKIT + value + MS + "flex-" + value + value;
     // align-items
 
     case 5187:
-      return WEBKIT + value + replace(value, /(\w+).+(:[^]+)/, WEBKIT + 'box-$1$2' + MS + 'flex-$1$2') + value;
+      return (
+        WEBKIT +
+        value +
+        replace(
+          value,
+          /(\w+).+(:[^]+)/,
+          WEBKIT + "box-$1$2" + MS + "flex-$1$2"
+        ) +
+        value
+      );
     // align-self
 
     case 5443:
-      return WEBKIT + value + MS + 'flex-item-' + replace(value, /flex-|-self/, '') + value;
+      return (
+        WEBKIT +
+        value +
+        MS +
+        "flex-item-" +
+        replace(value, /flex-|-self/, "") +
+        value
+      );
     // align-content
 
     case 4675:
-      return WEBKIT + value + MS + 'flex-line-pack' + replace(value, /align-content|flex-|-self/, '') + value;
+      return (
+        WEBKIT +
+        value +
+        MS +
+        "flex-line-pack" +
+        replace(value, /align-content|flex-|-self/, "") +
+        value
+      );
     // flex-shrink
 
     case 5548:
-      return WEBKIT + value + MS + replace(value, 'shrink', 'negative') + value;
+      return WEBKIT + value + MS + replace(value, "shrink", "negative") + value;
     // flex-basis
 
     case 5292:
-      return WEBKIT + value + MS + replace(value, 'basis', 'preferred-size') + value;
+      return (
+        WEBKIT + value + MS + replace(value, "basis", "preferred-size") + value
+      );
     // flex-grow
 
     case 6060:
-      return WEBKIT + 'box-' + replace(value, '-grow', '') + WEBKIT + value + MS + replace(value, 'grow', 'positive') + value;
+      return (
+        WEBKIT +
+        "box-" +
+        replace(value, "-grow", "") +
+        WEBKIT +
+        value +
+        MS +
+        replace(value, "grow", "positive") +
+        value
+      );
     // transition
 
     case 4554:
-      return WEBKIT + replace(value, /([^-])(transform)/g, '$1' + WEBKIT + '$2') + value;
+      return (
+        WEBKIT +
+        replace(value, /([^-])(transform)/g, "$1" + WEBKIT + "$2") +
+        value
+      );
     // cursor
 
     case 6187:
-      return replace(replace(replace(value, /(zoom-|grab)/, WEBKIT + '$1'), /(image-set)/, WEBKIT + '$1'), value, '') + value;
+      return (
+        replace(
+          replace(
+            replace(value, /(zoom-|grab)/, WEBKIT + "$1"),
+            /(image-set)/,
+            WEBKIT + "$1"
+          ),
+          value,
+          ""
+        ) + value
+      );
     // background, background-image
 
     case 5495:
     case 3959:
-      return replace(value, /(image-set\([^]*)/, WEBKIT + '$1' + '$`$1');
+      return replace(value, /(image-set\([^]*)/, WEBKIT + "$1" + "$`$1");
     // justify-content
 
     case 4968:
-      return replace(replace(value, /(.+:)(flex-)?(.*)/, WEBKIT + 'box-pack:$3' + MS + 'flex-pack:$3'), /s.+-b[^;]+/, 'justify') + WEBKIT + value + value;
+      return (
+        replace(
+          replace(
+            value,
+            /(.+:)(flex-)?(.*)/,
+            WEBKIT + "box-pack:$3" + MS + "flex-pack:$3"
+          ),
+          /s.+-b[^;]+/,
+          "justify"
+        ) +
+        WEBKIT +
+        value +
+        value
+      );
     // (margin|padding)-inline-(start|end)
 
     case 4095:
     case 3583:
     case 4068:
     case 2532:
-      return replace(value, /(.+)-inline(.+)/, WEBKIT + '$1$2') + value;
+      return replace(value, /(.+)-inline(.+)/, WEBKIT + "$1$2") + value;
     // (min|max)?(width|height|inline-size|block-size)
 
     case 8116:
@@ -354,20 +482,35 @@ function prefix(value, length) {
     case 5021:
     case 4765:
       // stretch, max-content, min-content, fill-available
-      if (strlen(value) - 1 - length > 6) switch (charat(value, length + 1)) {
-        // (m)ax-content, (m)in-content
-        case 109:
-          // -
-          if (charat(value, length + 4) !== 45) break;
-        // (f)ill-available, (f)it-content
+      if (strlen(value) - 1 - length > 6)
+        switch (charat(value, length + 1)) {
+          // (m)ax-content, (m)in-content
+          case 109:
+            // -
+            if (charat(value, length + 4) !== 45) break;
+          // (f)ill-available, (f)it-content
 
-        case 102:
-          return replace(value, /(.+:)(.+)-([^]+)/, '$1' + WEBKIT + '$2-$3' + '$1' + MOZ + (charat(value, length + 3) == 108 ? '$3' : '$2-$3')) + value;
-        // (s)tretch
+          case 102:
+            return (
+              replace(
+                value,
+                /(.+:)(.+)-([^]+)/,
+                "$1" +
+                  WEBKIT +
+                  "$2-$3" +
+                  "$1" +
+                  MOZ +
+                  (charat(value, length + 3) == 108 ? "$3" : "$2-$3")
+              ) + value
+            );
+          // (s)tretch
 
-        case 115:
-          return ~indexof(value, 'stretch') ? prefix(replace(value, 'stretch', 'fill-available'), length) + value : value;
-      }
+          case 115:
+            return ~indexof(value, "stretch")
+              ? prefix(replace(value, "stretch", "fill-available"), length) +
+                  value
+              : value;
+        }
       break;
     // position: sticky
 
@@ -377,14 +520,31 @@ function prefix(value, length) {
     // display: (flex|inline-flex)
 
     case 6444:
-      switch (charat(value, strlen(value) - 3 - (~indexof(value, '!important') && 10))) {
+      switch (
+        charat(value, strlen(value) - 3 - (~indexof(value, "!important") && 10))
+      ) {
         // stic(k)y
         case 107:
-          return replace(value, ':', ':' + WEBKIT) + value;
+          return replace(value, ":", ":" + WEBKIT) + value;
         // (inline-)?fl(e)x
 
         case 101:
-          return replace(value, /(.+:)([^;!]+)(;|!.+)?/, '$1' + WEBKIT + (charat(value, 14) === 45 ? 'inline-' : '') + 'box$3' + '$1' + WEBKIT + '$2$3' + '$1' + MS + '$2box$3') + value;
+          return (
+            replace(
+              value,
+              /(.+:)([^;!]+)(;|!.+)?/,
+              "$1" +
+                WEBKIT +
+                (charat(value, 14) === 45 ? "inline-" : "") +
+                "box$3" +
+                "$1" +
+                WEBKIT +
+                "$2$3" +
+                "$1" +
+                MS +
+                "$2box$3"
+            ) + value
+          );
       }
 
       break;
@@ -394,15 +554,33 @@ function prefix(value, length) {
       switch (charat(value, length + 11)) {
         // vertical-l(r)
         case 114:
-          return WEBKIT + value + MS + replace(value, /[svh]\w+-[tblr]{2}/, 'tb') + value;
+          return (
+            WEBKIT +
+            value +
+            MS +
+            replace(value, /[svh]\w+-[tblr]{2}/, "tb") +
+            value
+          );
         // vertical-r(l)
 
         case 108:
-          return WEBKIT + value + MS + replace(value, /[svh]\w+-[tblr]{2}/, 'tb-rl') + value;
+          return (
+            WEBKIT +
+            value +
+            MS +
+            replace(value, /[svh]\w+-[tblr]{2}/, "tb-rl") +
+            value
+          );
         // horizontal(-)tb
 
         case 45:
-          return WEBKIT + value + MS + replace(value, /[svh]\w+-[tblr]{2}/, 'lr') + value;
+          return (
+            WEBKIT +
+            value +
+            MS +
+            replace(value, /[svh]\w+-[tblr]{2}/, "lr") +
+            value
+          );
       }
 
       return WEBKIT + value + MS + value + value;
@@ -412,40 +590,68 @@ function prefix(value, length) {
 }
 
 var prefixer = function prefixer(element, index, children, callback) {
-  if (element.length > -1) if (!element["return"]) switch (element.type) {
-    case DECLARATION:
-      element["return"] = prefix(element.value, element.length);
-      break;
+  if (element.length > -1)
+    if (!element["return"])
+      switch (element.type) {
+        case DECLARATION:
+          element["return"] = prefix(element.value, element.length);
+          break;
 
-    case KEYFRAMES:
-      return serialize([copy(element, {
-        value: replace(element.value, '@', '@' + WEBKIT)
-      })], callback);
+        case KEYFRAMES:
+          return serialize(
+            [
+              copy(element, {
+                value: replace(element.value, "@", "@" + WEBKIT),
+              }),
+            ],
+            callback
+          );
 
-    case RULESET:
-      if (element.length) return combine(element.props, function (value) {
-        switch (match(value, /(::plac\w+|:read-\w+)/)) {
-          // :read-(only|write)
-          case ':read-only':
-          case ':read-write':
-            return serialize([copy(element, {
-              props: [replace(value, /:(read-\w+)/, ':' + MOZ + '$1')]
-            })], callback);
-          // :placeholder
+        case RULESET:
+          if (element.length)
+            return combine(element.props, function (value) {
+              switch (match(value, /(::plac\w+|:read-\w+)/)) {
+                // :read-(only|write)
+                case ":read-only":
+                case ":read-write":
+                  return serialize(
+                    [
+                      copy(element, {
+                        props: [
+                          replace(value, /:(read-\w+)/, ":" + MOZ + "$1"),
+                        ],
+                      }),
+                    ],
+                    callback
+                  );
+                // :placeholder
 
-          case '::placeholder':
-            return serialize([copy(element, {
-              props: [replace(value, /:(plac\w+)/, ':' + WEBKIT + 'input-$1')]
-            }), copy(element, {
-              props: [replace(value, /:(plac\w+)/, ':' + MOZ + '$1')]
-            }), copy(element, {
-              props: [replace(value, /:(plac\w+)/, MS + 'input-$1')]
-            })], callback);
-        }
+                case "::placeholder":
+                  return serialize(
+                    [
+                      copy(element, {
+                        props: [
+                          replace(
+                            value,
+                            /:(plac\w+)/,
+                            ":" + WEBKIT + "input-$1"
+                          ),
+                        ],
+                      }),
+                      copy(element, {
+                        props: [replace(value, /:(plac\w+)/, ":" + MOZ + "$1")],
+                      }),
+                      copy(element, {
+                        props: [replace(value, /:(plac\w+)/, MS + "input-$1")],
+                      }),
+                    ],
+                    callback
+                  );
+              }
 
-        return '';
-      });
-  }
+              return "";
+            });
+      }
 };
 
 var defaultStylisPlugins = [prefixer];
@@ -453,12 +659,17 @@ var defaultStylisPlugins = [prefixer];
 var createCache = function createCache(options) {
   var key = options.key;
 
-  if (process.env.NODE_ENV !== 'production' && !key) {
-    throw new Error("You have to configure `key` for your cache. Please make sure it's unique (and not equal to 'css') as it's used for linking styles to your cache.\n" + "If multiple caches share the same key they might \"fight\" for each other's style elements.");
+  if (process.env.NODE_ENV !== "production" && !key) {
+    throw new Error(
+      "You have to configure `key` for your cache. Please make sure it's unique (and not equal to 'css') as it's used for linking styles to your cache.\n" +
+        'If multiple caches share the same key they might "fight" for each other\'s style elements.'
+    );
   }
 
-  if (key === 'css') {
-    var ssrStyles = document.querySelectorAll("style[data-emotion]:not([data-s])"); // get SSRed styles out of the way of React's hydration
+  if (key === "css") {
+    var ssrStyles = document.querySelectorAll(
+      "style[data-emotion]:not([data-s])"
+    ); // get SSRed styles out of the way of React's hydration
     // document.head is a safe place to move them to(though note document.head is not necessarily the last place they will be)
     // note this very very intentionally targets all style elements regardless of the key to ensure
     // that creating a cache works inside of render of a React component
@@ -470,22 +681,26 @@ var createCache = function createCache(options) {
       // Emotion 10 client-side inserted styles did not have data-s (but importantly did not have a space in their data-emotion attributes)
       // so checking for the space ensures that loading Emotion 11 after Emotion 10 has inserted some styles
       // will not result in the Emotion 10 styles being destroyed
-      var dataEmotionAttribute = node.getAttribute('data-emotion');
+      var dataEmotionAttribute = node.getAttribute("data-emotion");
 
-      if (dataEmotionAttribute.indexOf(' ') === -1) {
+      if (dataEmotionAttribute.indexOf(" ") === -1) {
         return;
       }
       document.head.appendChild(node);
-      node.setAttribute('data-s', '');
+      node.setAttribute("data-s", "");
     });
   }
 
   var stylisPlugins = options.stylisPlugins || defaultStylisPlugins;
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     // $FlowFixMe
     if (/[^a-z-]/.test(key)) {
-      throw new Error("Emotion key must only contain lower case alphabetical characters and - but \"" + key + "\" was passed");
+      throw new Error(
+        'Emotion key must only contain lower case alphabetical characters and - but "' +
+          key +
+          '" was passed'
+      );
     }
   }
 
@@ -495,48 +710,60 @@ var createCache = function createCache(options) {
 
   {
     container = options.container || document.head;
-    Array.prototype.forEach.call( // this means we will ignore elements which don't have a space in them which
-    // means that the style elements we're looking at are only Emotion 11 server-rendered style elements
-    document.querySelectorAll("style[data-emotion^=\"" + key + " \"]"), function (node) {
-      var attrib = node.getAttribute("data-emotion").split(' '); // $FlowFixMe
+    Array.prototype.forEach.call(
+      // this means we will ignore elements which don't have a space in them which
+      // means that the style elements we're looking at are only Emotion 11 server-rendered style elements
+      document.querySelectorAll('style[data-emotion^="' + key + ' "]'),
+      function (node) {
+        var attrib = node.getAttribute("data-emotion").split(" "); // $FlowFixMe
 
-      for (var i = 1; i < attrib.length; i++) {
-        inserted[attrib[i]] = true;
+        for (var i = 1; i < attrib.length; i++) {
+          inserted[attrib[i]] = true;
+        }
+
+        nodesToHydrate.push(node);
       }
-
-      nodesToHydrate.push(node);
-    });
+    );
   }
 
   var _insert;
 
   var omnipresentPlugins = [compat, removeLabel];
 
-  if (process.env.NODE_ENV !== 'production') {
-    omnipresentPlugins.push(createUnsafeSelectorsAlarm({
-      get compat() {
-        return cache.compat;
-      }
-
-    }), incorrectImportAlarm);
+  if (process.env.NODE_ENV !== "production") {
+    omnipresentPlugins.push(
+      createUnsafeSelectorsAlarm({
+        get compat() {
+          return cache.compat;
+        },
+      }),
+      incorrectImportAlarm
+    );
   }
 
   {
     var currentSheet;
-    var finalizingPlugins = [stringify, process.env.NODE_ENV !== 'production' ? function (element) {
-      if (!element.root) {
-        if (element["return"]) {
-          currentSheet.insert(element["return"]);
-        } else if (element.value && element.type !== COMMENT) {
-          // insert empty rule in non-production environments
-          // so @emotion/jest can grab `key` from the (JS)DOM for caches without any rules inserted yet
-          currentSheet.insert(element.value + "{}");
-        }
-      }
-    } : rulesheet(function (rule) {
-      currentSheet.insert(rule);
-    })];
-    var serializer = middleware(omnipresentPlugins.concat(stylisPlugins, finalizingPlugins));
+    var finalizingPlugins = [
+      stringify,
+      process.env.NODE_ENV !== "production"
+        ? function (element) {
+            if (!element.root) {
+              if (element["return"]) {
+                currentSheet.insert(element["return"]);
+              } else if (element.value && element.type !== COMMENT) {
+                // insert empty rule in non-production environments
+                // so @emotion/jest can grab `key` from the (JS)DOM for caches without any rules inserted yet
+                currentSheet.insert(element.value + "{}");
+              }
+            }
+          }
+        : rulesheet(function (rule) {
+            currentSheet.insert(rule);
+          }),
+    ];
+    var serializer = middleware(
+      omnipresentPlugins.concat(stylisPlugins, finalizingPlugins)
+    );
 
     var stylis = function stylis(styles) {
       return serialize(compile(styles), serializer);
@@ -545,15 +772,20 @@ var createCache = function createCache(options) {
     _insert = function insert(selector, serialized, sheet, shouldCache) {
       currentSheet = sheet;
 
-      if (process.env.NODE_ENV !== 'production' && serialized.map !== undefined) {
+      if (
+        process.env.NODE_ENV !== "production" &&
+        serialized.map !== undefined
+      ) {
         currentSheet = {
           insert: function insert(rule) {
             sheet.insert(rule + serialized.map);
-          }
+          },
         };
       }
 
-      stylis(selector ? selector + "{" + serialized.styles + "}" : serialized.styles);
+      stylis(
+        selector ? selector + "{" + serialized.styles + "}" : serialized.styles
+      );
 
       if (shouldCache) {
         cache.inserted[serialized.name] = true;
@@ -569,12 +801,12 @@ var createCache = function createCache(options) {
       nonce: options.nonce,
       speedy: options.speedy,
       prepend: options.prepend,
-      insertionPoint: options.insertionPoint
+      insertionPoint: options.insertionPoint,
     }),
     nonce: options.nonce,
     inserted: inserted,
     registered: {},
-    insert: _insert
+    insert: _insert,
   };
   cache.sheet.hydrate(nodesToHydrate);
   return cache;

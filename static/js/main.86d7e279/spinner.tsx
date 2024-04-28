@@ -6,8 +6,8 @@ import {
   ThemingProps,
   useStyleConfig,
   HTMLChakraProps,
-} from "@chakra-ui/system"
-import { cx } from "@chakra-ui/shared-utils"
+} from "@chakra-ui/system";
+import { cx } from "@chakra-ui/shared-utils";
 
 const spin = keyframes({
   "0%": {
@@ -16,18 +16,18 @@ const spin = keyframes({
   "100%": {
     transform: "rotate(360deg)",
   },
-})
+});
 
 interface SpinnerOptions {
   /**
    * The color of the empty area in the spinner
    * @default "transparent"
    */
-  emptyColor?: string
+  emptyColor?: string;
   /**
    * The color of the spinner
    */
-  color?: string
+  color?: string;
   /**
    * The thickness of the spinner
    * @default "2px"
@@ -36,7 +36,7 @@ interface SpinnerOptions {
    * <Spinner thickness="4px"/>
    * ```
    */
-  thickness?: string
+  thickness?: string;
   /**
    * The speed of the spinner.
    * @default "0.45s"
@@ -45,13 +45,13 @@ interface SpinnerOptions {
    * <Spinner speed="0.2s"/>
    * ```
    */
-  speed?: string
+  speed?: string;
   /**
    * For accessibility, it is important to add a fallback loading text.
    * This text will be visible to screen readers.
    * @default "Loading..."
    */
-  label?: string
+  label?: string;
 }
 
 export interface SpinnerProps
@@ -66,7 +66,7 @@ export interface SpinnerProps
  * @see Docs https://chakra-ui.com/spinner
  */
 export const Spinner = forwardRef<SpinnerProps, "div">((props, ref) => {
-  const styles = useStyleConfig("Spinner", props)
+  const styles = useStyleConfig("Spinner", props);
 
   const {
     label = "Loading...",
@@ -75,9 +75,9 @@ export const Spinner = forwardRef<SpinnerProps, "div">((props, ref) => {
     emptyColor = "transparent",
     className,
     ...rest
-  } = omitThemingProps(props)
+  } = omitThemingProps(props);
 
-  const _className = cx("chakra-spinner", className)
+  const _className = cx("chakra-spinner", className);
 
   const spinnerStyles = {
     display: "inline-block",
@@ -89,7 +89,7 @@ export const Spinner = forwardRef<SpinnerProps, "div">((props, ref) => {
     borderLeftColor: emptyColor,
     animation: `${spin} ${speed} linear infinite`,
     ...styles,
-  }
+  };
 
   return (
     <chakra.div
@@ -100,7 +100,7 @@ export const Spinner = forwardRef<SpinnerProps, "div">((props, ref) => {
     >
       {label && <chakra.span srOnly>{label}</chakra.span>}
     </chakra.div>
-  )
-})
+  );
+});
 
-Spinner.displayName = "Spinner"
+Spinner.displayName = "Spinner";

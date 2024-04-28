@@ -1,58 +1,58 @@
-import { getValidChildren } from "@chakra-ui/react-children-utils"
-import { cx } from "@chakra-ui/shared-utils"
+import { getValidChildren } from "@chakra-ui/react-children-utils";
+import { cx } from "@chakra-ui/shared-utils";
 import {
   chakra,
   forwardRef,
   HTMLChakraProps,
   SystemProps,
-} from "@chakra-ui/system"
-import { cloneElement, Fragment, useMemo } from "react"
+} from "@chakra-ui/system";
+import { cloneElement, Fragment, useMemo } from "react";
 
-import { StackItem } from "./stack-item"
-import type { StackDirection } from "./stack.utils"
-import { getDividerStyles } from "./stack.utils"
+import { StackItem } from "./stack-item";
+import type { StackDirection } from "./stack.utils";
+import { getDividerStyles } from "./stack.utils";
 
-export type { StackDirection }
+export type { StackDirection };
 
 interface StackOptions {
   /**
    * Shorthand for `alignItems` style prop
    * @type SystemProps["alignItems"]
    */
-  align?: SystemProps["alignItems"]
+  align?: SystemProps["alignItems"];
   /**
    * Shorthand for `justifyContent` style prop
    * @type SystemProps["justifyContent"]
    */
-  justify?: SystemProps["justifyContent"]
+  justify?: SystemProps["justifyContent"];
   /**
    * Shorthand for `flexWrap` style prop
    * @type SystemProps["flexWrap"]
    */
-  wrap?: SystemProps["flexWrap"]
+  wrap?: SystemProps["flexWrap"];
   /**
    * The space between each stack item
    * @type SystemProps["margin"]
    * @default "0.5rem"
    */
-  spacing?: SystemProps["margin"]
+  spacing?: SystemProps["margin"];
   /**
    * The direction to stack the items.
    * @default "column"
    */
-  direction?: StackDirection
+  direction?: StackDirection;
   /**
    * If `true`, each stack item will show a divider
    * @type React.ReactElement
    */
-  divider?: React.ReactElement
+  divider?: React.ReactElement;
   /**
    * If `true`, the children will be wrapped in a `Box` with
    * `display: inline-block`, and the `Box` will take the spacing props
    *
    * @default false
    */
-  shouldWrapChildren?: boolean
+  shouldWrapChildren?: boolean;
   /**
    * If `true` the items will be stacked horizontally.
    *
@@ -60,7 +60,7 @@ interface StackOptions {
    *
    * @deprecated - Use `direction="row"` or `HStack` instead
    */
-  isInline?: boolean
+  isInline?: boolean;
 }
 
 export interface StackProps extends HTMLChakraProps<"div">, StackOptions {}
@@ -89,47 +89,47 @@ export const Stack = forwardRef<StackProps, "div">((props, ref) => {
     className,
     shouldWrapChildren,
     ...rest
-  } = props
+  } = props;
 
-  const direction = isInline ? "row" : directionProp ?? "column"
+  const direction = isInline ? "row" : directionProp ?? "column";
 
   const dividerStyle = useMemo(
     () => getDividerStyles({ spacing, direction }),
-    [spacing, direction],
-  )
+    [spacing, direction]
+  );
 
-  const hasDivider = !!divider
-  const shouldUseChildren = !shouldWrapChildren && !hasDivider
+  const hasDivider = !!divider;
+  const shouldUseChildren = !shouldWrapChildren && !hasDivider;
 
   const clones = useMemo(() => {
-    const validChildren = getValidChildren(children)
+    const validChildren = getValidChildren(children);
     return shouldUseChildren
       ? validChildren
       : validChildren.map((child, index) => {
           // Prefer provided child key, fallback to index
-          const key = typeof child.key !== "undefined" ? child.key : index
-          const isLast = index + 1 === validChildren.length
-          const wrappedChild = <StackItem key={key}>{child}</StackItem>
-          const _child = shouldWrapChildren ? wrappedChild : child
+          const key = typeof child.key !== "undefined" ? child.key : index;
+          const isLast = index + 1 === validChildren.length;
+          const wrappedChild = <StackItem key={key}>{child}</StackItem>;
+          const _child = shouldWrapChildren ? wrappedChild : child;
 
-          if (!hasDivider) return _child
+          if (!hasDivider) return _child;
 
           const clonedDivider = cloneElement(
             divider as React.ReactElement<any>,
             {
               __css: dividerStyle,
-            },
-          )
+            }
+          );
 
-          const _divider = isLast ? null : clonedDivider
+          const _divider = isLast ? null : clonedDivider;
 
           return (
             <Fragment key={key}>
               {_child}
               {_divider}
             </Fragment>
-          )
-        })
+          );
+        });
   }, [
     divider,
     dividerStyle,
@@ -137,9 +137,9 @@ export const Stack = forwardRef<StackProps, "div">((props, ref) => {
     shouldUseChildren,
     shouldWrapChildren,
     children,
-  ])
+  ]);
 
-  const _className = cx("chakra-stack", className)
+  const _className = cx("chakra-stack", className);
 
   return (
     <chakra.div
@@ -155,7 +155,7 @@ export const Stack = forwardRef<StackProps, "div">((props, ref) => {
     >
       {clones}
     </chakra.div>
-  )
-})
+  );
+});
 
-Stack.displayName = "Stack"
+Stack.displayName = "Stack";

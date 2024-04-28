@@ -1,6 +1,6 @@
-import { forwardRef } from "@chakra-ui/system"
+import { forwardRef } from "@chakra-ui/system";
 
-import { Stack, StackProps } from "./stack"
+import { Stack, StackProps } from "./stack";
 
 /**
  * A view that arranges its children in a horizontal line.
@@ -9,6 +9,6 @@ import { Stack, StackProps } from "./stack"
  */
 export const HStack = forwardRef<StackProps, "div">((props, ref) => (
   <Stack align="center" {...props} direction="row" ref={ref} />
-))
+));
 
-HStack.displayName = "HStack"
+HStack.displayName = "HStack";

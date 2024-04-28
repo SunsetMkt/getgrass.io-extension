@@ -1,5 +1,5 @@
 const instantAnimationState = {
-    current: false,
+  current: false,
 };
 
 export { instantAnimationState };

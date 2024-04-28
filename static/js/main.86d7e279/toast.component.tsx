@@ -1,26 +1,26 @@
-import { useTimeout } from "@chakra-ui/react-use-timeout"
-import { useUpdateEffect } from "@chakra-ui/react-use-update-effect"
-import { runIfFn } from "@chakra-ui/shared-utils"
-import { motion, useIsPresent, Variants } from "framer-motion"
-import { chakra } from "@chakra-ui/system"
-import type { ToastOptions } from "./toast.types"
-import { getToastStyle } from "./toast.utils"
-import { ToastProviderProps } from "./toast.provider"
-import { memo, useEffect, useMemo, useState } from "react"
+import { useTimeout } from "@chakra-ui/react-use-timeout";
+import { useUpdateEffect } from "@chakra-ui/react-use-update-effect";
+import { runIfFn } from "@chakra-ui/shared-utils";
+import { motion, useIsPresent, Variants } from "framer-motion";
+import { chakra } from "@chakra-ui/system";
+import type { ToastOptions } from "./toast.types";
+import { getToastStyle } from "./toast.utils";
+import { ToastProviderProps } from "./toast.provider";
+import { memo, useEffect, useMemo, useState } from "react";
 
 const toastMotionVariants: Variants = {
   initial: (props) => {
-    const { position } = props
+    const { position } = props;
 
-    const dir = ["top", "bottom"].includes(position) ? "y" : "x"
+    const dir = ["top", "bottom"].includes(position) ? "y" : "x";
 
-    let factor = ["top-right", "bottom-right"].includes(position) ? 1 : -1
-    if (position === "bottom") factor = 1
+    let factor = ["top-right", "bottom-right"].includes(position) ? 1 : -1;
+    if (position === "bottom") factor = 1;
 
     return {
       opacity: 0,
       [dir]: factor * 24,
-    }
+    };
   },
   animate: {
     opacity: 1,
@@ -40,7 +40,7 @@ const toastMotionVariants: Variants = {
       ease: [0.4, 0, 1, 1],
     },
   },
-}
+};
 
 export interface ToastComponentProps
   extends ToastOptions,
@@ -58,35 +58,35 @@ export const ToastComponent = memo((props: ToastComponentProps) => {
     containerStyle,
     motionVariants = toastMotionVariants,
     toastSpacing = "0.5rem",
-  } = props
+  } = props;
 
-  const [delay, setDelay] = useState(duration)
-  const isPresent = useIsPresent()
+  const [delay, setDelay] = useState(duration);
+  const isPresent = useIsPresent();
 
   useUpdateEffect(() => {
     if (!isPresent) {
-      onCloseComplete?.()
+      onCloseComplete?.();
     }
-  }, [isPresent])
+  }, [isPresent]);
 
   useUpdateEffect(() => {
-    setDelay(duration)
-  }, [duration])
+    setDelay(duration);
+  }, [duration]);
 
-  const onMouseEnter = () => setDelay(null)
-  const onMouseLeave = () => setDelay(duration)
+  const onMouseEnter = () => setDelay(null);
+  const onMouseLeave = () => setDelay(duration);
 
   const close = () => {
-    if (isPresent) onRequestRemove()
-  }
+    if (isPresent) onRequestRemove();
+  };
 
   useEffect(() => {
     if (isPresent && requestClose) {
-      onRequestRemove()
+      onRequestRemove();
     }
-  }, [isPresent, requestClose, onRequestRemove])
+  }, [isPresent, requestClose, onRequestRemove]);
 
-  useTimeout(close, delay)
+  useTimeout(close, delay);
 
   const containerStyles = useMemo(
     () => ({
@@ -96,10 +96,10 @@ export const ToastComponent = memo((props: ToastComponentProps) => {
       margin: toastSpacing,
       ...containerStyle,
     }),
-    [containerStyle, toastSpacing],
-  )
+    [containerStyle, toastSpacing]
+  );
 
-  const toastStyle = useMemo(() => getToastStyle(position), [position])
+  const toastStyle = useMemo(() => getToastStyle(position), [position]);
 
   return (
     <motion.div
@@ -123,7 +123,7 @@ export const ToastComponent = memo((props: ToastComponentProps) => {
         {runIfFn(message, { id, onClose: close })}
       </chakra.div>
     </motion.div>
-  )
-})
+  );
+});
 
-ToastComponent.displayName = "ToastComponent"
+ToastComponent.displayName = "ToastComponent";

@@ -1,16 +1,9 @@
 // src/responsive.ts
 import { isObject } from "@chakra-ui/shared-utils";
-var breakpoints = Object.freeze([
-  "base",
-  "sm",
-  "md",
-  "lg",
-  "xl",
-  "2xl"
-]);
+var breakpoints = Object.freeze(["base", "sm", "md", "lg", "xl", "2xl"]);
 function mapResponsive(prop, mapper) {
   if (Array.isArray(prop)) {
-    return prop.map((item) => item === null ? null : mapper(item));
+    return prop.map((item) => (item === null ? null : mapper(item)));
   }
   if (isObject(prop)) {
     return Object.keys(prop).reduce((result, key) => {
@@ -29,16 +22,14 @@ function objectToArrayNotation(obj, bps = breakpoints) {
     return (_a = obj[br]) != null ? _a : null;
   });
   const lastItem = result[result.length - 1];
-  while (lastItem === null)
-    result.pop();
+  while (lastItem === null) result.pop();
   return result;
 }
 function arrayToObjectNotation(values, bps = breakpoints) {
   const result = {};
   values.forEach((value, index) => {
     const key = bps[index];
-    if (value == null)
-      return;
+    if (value == null) return;
     result[key] = value;
   });
   return result;
@@ -55,5 +46,5 @@ export {
   objectToArrayNotation,
   arrayToObjectNotation,
   isResponsiveObjectLike,
-  isCustomBreakpoint
+  isCustomBreakpoint,
 };

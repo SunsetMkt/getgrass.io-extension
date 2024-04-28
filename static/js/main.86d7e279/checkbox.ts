@@ -1,19 +1,19 @@
-import { checkboxAnatomy as parts } from "@chakra-ui/anatomy"
+import { checkboxAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { mode } from "@chakra-ui/theme-tools"
-import { runIfFn } from "../utils/run-if-fn"
+} from "@chakra-ui/styled-system";
+import { mode } from "@chakra-ui/theme-tools";
+import { runIfFn } from "../utils/run-if-fn";
 
 const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $size = cssVar("checkbox-size")
+const $size = cssVar("checkbox-size");
 
 const baseStyleControl = defineStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
 
   return {
     w: $size.reference,
@@ -60,29 +60,29 @@ const baseStyleControl = defineStyle((props) => {
     _invalid: {
       borderColor: mode("red.500", "red.300")(props),
     },
-  }
-})
+  };
+});
 
 const baseStyleContainer = defineStyle({
   _disabled: { cursor: "not-allowed" },
-})
+});
 
 const baseStyleLabel = defineStyle({
   userSelect: "none",
   _disabled: { opacity: 0.4 },
-})
+});
 
 const baseStyleIcon = defineStyle({
   transitionProperty: "transform",
   transitionDuration: "normal",
-})
+});
 
 const baseStyle = definePartsStyle((props) => ({
   icon: baseStyleIcon,
   container: baseStyleContainer,
   control: runIfFn(baseStyleControl, props),
   label: baseStyleLabel,
-}))
+}));
 
 const sizes = {
   sm: definePartsStyle({
@@ -100,7 +100,7 @@ const sizes = {
     label: { fontSize: "lg" },
     icon: { fontSize: "2xs" },
   }),
-}
+};
 
 export const checkboxTheme = defineMultiStyleConfig({
   baseStyle,
@@ -109,4 +109,4 @@ export const checkboxTheme = defineMultiStyleConfig({
     size: "md",
     colorScheme: "blue",
   },
-})
+});

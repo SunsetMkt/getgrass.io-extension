@@ -1,5 +1,5 @@
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
+  "update_url": "https://clients2.google.com/service/update2/crx",
 
   "manifest_version": 3,
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuQNQIhiPzmifa28/SwJCwnh6g1VNKkYD3qmQZxw5bKUyY+G0LQe2+20q9QDzimAYJp+HSt9fR05B86iRomZaz17IA4PwE23LIIwaH8aM3L5VdZOJ4+MNDIA0DVouKIq5Ncoh80Db6Da9ZM6DGooGdw+Fpx08t2tx26Ad7/6PXuXXh1yntbZJBBe9mSoIXQDW2NMv2iz7/vmZn38eMVbkGls4AULpjFhJRSFvgh0ViI93RktptM3OzFNLVpwry0+PyxM4btgL95iuNZLbHZTPaKw3aLvjvsriVLxPRIFJ7LEkvdNKth05rkykKWp4K+usvcESC9GuwGwaVMc5cpxdWQIDAQAB",
@@ -26,9 +26,7 @@
     "webRequest",
     "declarativeNetRequestWithHostAccess"
   ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
   "externally_connectable": {
     "matches": [
       "http://127.0.0.1/*",

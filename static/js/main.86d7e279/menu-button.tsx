@@ -1,13 +1,13 @@
-import { forwardRef, HTMLChakraProps, chakra } from "@chakra-ui/system"
-import { cx } from "@chakra-ui/shared-utils"
+import { forwardRef, HTMLChakraProps, chakra } from "@chakra-ui/system";
+import { cx } from "@chakra-ui/shared-utils";
 
-import { useMenuStyles } from "./menu"
-import { useMenuButton } from "./use-menu"
+import { useMenuStyles } from "./menu";
+import { useMenuButton } from "./use-menu";
 
 export interface MenuButtonProps extends HTMLChakraProps<"button"> {}
 
 const StyledMenuButton = forwardRef<MenuButtonProps, "button">((props, ref) => {
-  const styles = useMenuStyles()
+  const styles = useMenuStyles();
   return (
     <chakra.button
       ref={ref}
@@ -20,8 +20,8 @@ const StyledMenuButton = forwardRef<MenuButtonProps, "button">((props, ref) => {
         ...styles.button,
       }}
     />
-  )
-})
+  );
+});
 
 /**
  * The trigger for the menu list. Must be a direct child of `Menu`.
@@ -30,11 +30,11 @@ const StyledMenuButton = forwardRef<MenuButtonProps, "button">((props, ref) => {
  */
 export const MenuButton = forwardRef<MenuButtonProps, "button">(
   (props, ref) => {
-    const { children, as: As, ...rest } = props
+    const { children, as: As, ...rest } = props;
 
-    const buttonProps = useMenuButton(rest, ref)
+    const buttonProps = useMenuButton(rest, ref);
 
-    const Element = As || StyledMenuButton
+    const Element = As || StyledMenuButton;
 
     return (
       <Element
@@ -47,8 +47,8 @@ export const MenuButton = forwardRef<MenuButtonProps, "button">(
           {props.children}
         </chakra.span>
       </Element>
-    )
-  },
-)
+    );
+  }
+);
 
-MenuButton.displayName = "MenuButton"
+MenuButton.displayName = "MenuButton";

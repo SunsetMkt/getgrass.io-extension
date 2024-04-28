@@ -1,4 +1,4 @@
-import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system"
+import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system";
 
 const baseStyle = defineStyle({
   transitionProperty: "common",
@@ -14,8 +14,8 @@ const baseStyle = defineStyle({
   _focusVisible: {
     boxShadow: "outline",
   },
-})
+});
 
 export const linkTheme = defineStyleConfig({
   baseStyle,
-})
+});

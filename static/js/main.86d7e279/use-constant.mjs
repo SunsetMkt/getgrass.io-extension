@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 
 /**
  * Creates a constant value over the lifecycle of a component.
@@ -8,11 +8,11 @@ import { useRef } from 'react';
  * you can ensure that initialisers don't execute twice or more.
  */
 function useConstant(init) {
-    const ref = useRef(null);
-    if (ref.current === null) {
-        ref.current = init();
-    }
-    return ref.current;
+  const ref = useRef(null);
+  if (ref.current === null) {
+    ref.current = init();
+  }
+  return ref.current;
 }
 
 export { useConstant };

@@ -2,14 +2,14 @@ import {
   InternalFieldErrors,
   InternalFieldName,
   ValidateResult,
-} from '../types';
+} from "../types";
 
 export default (
   name: InternalFieldName,
   validateAllFieldCriteria: boolean,
   errors: InternalFieldErrors,
   type: string,
-  message: ValidateResult,
+  message: ValidateResult
 ) =>
   validateAllFieldCriteria
     ? {

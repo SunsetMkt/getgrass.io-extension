@@ -1,5 +1,5 @@
 const isKeyframesTarget = (v) => {
-    return Array.isArray(v);
+  return Array.isArray(v);
 };
 
 export { isKeyframesTarget };

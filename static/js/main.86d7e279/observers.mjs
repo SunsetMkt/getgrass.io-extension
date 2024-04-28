@@ -11,39 +11,42 @@ const observerCallbacks = new WeakMap();
  */
 const observers = new WeakMap();
 const fireObserverCallback = (entry) => {
-    const callback = observerCallbacks.get(entry.target);
-    callback && callback(entry);
+  const callback = observerCallbacks.get(entry.target);
+  callback && callback(entry);
 };
 const fireAllObserverCallbacks = (entries) => {
-    entries.forEach(fireObserverCallback);
+  entries.forEach(fireObserverCallback);
 };
 function initIntersectionObserver({ root, ...options }) {
-    const lookupRoot = root || document;
-    /**
-     * If we don't have an observer lookup map for this root, create one.
-     */
-    if (!observers.has(lookupRoot)) {
-        observers.set(lookupRoot, {});
-    }
-    const rootObservers = observers.get(lookupRoot);
-    const key = JSON.stringify(options);
-    /**
-     * If we don't have an observer for this combination of root and settings,
-     * create one.
-     */
-    if (!rootObservers[key]) {
-        rootObservers[key] = new IntersectionObserver(fireAllObserverCallbacks, { root, ...options });
-    }
-    return rootObservers[key];
+  const lookupRoot = root || document;
+  /**
+   * If we don't have an observer lookup map for this root, create one.
+   */
+  if (!observers.has(lookupRoot)) {
+    observers.set(lookupRoot, {});
+  }
+  const rootObservers = observers.get(lookupRoot);
+  const key = JSON.stringify(options);
+  /**
+   * If we don't have an observer for this combination of root and settings,
+   * create one.
+   */
+  if (!rootObservers[key]) {
+    rootObservers[key] = new IntersectionObserver(fireAllObserverCallbacks, {
+      root,
+      ...options,
+    });
+  }
+  return rootObservers[key];
 }
 function observeIntersection(element, options, callback) {
-    const rootInteresectionObserver = initIntersectionObserver(options);
-    observerCallbacks.set(element, callback);
-    rootInteresectionObserver.observe(element);
-    return () => {
-        observerCallbacks.delete(element);
-        rootInteresectionObserver.unobserve(element);
-    };
+  const rootInteresectionObserver = initIntersectionObserver(options);
+  observerCallbacks.set(element, callback);
+  rootInteresectionObserver.observe(element);
+  return () => {
+    observerCallbacks.delete(element);
+    rootInteresectionObserver.unobserve(element);
+  };
 }
 
 export { observeIntersection };

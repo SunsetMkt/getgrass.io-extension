@@ -6,15 +6,13 @@
  * @param child - Element to test against parent
  */
 const isNodeOrChild = (parent, child) => {
-    if (!child) {
-        return false;
-    }
-    else if (parent === child) {
-        return true;
-    }
-    else {
-        return isNodeOrChild(parent, child.parentElement);
-    }
+  if (!child) {
+    return false;
+  } else if (parent === child) {
+    return true;
+  } else {
+    return isNodeOrChild(parent, child.parentElement);
+  }
 };
 
 export { isNodeOrChild };

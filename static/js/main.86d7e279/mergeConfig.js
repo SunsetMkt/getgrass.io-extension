@@ -1,9 +1,10 @@
-'use strict';
+"use strict";
 
-import utils from '../utils.js';
+import utils from "../utils.js";
 import AxiosHeaders from "./AxiosHeaders.js";
 
-const headersToObject = (thing) => thing instanceof AxiosHeaders ? { ...thing } : thing;
+const headersToObject = (thing) =>
+  thing instanceof AxiosHeaders ? { ...thing } : thing;
 
 /**
  * Config-specific merge-function which creates a new config-object
@@ -21,7 +22,7 @@ export default function mergeConfig(config1, config2) {
 
   function getMergedValue(target, source, caseless) {
     if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
-      return utils.merge.call({caseless}, target, source);
+      return utils.merge.call({ caseless }, target, source);
     } else if (utils.isPlainObject(source)) {
       return utils.merge({}, source);
     } else if (utils.isArray(source)) {
@@ -93,14 +94,19 @@ export default function mergeConfig(config1, config2) {
     socketPath: defaultToConfig2,
     responseEncoding: defaultToConfig2,
     validateStatus: mergeDirectKeys,
-    headers: (a, b) => mergeDeepProperties(headersToObject(a), headersToObject(b), true)
+    headers: (a, b) =>
+      mergeDeepProperties(headersToObject(a), headersToObject(b), true),
   };
 
-  utils.forEach(Object.keys(Object.assign({}, config1, config2)), function computeConfigValue(prop) {
-    const merge = mergeMap[prop] || mergeDeepProperties;
-    const configValue = merge(config1[prop], config2[prop], prop);
-    (utils.isUndefined(configValue) && merge !== mergeDirectKeys) || (config[prop] = configValue);
-  });
+  utils.forEach(
+    Object.keys(Object.assign({}, config1, config2)),
+    function computeConfigValue(prop) {
+      const merge = mergeMap[prop] || mergeDeepProperties;
+      const configValue = merge(config1[prop], config2[prop], prop);
+      (utils.isUndefined(configValue) && merge !== mergeDirectKeys) ||
+        (config[prop] = configValue);
+    }
+  );
 
   return config;
 }

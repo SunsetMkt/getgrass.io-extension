@@ -1,8 +1,8 @@
-import { FieldValues } from '../types';
+import { FieldValues } from "../types";
 
-import isKey from './isKey';
-import isObject from './isObject';
-import stringToPath from './stringToPath';
+import isKey from "./isKey";
+import isObject from "./isObject";
+import stringToPath from "./stringToPath";
 
 export default (object: FieldValues, path: string, value?: unknown) => {
   let index = -1;

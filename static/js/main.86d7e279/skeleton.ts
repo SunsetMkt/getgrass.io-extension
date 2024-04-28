@@ -2,10 +2,10 @@ import {
   cssVar,
   defineStyle,
   defineStyleConfig,
-} from "@chakra-ui/styled-system"
+} from "@chakra-ui/styled-system";
 
-const $startColor = cssVar("skeleton-start-color")
-const $endColor = cssVar("skeleton-end-color")
+const $startColor = cssVar("skeleton-start-color");
+const $endColor = cssVar("skeleton-end-color");
 
 const baseStyle = defineStyle({
   [$startColor.variable]: "colors.gray.100",
@@ -18,8 +18,8 @@ const baseStyle = defineStyle({
   borderColor: $endColor.reference,
   opacity: 0.7,
   borderRadius: "sm",
-})
+});
 
 export const skeletonTheme = defineStyleConfig({
   baseStyle,
-})
+});

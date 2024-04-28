@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 function useUnmountEffect(callback) {
-    return useEffect(() => () => callback(), []);
+  return useEffect(() => () => callback(), []);
 }
 
 export { useUnmountEffect };

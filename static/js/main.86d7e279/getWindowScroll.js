@@ -5,6 +5,6 @@ export default function getWindowScroll(node) {
   var scrollTop = win.pageYOffset;
   return {
     scrollLeft: scrollLeft,
-    scrollTop: scrollTop
+    scrollTop: scrollTop,
   };
 }

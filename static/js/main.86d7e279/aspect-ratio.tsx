@@ -3,11 +3,11 @@ import {
   forwardRef,
   ResponsiveValue,
   HTMLChakraProps,
-} from "@chakra-ui/system"
-import { mapResponsive } from "@chakra-ui/breakpoint-utils"
-import { cx } from "@chakra-ui/shared-utils"
+} from "@chakra-ui/system";
+import { mapResponsive } from "@chakra-ui/breakpoint-utils";
+import { cx } from "@chakra-ui/shared-utils";
 
-import { Children } from "react"
+import { Children } from "react";
 
 interface AspectRatioOptions {
   /**
@@ -15,7 +15,7 @@ interface AspectRatioOptions {
    *
    * `21/9`, `16/9`, `9/16`, `4/3`, `1.85/1`
    */
-  ratio?: ResponsiveValue<number>
+  ratio?: ResponsiveValue<number>;
 }
 
 export interface AspectRatioProps
@@ -30,14 +30,14 @@ export interface AspectRatioProps
  */
 export const AspectRatio = forwardRef<AspectRatioProps, "div">(function (
   props,
-  ref,
+  ref
 ) {
-  const { ratio = 4 / 3, children, className, ...rest } = props
+  const { ratio = 4 / 3, children, className, ...rest } = props;
 
   // enforce single child
-  const child = Children.only(children)
+  const child = Children.only(children);
 
-  const _className = cx("chakra-aspect-ratio", className)
+  const _className = cx("chakra-aspect-ratio", className);
 
   return (
     <chakra.div
@@ -72,7 +72,7 @@ export const AspectRatio = forwardRef<AspectRatioProps, "div">(function (
     >
       {child}
     </chakra.div>
-  )
-})
+  );
+});
 
-AspectRatio.displayName = "AspectRatio"
+AspectRatio.displayName = "AspectRatio";

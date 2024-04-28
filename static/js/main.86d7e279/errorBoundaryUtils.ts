@@ -1,21 +1,21 @@
-'use client'
-import * as React from 'react'
-import { shouldThrowError } from './utils'
+"use client";
+import * as React from "react";
+import { shouldThrowError } from "./utils";
 import type {
   DefaultedQueryObserverOptions,
   Query,
   QueryKey,
   QueryObserverResult,
   ThrowOnError,
-} from '@tanstack/query-core'
-import type { QueryErrorResetBoundaryValue } from './QueryErrorResetBoundary'
+} from "@tanstack/query-core";
+import type { QueryErrorResetBoundaryValue } from "./QueryErrorResetBoundary";
 
 export const ensurePreventErrorBoundaryRetry = <
   TQueryFnData,
   TError,
   TData,
   TQueryData,
-  TQueryKey extends QueryKey,
+  TQueryKey extends QueryKey
 >(
   options: DefaultedQueryObserverOptions<
     TQueryFnData,
@@ -24,40 +24,40 @@ export const ensurePreventErrorBoundaryRetry = <
     TQueryData,
     TQueryKey
   >,
-  errorResetBoundary: QueryErrorResetBoundaryValue,
+  errorResetBoundary: QueryErrorResetBoundaryValue
 ) => {
   if (options.suspense || options.throwOnError) {
     // Prevent retrying failed query if the error boundary has not been reset yet
     if (!errorResetBoundary.isReset()) {
-      options.retryOnMount = false
+      options.retryOnMount = false;
     }
   }
-}
+};
 
 export const useClearResetErrorBoundary = (
-  errorResetBoundary: QueryErrorResetBoundaryValue,
+  errorResetBoundary: QueryErrorResetBoundaryValue
 ) => {
   React.useEffect(() => {
-    errorResetBoundary.clearReset()
-  }, [errorResetBoundary])
-}
+    errorResetBoundary.clearReset();
+  }, [errorResetBoundary]);
+};
 
 export const getHasError = <
   TData,
   TError,
   TQueryFnData,
   TQueryData,
-  TQueryKey extends QueryKey,
+  TQueryKey extends QueryKey
 >({
   result,
   errorResetBoundary,
   throwOnError,
   query,
 }: {
-  result: QueryObserverResult<TData, TError>
-  errorResetBoundary: QueryErrorResetBoundaryValue
-  throwOnError: ThrowOnError<TQueryFnData, TError, TQueryData, TQueryKey>
-  query: Query<TQueryFnData, TError, TQueryData, TQueryKey> | undefined
+  result: QueryObserverResult<TData, TError>;
+  errorResetBoundary: QueryErrorResetBoundaryValue;
+  throwOnError: ThrowOnError<TQueryFnData, TError, TQueryData, TQueryKey>;
+  query: Query<TQueryFnData, TError, TQueryData, TQueryKey> | undefined;
 }) => {
   return (
     result.isError &&
@@ -65,5 +65,5 @@ export const getHasError = <
     !result.isFetching &&
     query &&
     shouldThrowError(throwOnError, [result.error, query])
-  )
-}
+  );
+};

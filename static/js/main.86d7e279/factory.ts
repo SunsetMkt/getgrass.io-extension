@@ -1,16 +1,16 @@
-import { DOMElements } from "./system.utils"
-import { ChakraStyledOptions, HTMLChakraComponents, styled } from "./system"
-import { As, ChakraComponent } from "./system.types"
+import { DOMElements } from "./system.utils";
+import { ChakraStyledOptions, HTMLChakraComponents, styled } from "./system";
+import { As, ChakraComponent } from "./system.types";
 
 type ChakraFactory = {
   <T extends As, P extends object = {}>(
     component: T,
-    options?: ChakraStyledOptions,
-  ): ChakraComponent<T, P>
-}
+    options?: ChakraStyledOptions
+  ): ChakraComponent<T, P>;
+};
 
 function factory() {
-  const cache = new Map<DOMElements, ChakraComponent<DOMElements>>()
+  const cache = new Map<DOMElements, ChakraComponent<DOMElements>>();
 
   return new Proxy(styled, {
     /**
@@ -19,7 +19,7 @@ function factory() {
      * const WithChakra = chakra(AnotherComponent)
      */
     apply(target, thisArg, argArray: [DOMElements, ChakraStyledOptions]) {
-      return styled(...argArray)
+      return styled(...argArray);
     },
     /**
      * @example
@@ -27,11 +27,11 @@ function factory() {
      */
     get(_, element: DOMElements) {
       if (!cache.has(element)) {
-        cache.set(element, styled(element))
+        cache.set(element, styled(element));
       }
-      return cache.get(element)
+      return cache.get(element);
     },
-  }) as ChakraFactory & HTMLChakraComponents
+  }) as ChakraFactory & HTMLChakraComponents;
 }
 /**
  * The Chakra factory serves as an object of chakra enabled JSX elements,
@@ -39,4 +39,4 @@ function factory() {
  *
  * @see Docs https://chakra-ui.com/docs/styled-system/chakra-factory
  */
-export const chakra = factory()
+export const chakra = factory();

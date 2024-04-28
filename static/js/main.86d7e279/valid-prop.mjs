@@ -5,37 +5,37 @@
  * This doesn't throw if a `MotionProp` name is missing - it should.
  */
 const validMotionProps = new Set([
-    "animate",
-    "exit",
-    "variants",
-    "initial",
-    "style",
-    "values",
-    "variants",
-    "transition",
-    "transformTemplate",
-    "transformValues",
-    "custom",
-    "inherit",
-    "onBeforeLayoutMeasure",
-    "onAnimationStart",
-    "onAnimationComplete",
-    "onUpdate",
-    "onDragStart",
-    "onDrag",
-    "onDragEnd",
-    "onMeasureDragConstraints",
-    "onDirectionLock",
-    "onDragTransitionEnd",
-    "_dragX",
-    "_dragY",
-    "onHoverStart",
-    "onHoverEnd",
-    "onViewportEnter",
-    "onViewportLeave",
-    "globalTapTarget",
-    "ignoreStrict",
-    "viewport",
+  "animate",
+  "exit",
+  "variants",
+  "initial",
+  "style",
+  "values",
+  "variants",
+  "transition",
+  "transformTemplate",
+  "transformValues",
+  "custom",
+  "inherit",
+  "onBeforeLayoutMeasure",
+  "onAnimationStart",
+  "onAnimationComplete",
+  "onUpdate",
+  "onDragStart",
+  "onDrag",
+  "onDragEnd",
+  "onMeasureDragConstraints",
+  "onDirectionLock",
+  "onDragTransitionEnd",
+  "_dragX",
+  "_dragY",
+  "onHoverStart",
+  "onHoverEnd",
+  "onViewportEnter",
+  "onViewportLeave",
+  "globalTapTarget",
+  "ignoreStrict",
+  "viewport",
 ]);
 /**
  * Check whether a prop name is a valid `MotionProp` key.
@@ -46,13 +46,15 @@ const validMotionProps = new Set([
  * @public
  */
 function isValidMotionProp(key) {
-    return (key.startsWith("while") ||
-        (key.startsWith("drag") && key !== "draggable") ||
-        key.startsWith("layout") ||
-        key.startsWith("onTap") ||
-        key.startsWith("onPan") ||
-        key.startsWith("onLayout") ||
-        validMotionProps.has(key));
+  return (
+    key.startsWith("while") ||
+    (key.startsWith("drag") && key !== "draggable") ||
+    key.startsWith("layout") ||
+    key.startsWith("onTap") ||
+    key.startsWith("onPan") ||
+    key.startsWith("onLayout") ||
+    validMotionProps.has(key)
+  );
 }
 
 export { isValidMotionProp };

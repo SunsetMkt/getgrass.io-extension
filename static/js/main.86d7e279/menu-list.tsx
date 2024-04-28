@@ -1,19 +1,19 @@
-import { callAll, cx } from "@chakra-ui/shared-utils"
-import { chakra, forwardRef, HTMLChakraProps } from "@chakra-ui/system"
+import { callAll, cx } from "@chakra-ui/shared-utils";
+import { chakra, forwardRef, HTMLChakraProps } from "@chakra-ui/system";
 
-import { HTMLMotionProps, motion, Variants } from "framer-motion"
-import { useMenuStyles } from "./menu"
-import { useMenuContext, useMenuList, useMenuPositioner } from "./use-menu"
+import { HTMLMotionProps, motion, Variants } from "framer-motion";
+import { useMenuStyles } from "./menu";
+import { useMenuContext, useMenuList, useMenuPositioner } from "./use-menu";
 
 export interface MenuListProps extends HTMLChakraProps<"div"> {
   /**
    * Props for the root element that positions the menu.
    */
-  rootProps?: HTMLChakraProps<"div">
+  rootProps?: HTMLChakraProps<"div">;
   /**
    * The framer-motion props to animate the menu list
    */
-  motionProps?: HTMLMotionProps<"div">
+  motionProps?: HTMLMotionProps<"div">;
 }
 
 const motionVariants: Variants = {
@@ -37,25 +37,25 @@ const motionVariants: Variants = {
       easings: "easeOut",
     },
   },
-}
+};
 
-const MenuTransition = chakra(motion.div)
+const MenuTransition = chakra(motion.div);
 
 export const MenuList = forwardRef<MenuListProps, "div">(function MenuList(
   props,
-  ref,
+  ref
 ) {
-  const { rootProps, motionProps, ...rest } = props
+  const { rootProps, motionProps, ...rest } = props;
   const {
     isOpen,
     onTransitionEnd,
     unstable__animationState: animated,
-  } = useMenuContext()
+  } = useMenuContext();
 
-  const listProps = useMenuList(rest, ref) as any
-  const positionerProps = useMenuPositioner(rootProps)
+  const listProps = useMenuList(rest, ref) as any;
+  const positionerProps = useMenuPositioner(rootProps);
 
-  const styles = useMenuStyles()
+  const styles = useMenuStyles();
 
   return (
     <chakra.div
@@ -73,11 +73,11 @@ export const MenuList = forwardRef<MenuListProps, "div">(function MenuList(
         onUpdate={onTransitionEnd}
         onAnimationComplete={callAll(
           animated.onComplete,
-          listProps.onAnimationComplete,
+          listProps.onAnimationComplete
         )}
       />
     </chakra.div>
-  )
-})
+  );
+});
 
-MenuList.displayName = "MenuList"
+MenuList.displayName = "MenuList";

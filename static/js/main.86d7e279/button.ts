@@ -1,6 +1,6 @@
-import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system"
-import { mode, transparentize } from "@chakra-ui/theme-tools"
-import { runIfFn } from "../utils/run-if-fn"
+import { defineStyle, defineStyleConfig } from "@chakra-ui/styled-system";
+import { mode, transparentize } from "@chakra-ui/theme-tools";
+import { runIfFn } from "../utils/run-if-fn";
 
 const baseStyle = defineStyle({
   lineHeight: "1.2",
@@ -21,10 +21,10 @@ const baseStyle = defineStyle({
       bg: "initial",
     },
   },
-})
+});
 
 const variantGhost = defineStyle((props) => {
-  const { colorScheme: c, theme } = props
+  const { colorScheme: c, theme } = props;
 
   if (c === "gray") {
     return {
@@ -33,11 +33,11 @@ const variantGhost = defineStyle((props) => {
         bg: mode(`gray.100`, `whiteAlpha.200`)(props),
       },
       _active: { bg: mode(`gray.200`, `whiteAlpha.300`)(props) },
-    }
+    };
   }
 
-  const darkHoverBg = transparentize(`${c}.200`, 0.12)(theme)
-  const darkActiveBg = transparentize(`${c}.200`, 0.24)(theme)
+  const darkHoverBg = transparentize(`${c}.200`, 0.12)(theme);
+  const darkActiveBg = transparentize(`${c}.200`, 0.24)(theme);
 
   return {
     color: mode(`${c}.600`, `${c}.200`)(props),
@@ -48,12 +48,12 @@ const variantGhost = defineStyle((props) => {
     _active: {
       bg: mode(`${c}.100`, darkActiveBg)(props),
     },
-  }
-})
+  };
+});
 
 const variantOutline = defineStyle((props) => {
-  const { colorScheme: c } = props
-  const borderColor = mode(`gray.200`, `whiteAlpha.300`)(props)
+  const { colorScheme: c } = props;
+  const borderColor = mode(`gray.200`, `whiteAlpha.300`)(props);
   return {
     border: "1px solid",
     borderColor: c === "gray" ? borderColor : "currentColor",
@@ -62,15 +62,15 @@ const variantOutline = defineStyle((props) => {
     ".chakra-button__group[data-attached][data-orientation=vertical] > &:not(:last-of-type)":
       { marginBottom: "-1px" },
     ...runIfFn(variantGhost, props),
-  }
-})
+  };
+});
 
 type AccessibleColor = {
-  bg?: string
-  color?: string
-  hoverBg?: string
-  activeBg?: string
-}
+  bg?: string;
+  color?: string;
+  hoverBg?: string;
+  activeBg?: string;
+};
 
 /** Accessible color overrides for less accessible colors. */
 const accessibleColorMap: { [key: string]: AccessibleColor } = {
@@ -86,13 +86,13 @@ const accessibleColorMap: { [key: string]: AccessibleColor } = {
     hoverBg: "cyan.500",
     activeBg: "cyan.600",
   },
-}
+};
 
 const variantSolid = defineStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
 
   if (c === "gray") {
-    const bg = mode(`gray.100`, `whiteAlpha.200`)(props)
+    const bg = mode(`gray.100`, `whiteAlpha.200`)(props);
 
     return {
       bg,
@@ -104,7 +104,7 @@ const variantSolid = defineStyle((props) => {
         },
       },
       _active: { bg: mode(`gray.300`, `whiteAlpha.400`)(props) },
-    }
+    };
   }
 
   const {
@@ -112,9 +112,9 @@ const variantSolid = defineStyle((props) => {
     color = "white",
     hoverBg = `${c}.600`,
     activeBg = `${c}.700`,
-  } = accessibleColorMap[c] ?? {}
+  } = accessibleColorMap[c] ?? {};
 
-  const background = mode(bg, `${c}.200`)(props)
+  const background = mode(bg, `${c}.200`)(props);
 
   return {
     bg: background,
@@ -126,11 +126,11 @@ const variantSolid = defineStyle((props) => {
       },
     },
     _active: { bg: mode(activeBg, `${c}.400`)(props) },
-  }
-})
+  };
+});
 
 const variantLink = defineStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
   return {
     padding: 0,
     height: "auto",
@@ -146,8 +146,8 @@ const variantLink = defineStyle((props) => {
     _active: {
       color: mode(`${c}.700`, `${c}.500`)(props),
     },
-  }
-})
+  };
+});
 
 const variantUnstyled = defineStyle({
   bg: "none",
@@ -156,7 +156,7 @@ const variantUnstyled = defineStyle({
   lineHeight: "inherit",
   m: "0",
   p: "0",
-})
+});
 
 const variants = {
   ghost: variantGhost,
@@ -164,7 +164,7 @@ const variants = {
   solid: variantSolid,
   link: variantLink,
   unstyled: variantUnstyled,
-}
+};
 
 const sizes = {
   lg: defineStyle({
@@ -191,7 +191,7 @@ const sizes = {
     fontSize: "xs",
     px: "2",
   }),
-}
+};
 
 export const buttonTheme = defineStyleConfig({
   baseStyle,
@@ -202,4 +202,4 @@ export const buttonTheme = defineStyleConfig({
     size: "md",
     colorScheme: "gray",
   },
-})
+});

@@ -1,5 +1,5 @@
-import parseToRgba from './parseToRgba';
-import rgba from './rgba';
+import parseToRgba from "./parseToRgba";
+import rgba from "./rgba";
 
 /**
  * Takes in a color and makes it more transparent by convert to `rgba` and

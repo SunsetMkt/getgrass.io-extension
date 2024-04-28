@@ -1,20 +1,20 @@
-import { useClickable } from "@chakra-ui/clickable"
-import { createDescendantContext } from "@chakra-ui/descendant"
-import { useFocusOnHide } from "@chakra-ui/react-use-focus-effect"
-import { usePopper, UsePopperProps } from "@chakra-ui/popper"
+import { useClickable } from "@chakra-ui/clickable";
+import { createDescendantContext } from "@chakra-ui/descendant";
+import { useFocusOnHide } from "@chakra-ui/react-use-focus-effect";
+import { usePopper, UsePopperProps } from "@chakra-ui/popper";
 import {
   useDisclosure,
   UseDisclosureProps,
-} from "@chakra-ui/react-use-disclosure"
-import { useOutsideClick } from "@chakra-ui/react-use-outside-click"
-import { useAnimationState } from "@chakra-ui/react-use-animation-state"
-import { createContext } from "@chakra-ui/react-context"
-import { getValidChildren } from "@chakra-ui/react-children-utils"
-import { useControllableState } from "@chakra-ui/react-use-controllable-state"
-import { useUpdateEffect } from "@chakra-ui/react-use-update-effect"
-import { mergeRefs } from "@chakra-ui/react-use-merge-refs"
-import { dataAttr, callAllHandlers } from "@chakra-ui/shared-utils"
-import { lazyDisclosure, LazyMode } from "@chakra-ui/lazy-utils"
+} from "@chakra-ui/react-use-disclosure";
+import { useOutsideClick } from "@chakra-ui/react-use-outside-click";
+import { useAnimationState } from "@chakra-ui/react-use-animation-state";
+import { createContext } from "@chakra-ui/react-context";
+import { getValidChildren } from "@chakra-ui/react-children-utils";
+import { useControllableState } from "@chakra-ui/react-use-controllable-state";
+import { useUpdateEffect } from "@chakra-ui/react-use-update-effect";
+import { mergeRefs } from "@chakra-ui/react-use-merge-refs";
+import { dataAttr, callAllHandlers } from "@chakra-ui/shared-utils";
+import { lazyDisclosure, LazyMode } from "@chakra-ui/lazy-utils";
 
 import React, {
   cloneElement,
@@ -24,9 +24,9 @@ import React, {
   useId,
   useMemo,
   useEffect,
-} from "react"
-import { useShortcut } from "./use-shortcut"
-import { getNextItemFromSearch } from "./get-next-item-from-search"
+} from "react";
+import { useShortcut } from "./use-shortcut";
+import { getNextItemFromSearch } from "./get-next-item-from-search";
 
 /* -------------------------------------------------------------------------------------------------
  * Create context to track descendants and their indices
@@ -37,7 +37,7 @@ export const [
   useMenuDescendantsContext,
   useMenuDescendants,
   useMenuDescendant,
-] = createDescendantContext<HTMLElement>()
+] = createDescendantContext<HTMLElement>();
 
 /* -------------------------------------------------------------------------------------------------
  * Create context to track menu state and logic
@@ -48,7 +48,7 @@ export const [MenuProvider, useMenuContext] = createContext<
 >({
   strict: false,
   name: "MenuContext",
-})
+});
 
 /* -------------------------------------------------------------------------------------------------
  * useMenu hook
@@ -60,28 +60,28 @@ export interface UseMenuProps
   /**
    * The `ref` of the element that should receive focus when the popover opens.
    */
-  initialFocusRef?: React.RefObject<{ focus(): void }>
+  initialFocusRef?: React.RefObject<{ focus(): void }>;
   /**
    * If `true`, the menu will close when a menu item is
    * clicked
    *
    * @default true
    */
-  closeOnSelect?: boolean
+  closeOnSelect?: boolean;
   /**
    * If `true`, the menu will close when you click outside
    * the menu list
    *
    * @default true
    */
-  closeOnBlur?: boolean
+  closeOnBlur?: boolean;
   /**
    * If `true`, the first enabled menu item will receive focus and be selected
    * when the menu opens.
    *
    * @default true
    */
-  autoSelect?: boolean
+  autoSelect?: boolean;
   /**
    * Performance 🚀:
    * If `true`, the MenuItem rendering will be deferred
@@ -89,7 +89,7 @@ export interface UseMenuProps
    *
    * @default false
    */
-  isLazy?: boolean
+  isLazy?: boolean;
   /**
    * Performance 🚀:
    * The lazy behavior of menu's content when not visible.
@@ -101,12 +101,12 @@ export interface UseMenuProps
    *
    * @default "unmount"
    */
-  lazyBehavior?: LazyMode
+  lazyBehavior?: LazyMode;
   /**
    * If `rtl`, proper placement positions will be flipped i.e. 'top-right' will
    * become 'top-left' and vice-verse
    */
-  direction?: "ltr" | "rtl"
+  direction?: "ltr" | "rtl";
   /*
    * If `true`, the menu will be positioned when it mounts
    * (even if it's not open).
@@ -116,24 +116,24 @@ export interface UseMenuProps
    *
    * @default false
    */
-  computePositionOnMount?: boolean
+  computePositionOnMount?: boolean;
 }
 
 function useIds(idProp?: string, ...prefixes: string[]) {
-  const reactId = useId()
-  const id = idProp || reactId
+  const reactId = useId();
+  const id = idProp || reactId;
   return useMemo(() => {
-    return prefixes.map((prefix) => `${prefix}-${id}`)
-  }, [id, prefixes])
+    return prefixes.map((prefix) => `${prefix}-${id}`);
+  }, [id, prefixes]);
 }
 
 function getOwnerDocument(node?: Element | null): Document {
-  return node?.ownerDocument ?? document
+  return node?.ownerDocument ?? document;
 }
 
 function isActiveElement(element: HTMLElement) {
-  const doc = getOwnerDocument(element)
-  return doc.activeElement === (element as HTMLElement)
+  const doc = getOwnerDocument(element);
+  return doc.activeElement === (element as HTMLElement);
 }
 
 /**
@@ -159,69 +159,69 @@ export function useMenu(props: UseMenuProps = {}) {
     direction,
     computePositionOnMount = false,
     ...popperProps
-  } = props
+  } = props;
   /**
    * Prepare the reference to the menu and disclosure
    */
-  const menuRef = useRef<HTMLDivElement>(null)
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   /**
    * Context to register all menu item nodes
    */
-  const descendants = useMenuDescendants()
+  const descendants = useMenuDescendants();
 
   const focusMenu = useCallback(() => {
     requestAnimationFrame(() => {
-      menuRef.current?.focus({ preventScroll: false })
-    })
-  }, [])
+      menuRef.current?.focus({ preventScroll: false });
+    });
+  }, []);
 
   const focusFirstItem = useCallback(() => {
     const id = setTimeout(() => {
       if (initialFocusRef) {
-        initialFocusRef.current?.focus()
+        initialFocusRef.current?.focus();
       } else {
-        const first = descendants.firstEnabled()
-        if (first) setFocusedIndex(first.index)
+        const first = descendants.firstEnabled();
+        if (first) setFocusedIndex(first.index);
       }
-    })
-    timeoutIds.current.add(id)
-  }, [descendants, initialFocusRef])
+    });
+    timeoutIds.current.add(id);
+  }, [descendants, initialFocusRef]);
 
   const focusLastItem = useCallback(() => {
     const id = setTimeout(() => {
-      const last = descendants.lastEnabled()
-      if (last) setFocusedIndex(last.index)
-    })
-    timeoutIds.current.add(id)
-  }, [descendants])
+      const last = descendants.lastEnabled();
+      if (last) setFocusedIndex(last.index);
+    });
+    timeoutIds.current.add(id);
+  }, [descendants]);
 
   const onOpenInternal = useCallback(() => {
-    onOpenProp?.()
+    onOpenProp?.();
     if (autoSelect) {
-      focusFirstItem()
+      focusFirstItem();
     } else {
-      focusMenu()
+      focusMenu();
     }
-  }, [autoSelect, focusFirstItem, focusMenu, onOpenProp])
+  }, [autoSelect, focusFirstItem, focusMenu, onOpenProp]);
 
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure({
     isOpen: isOpenProp,
     defaultIsOpen,
     onClose: onCloseProp,
     onOpen: onOpenInternal,
-  })
+  });
 
   useOutsideClick({
     enabled: isOpen && closeOnBlur,
     ref: menuRef,
     handler: (event) => {
       if (!buttonRef.current?.contains(event.target as HTMLElement)) {
-        onClose()
+        onClose();
       }
     },
-  })
+  });
 
   /**
    * Add some popper.js for dynamic positioning
@@ -231,68 +231,68 @@ export function useMenu(props: UseMenuProps = {}) {
     enabled: isOpen || computePositionOnMount,
     placement,
     direction,
-  })
+  });
 
-  const [focusedIndex, setFocusedIndex] = useState(-1)
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
   /**
    * Focus the button when we close the menu
    */
   useUpdateEffect(() => {
     if (!isOpen) {
-      setFocusedIndex(-1)
+      setFocusedIndex(-1);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   useFocusOnHide(menuRef, {
     focusRef: buttonRef,
     visible: isOpen,
     shouldFocus: true,
-  })
+  });
 
-  const animationState = useAnimationState({ isOpen, ref: menuRef })
+  const animationState = useAnimationState({ isOpen, ref: menuRef });
 
   /**
    * Generate unique ids for menu's list and button
    */
-  const [buttonId, menuId] = useIds(id, `menu-button`, `menu-list`)
+  const [buttonId, menuId] = useIds(id, `menu-button`, `menu-list`);
 
   const openAndFocusMenu = useCallback(() => {
-    onOpen()
-    focusMenu()
-  }, [onOpen, focusMenu])
+    onOpen();
+    focusMenu();
+  }, [onOpen, focusMenu]);
 
-  const timeoutIds = useRef<Set<any>>(new Set([]))
+  const timeoutIds = useRef<Set<any>>(new Set([]));
 
   // clean up timeouts
   useEffect(() => {
-    const ids = timeoutIds.current
+    const ids = timeoutIds.current;
     return () => {
-      ids.forEach((id) => clearTimeout(id))
-      ids.clear()
-    }
-  }, [])
+      ids.forEach((id) => clearTimeout(id));
+      ids.clear();
+    };
+  }, []);
 
   const openAndFocusFirstItem = useCallback(() => {
-    onOpen()
-    focusFirstItem()
-  }, [focusFirstItem, onOpen])
+    onOpen();
+    focusFirstItem();
+  }, [focusFirstItem, onOpen]);
 
   const openAndFocusLastItem = useCallback(() => {
-    onOpen()
-    focusLastItem()
-  }, [onOpen, focusLastItem])
+    onOpen();
+    focusLastItem();
+  }, [onOpen, focusLastItem]);
 
   const refocus = useCallback(() => {
-    const doc = getOwnerDocument(menuRef.current)
-    const hasFocusWithin = menuRef.current?.contains(doc.activeElement)
-    const shouldRefocus = isOpen && !hasFocusWithin
+    const doc = getOwnerDocument(menuRef.current);
+    const hasFocusWithin = menuRef.current?.contains(doc.activeElement);
+    const shouldRefocus = isOpen && !hasFocusWithin;
 
-    if (!shouldRefocus) return
+    if (!shouldRefocus) return;
 
-    const node = descendants.item(focusedIndex)?.node
-    node?.focus({ preventScroll: true })
-  }, [isOpen, focusedIndex, descendants])
+    const node = descendants.item(focusedIndex)?.node;
+    node?.focus({ preventScroll: true });
+  }, [isOpen, focusedIndex, descendants]);
 
   /**
    * Track the animation frame which is scheduled to focus
@@ -300,7 +300,7 @@ export function useMenu(props: UseMenuProps = {}) {
    * is focused before the animation executes. This prevents
    * infinite rerenders.
    */
-  const rafId = useRef<number | null>(null)
+  const rafId = useRef<number | null>(null);
 
   return {
     openAndFocusMenu,
@@ -329,7 +329,7 @@ export function useMenu(props: UseMenuProps = {}) {
     lazyBehavior,
     initialFocusRef,
     rafId,
-  }
+  };
 }
 
 export interface UseMenuReturn extends ReturnType<typeof useMenu> {}
@@ -349,31 +349,32 @@ export interface UseMenuButtonProps
  */
 export function useMenuButton(
   props: UseMenuButtonProps = {},
-  externalRef: React.Ref<any> = null,
+  externalRef: React.Ref<any> = null
 ) {
-  const menu = useMenuContext()
+  const menu = useMenuContext();
 
-  const { onToggle, popper, openAndFocusFirstItem, openAndFocusLastItem } = menu
+  const { onToggle, popper, openAndFocusFirstItem, openAndFocusLastItem } =
+    menu;
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      const eventKey = event.key
+      const eventKey = event.key;
       const keyMap: Record<string, React.KeyboardEventHandler> = {
         Enter: openAndFocusFirstItem,
         ArrowDown: openAndFocusFirstItem,
         ArrowUp: openAndFocusLastItem,
-      }
+      };
 
-      const action = keyMap[eventKey]
+      const action = keyMap[eventKey];
 
       if (action) {
-        event.preventDefault()
-        event.stopPropagation()
-        action(event)
+        event.preventDefault();
+        event.stopPropagation();
+        action(event);
       }
     },
-    [openAndFocusFirstItem, openAndFocusLastItem],
-  )
+    [openAndFocusFirstItem, openAndFocusLastItem]
+  );
 
   return {
     ...props,
@@ -385,7 +386,7 @@ export function useMenuButton(
     "aria-controls": menu.menuId,
     onClick: callAllHandlers(props.onClick, onToggle),
     onKeyDown: callAllHandlers(props.onKeyDown, onKeyDown),
-  }
+  };
 }
 
 function isTargetMenuItem(target: EventTarget | null) {
@@ -393,7 +394,7 @@ function isTargetMenuItem(target: EventTarget | null) {
   return (
     isHTMLElement(target) &&
     !!target?.getAttribute("role")?.startsWith("menuitem")
-  )
+  );
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -412,14 +413,14 @@ export interface UseMenuListProps
  */
 export function useMenuList(
   props: UseMenuListProps = {},
-  ref: React.Ref<any> = null,
+  ref: React.Ref<any> = null
 ): React.HTMLAttributes<HTMLElement> & React.RefAttributes<HTMLElement> {
-  const menu = useMenuContext()
+  const menu = useMenuContext();
 
   if (!menu) {
     throw new Error(
-      `useMenuContext: context is undefined. Seems you forgot to wrap component within <Menu>`,
-    )
+      `useMenuContext: context is undefined. Seems you forgot to wrap component within <Menu>`
+    );
   }
 
   const {
@@ -432,9 +433,9 @@ export function useMenuList(
     isLazy,
     lazyBehavior,
     unstable__animationState: animated,
-  } = menu
+  } = menu;
 
-  const descendants = useMenuDescendantsContext()
+  const descendants = useMenuDescendantsContext();
 
   /**
    * Hook that creates a keydown event handler that listens
@@ -443,34 +444,34 @@ export function useMenuList(
   const createTypeaheadHandler = useShortcut({
     preventDefault: (event) =>
       event.key !== " " && isTargetMenuItem(event.target),
-  })
+  });
 
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       // ignore events bubbles from portal children
-      if (!event.currentTarget.contains(event.target as Element)) return
+      if (!event.currentTarget.contains(event.target as Element)) return;
 
-      const eventKey = event.key
+      const eventKey = event.key;
 
       const keyMap: Record<string, React.KeyboardEventHandler> = {
         Tab: (event) => event.preventDefault(),
         Escape: onClose,
         ArrowDown: () => {
-          const next = descendants.nextEnabled(focusedIndex)
-          if (next) setFocusedIndex(next.index)
+          const next = descendants.nextEnabled(focusedIndex);
+          if (next) setFocusedIndex(next.index);
         },
         ArrowUp: () => {
-          const prev = descendants.prevEnabled(focusedIndex)
-          if (prev) setFocusedIndex(prev.index)
+          const prev = descendants.prevEnabled(focusedIndex);
+          if (prev) setFocusedIndex(prev.index);
         },
-      }
+      };
 
-      const fn = keyMap[eventKey]
+      const fn = keyMap[eventKey];
 
       if (fn) {
-        event.preventDefault()
-        fn(event)
-        return
+        event.preventDefault();
+        fn(event);
+        return;
       }
 
       /**
@@ -482,16 +483,16 @@ export function useMenuList(
           descendants.values(),
           character,
           (item) => item?.node?.textContent ?? "",
-          descendants.item(focusedIndex),
-        )
+          descendants.item(focusedIndex)
+        );
         if (nextItem) {
-          const index = descendants.indexOf(nextItem.node)
-          setFocusedIndex(index)
+          const index = descendants.indexOf(nextItem.node);
+          setFocusedIndex(index);
         }
-      })
+      });
 
       if (isTargetMenuItem(event.target)) {
-        onTypeahead(event)
+        onTypeahead(event);
       }
     },
     [
@@ -500,12 +501,12 @@ export function useMenuList(
       createTypeaheadHandler,
       onClose,
       setFocusedIndex,
-    ],
-  )
+    ]
+  );
 
-  const hasBeenOpened = useRef(false)
+  const hasBeenOpened = useRef(false);
   if (isOpen) {
-    hasBeenOpened.current = true
+    hasBeenOpened.current = true;
   }
 
   const shouldRenderChildren = lazyDisclosure({
@@ -513,7 +514,7 @@ export function useMenuList(
     enabled: isLazy,
     mode: lazyBehavior,
     isSelected: animated.present,
-  })
+  });
 
   return {
     ...props,
@@ -528,7 +529,7 @@ export function useMenuList(
     },
     "aria-orientation": "vertical" as React.AriaAttributes["aria-orientation"],
     onKeyDown: callAllHandlers(props.onKeyDown, onKeyDown),
-  }
+  };
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -536,14 +537,14 @@ export function useMenuList(
  * -----------------------------------------------------------------------------------------------*/
 
 export function useMenuPositioner(props: any = {}) {
-  const { popper, isOpen } = useMenuContext()
+  const { popper, isOpen } = useMenuContext();
   return popper.getPopperProps({
     ...props,
     style: {
       visibility: isOpen ? "visible" : "hidden",
       ...props.style,
     },
-  })
+  });
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -556,25 +557,25 @@ export interface UseMenuItemProps
   /**
    * If `true`, the menuitem will be disabled
    */
-  isDisabled?: boolean
+  isDisabled?: boolean;
   /**
    * If `true` and the menuitem is disabled, it'll
    * remain keyboard-focusable
    */
-  isFocusable?: boolean
+  isFocusable?: boolean;
   /**
    * Overrides the parent menu's `closeOnSelect` prop.
    */
-  closeOnSelect?: boolean
+  closeOnSelect?: boolean;
   /**
    * The type of the menuitem.
    */
-  type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"]
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
 }
 
 export function useMenuItem(
   props: UseMenuItemProps = {},
-  externalRef: React.Ref<any> = null,
+  externalRef: React.Ref<any> = null
 ) {
   const {
     onMouseEnter: onMouseEnterProp,
@@ -587,9 +588,9 @@ export function useMenuItem(
     closeOnSelect,
     type: typeProp,
     ...htmlProps
-  } = props
+  } = props;
 
-  const menu = useMenuContext()
+  const menu = useMenuContext();
 
   const {
     setFocusedIndex,
@@ -600,94 +601,94 @@ export function useMenuItem(
     isOpen,
     menuId,
     rafId,
-  } = menu
+  } = menu;
 
-  const ref = useRef<HTMLDivElement>(null)
-  const id = `${menuId}-menuitem-${useId()}`
+  const ref = useRef<HTMLDivElement>(null);
+  const id = `${menuId}-menuitem-${useId()}`;
 
   /**
    * Register the menuitem's node into the domContext
    */
   const { index, register } = useMenuDescendant({
     disabled: isDisabled && !isFocusable,
-  })
+  });
 
   const onMouseEnter = useCallback(
     (event: any) => {
-      onMouseEnterProp?.(event)
-      if (isDisabled) return
-      setFocusedIndex(index)
+      onMouseEnterProp?.(event);
+      if (isDisabled) return;
+      setFocusedIndex(index);
     },
-    [setFocusedIndex, index, isDisabled, onMouseEnterProp],
-  )
+    [setFocusedIndex, index, isDisabled, onMouseEnterProp]
+  );
 
   const onMouseMove = useCallback(
     (event: any) => {
-      onMouseMoveProp?.(event)
+      onMouseMoveProp?.(event);
       if (ref.current && !isActiveElement(ref.current)) {
-        onMouseEnter(event)
+        onMouseEnter(event);
       }
     },
-    [onMouseEnter, onMouseMoveProp],
-  )
+    [onMouseEnter, onMouseMoveProp]
+  );
 
   const onMouseLeave = useCallback(
     (event: any) => {
-      onMouseLeaveProp?.(event)
-      if (isDisabled) return
-      setFocusedIndex(-1)
+      onMouseLeaveProp?.(event);
+      if (isDisabled) return;
+      setFocusedIndex(-1);
     },
-    [setFocusedIndex, isDisabled, onMouseLeaveProp],
-  )
+    [setFocusedIndex, isDisabled, onMouseLeaveProp]
+  );
 
   const onClick = useCallback(
     (event: React.MouseEvent) => {
-      onClickProp?.(event)
-      if (!isTargetMenuItem(event.currentTarget)) return
+      onClickProp?.(event);
+      if (!isTargetMenuItem(event.currentTarget)) return;
       /**
        * Close menu and parent menus, allowing the MenuItem
        * to override its parent menu's `closeOnSelect` prop.
        */
       if (closeOnSelect ?? menuCloseOnSelect) {
-        onClose()
+        onClose();
       }
     },
-    [onClose, onClickProp, menuCloseOnSelect, closeOnSelect],
-  )
+    [onClose, onClickProp, menuCloseOnSelect, closeOnSelect]
+  );
 
   const onFocus = useCallback(
     (event: React.FocusEvent) => {
-      onFocusProp?.(event)
-      setFocusedIndex(index)
+      onFocusProp?.(event);
+      setFocusedIndex(index);
     },
-    [setFocusedIndex, onFocusProp, index],
-  )
+    [setFocusedIndex, onFocusProp, index]
+  );
 
-  const isFocused = index === focusedIndex
+  const isFocused = index === focusedIndex;
 
-  const trulyDisabled = isDisabled && !isFocusable
+  const trulyDisabled = isDisabled && !isFocusable;
 
   useUpdateEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
     if (isFocused && !trulyDisabled && ref.current) {
       // Cancel any pending animations
       if (rafId.current) {
-        cancelAnimationFrame(rafId.current)
+        cancelAnimationFrame(rafId.current);
       }
       rafId.current = requestAnimationFrame(() => {
-        ref.current?.focus({ preventScroll: true })
-        rafId.current = null
-      })
+        ref.current?.focus({ preventScroll: true });
+        rafId.current = null;
+      });
     } else if (menuRef.current && !isActiveElement(menuRef.current)) {
-      menuRef.current.focus({ preventScroll: true })
+      menuRef.current.focus({ preventScroll: true });
     }
 
     return () => {
       if (rafId.current) {
-        cancelAnimationFrame(rafId.current)
+        cancelAnimationFrame(rafId.current);
       }
-    }
-  }, [isFocused, trulyDisabled, menuRef, isOpen])
+    };
+  }, [isFocused, trulyDisabled, menuRef, isOpen]);
 
   const clickableProps = useClickable({
     onClick,
@@ -698,7 +699,7 @@ export function useMenuItem(
     ref: mergeRefs(register, ref, externalRef),
     isDisabled,
     isFocusable,
-  })
+  });
 
   return {
     ...htmlProps,
@@ -707,7 +708,7 @@ export function useMenuItem(
     id,
     role: "menuitem",
     tabIndex: isFocused ? 0 : -1,
-  }
+  };
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -715,10 +716,10 @@ export function useMenuItem(
  * -----------------------------------------------------------------------------------------------*/
 
 export interface UseMenuOptionOptions {
-  value?: string
-  isChecked?: boolean
-  type?: "radio" | "checkbox"
-  children?: React.ReactNode
+  value?: string;
+  isChecked?: boolean;
+  type?: "radio" | "checkbox";
+  children?: React.ReactNode;
 }
 
 export interface UseMenuOptionProps
@@ -727,15 +728,15 @@ export interface UseMenuOptionProps
 
 export function useMenuOption(
   props: UseMenuOptionProps = {},
-  ref: React.Ref<any> = null,
+  ref: React.Ref<any> = null
 ) {
-  const { type = "radio", isChecked, ...rest } = props
-  const ownProps = useMenuItem(rest, ref)
+  const { type = "radio", isChecked, ...rest } = props;
+  const ownProps = useMenuItem(rest, ref);
   return {
     ...ownProps,
     role: `menuitem${type}`,
     "aria-checked": isChecked as React.AriaAttributes["aria-checked"],
-  }
+  };
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -743,11 +744,11 @@ export function useMenuOption(
  * -----------------------------------------------------------------------------------------------*/
 
 export interface UseMenuOptionGroupProps {
-  value?: string | string[]
-  defaultValue?: string | string[]
-  type?: "radio" | "checkbox"
-  onChange?: (value: string | string[]) => void
-  children?: React.ReactNode
+  value?: string | string[];
+  defaultValue?: string | string[];
+  type?: "radio" | "checkbox";
+  onChange?: (value: string | string[]) => void;
+  children?: React.ReactNode;
 }
 
 export function useMenuOptionGroup(props: UseMenuOptionGroupProps = {}) {
@@ -758,36 +759,36 @@ export function useMenuOptionGroup(props: UseMenuOptionGroupProps = {}) {
     defaultValue,
     onChange: onChangeProp,
     ...htmlProps
-  } = props
+  } = props;
 
-  const isRadio = type === "radio"
+  const isRadio = type === "radio";
 
-  const fallback = isRadio ? "" : []
+  const fallback = isRadio ? "" : [];
 
   const [value, setValue] = useControllableState({
     defaultValue: defaultValue ?? fallback,
     value: valueProp,
     onChange: onChangeProp,
-  })
+  });
 
   const onChange = useCallback(
     (selectedValue: string) => {
       if (type === "radio" && typeof value === "string") {
-        setValue(selectedValue)
+        setValue(selectedValue);
       }
 
       if (type === "checkbox" && Array.isArray(value)) {
         const nextValue = value.includes(selectedValue)
           ? value.filter((item) => item !== selectedValue)
-          : value.concat(selectedValue)
+          : value.concat(selectedValue);
 
-        setValue(nextValue)
+        setValue(nextValue);
       }
     },
-    [value, setValue, type],
-  )
+    [value, setValue, type]
+  );
 
-  const validChildren = getValidChildren(children)
+  const validChildren = getValidChildren(children);
 
   const clones = validChildren.map((child) => {
     /**
@@ -797,40 +798,40 @@ export function useMenuOptionGroup(props: UseMenuOptionGroupProps = {}) {
      * We can't rely on displayName or the element's type since
      * they can be changed by the user.
      */
-    if ((child.type as any).id !== "MenuItemOption") return child
+    if ((child.type as any).id !== "MenuItemOption") return child;
 
     const onClick = (event: MouseEvent) => {
-      onChange(child.props.value)
-      child.props.onClick?.(event)
-    }
+      onChange(child.props.value);
+      child.props.onClick?.(event);
+    };
 
     const isChecked =
       type === "radio"
         ? child.props.value === value
-        : value.includes(child.props.value)
+        : value.includes(child.props.value);
 
     return cloneElement(child, {
       type,
       onClick,
       isChecked,
-    })
-  })
+    });
+  });
 
   return {
     ...htmlProps,
     children: clones,
-  }
+  };
 }
 
 export function useMenuState() {
-  const { isOpen, onClose } = useMenuContext()
-  return { isOpen, onClose }
+  const { isOpen, onClose } = useMenuContext();
+  return { isOpen, onClose };
 }
 
 function isHTMLElement(el: any): el is HTMLElement {
-  if (!isElement(el)) return false
-  const win = el.ownerDocument.defaultView ?? window
-  return el instanceof win.HTMLElement
+  if (!isElement(el)) return false;
+  const win = el.ownerDocument.defaultView ?? window;
+  return el instanceof win.HTMLElement;
 }
 
 function isElement(el: any): el is Element {
@@ -839,5 +840,5 @@ function isElement(el: any): el is Element {
     typeof el == "object" &&
     "nodeType" in el &&
     el.nodeType === Node.ELEMENT_NODE
-  )
+  );
 }

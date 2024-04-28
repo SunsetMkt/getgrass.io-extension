@@ -3,7 +3,7 @@ import {
   forwardRef,
   SystemStyleObject,
   HTMLChakraProps,
-} from "@chakra-ui/system"
+} from "@chakra-ui/system";
 
 export interface BoxProps extends HTMLChakraProps<"div"> {}
 
@@ -13,38 +13,38 @@ export interface BoxProps extends HTMLChakraProps<"div"> {}
  *
  * @see Docs https://chakra-ui.com/box
  */
-export const Box = chakra("div")
+export const Box = chakra("div");
 
-Box.displayName = "Box"
+Box.displayName = "Box";
 
 /**
  * As a constraint, you can't pass size related props
  * Only `size` would be allowed
  */
-type Omitted = "size" | "boxSize" | "width" | "height" | "w" | "h"
+type Omitted = "size" | "boxSize" | "width" | "height" | "w" | "h";
 
 export interface SquareProps extends Omit<BoxProps, Omitted> {
   /**
    * The size (width and height) of the square
    */
-  size?: BoxProps["width"]
+  size?: BoxProps["width"];
   /**
    * If `true`, the content will be centered in the square
    *
    * @default false
    */
-  centerContent?: boolean
+  centerContent?: boolean;
 }
 
 export const Square = forwardRef<SquareProps, "div">(function Square(
   props,
-  ref,
+  ref
 ) {
-  const { size, centerContent = true, ...rest } = props
+  const { size, centerContent = true, ...rest } = props;
 
   const styles: SystemStyleObject = centerContent
     ? { display: "flex", alignItems: "center", justifyContent: "center" }
-    : {}
+    : {};
 
   return (
     <Box
@@ -57,17 +57,17 @@ export const Square = forwardRef<SquareProps, "div">(function Square(
       }}
       {...rest}
     />
-  )
-})
+  );
+});
 
-Square.displayName = "Square"
+Square.displayName = "Square";
 
 export const Circle = forwardRef<SquareProps, "div">(function Circle(
   props,
-  ref,
+  ref
 ) {
-  const { size, ...rest } = props
-  return <Square size={size} ref={ref} borderRadius="9999px" {...rest} />
-})
+  const { size, ...rest } = props;
+  return <Square size={size} ref={ref} borderRadius="9999px" {...rest} />;
+});
 
-Circle.displayName = "Circle"
+Circle.displayName = "Circle";

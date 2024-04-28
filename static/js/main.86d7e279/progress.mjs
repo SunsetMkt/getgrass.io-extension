@@ -11,8 +11,8 @@
   @return [number]: Progress of value within range as expressed 0-1
 */
 const progress = (from, to, value) => {
-    const toFromDifference = to - from;
-    return toFromDifference === 0 ? 1 : (value - from) / toFromDifference;
+  const toFromDifference = to - from;
+  return toFromDifference === 0 ? 1 : (value - from) / toFromDifference;
 };
 
 export { progress };

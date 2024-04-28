@@ -1,4 +1,4 @@
-import guard from './guard';
+import guard from "./guard";
 
 /**
  * Takes in rgba parts and returns an rgba string

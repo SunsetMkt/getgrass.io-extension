@@ -1,4 +1,4 @@
-import { Variants } from "framer-motion"
+import { Variants } from "framer-motion";
 
 export const scale: Variants = {
   exit: {
@@ -17,4 +17,4 @@ export const scale: Variants = {
       scale: { duration: 0.2, ease: [0.175, 0.885, 0.4, 1.1] },
     },
   },
-}
+};

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import utils from '../utils.js';
+import utils from "../utils.js";
 
 /**
  * It takes a string like `foo[x][y][z]` and returns an array like `['foo', 'x', 'y', 'z']
@@ -14,8 +14,8 @@ function parsePropPath(name) {
   // foo.x.y.z
   // foo-x-y-z
   // foo x y z
-  return utils.matchAll(/\w+|\[(\w*)]/g, name).map(match => {
-    return match[0] === '[]' ? '' : match[1] || match[0];
+  return utils.matchAll(/\w+|\[(\w*)]/g, name).map((match) => {
+    return match[0] === "[]" ? "" : match[1] || match[0];
   });
 }
 
@@ -50,7 +50,7 @@ function formDataToJSON(formData) {
   function buildPath(path, value, target, index) {
     let name = path[index++];
 
-    if (name === '__proto__') return true;
+    if (name === "__proto__") return true;
 
     const isNumericKey = Number.isFinite(+name);
     const isLast = index >= path.length;

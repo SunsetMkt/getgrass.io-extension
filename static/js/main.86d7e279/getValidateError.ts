@@ -1,11 +1,11 @@
-import { FieldError, Ref, ValidateResult } from '../types';
-import isBoolean from '../utils/isBoolean';
-import isMessage from '../utils/isMessage';
+import { FieldError, Ref, ValidateResult } from "../types";
+import isBoolean from "../utils/isBoolean";
+import isMessage from "../utils/isMessage";
 
 export default function getValidateError(
   result: ValidateResult,
   ref: Ref,
-  type = 'validate',
+  type = "validate"
 ): FieldError | void {
   if (
     isMessage(result) ||
@@ -14,7 +14,7 @@ export default function getValidateError(
   ) {
     return {
       type,
-      message: isMessage(result) ? result : '',
+      message: isMessage(result) ? result : "",
       ref,
     };
   }

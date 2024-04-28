@@ -1,20 +1,20 @@
-import { sliderAnatomy as parts } from "@chakra-ui/anatomy"
+import { sliderAnatomy as parts } from "@chakra-ui/anatomy";
 import {
   createMultiStyleConfigHelpers,
   cssVar,
   defineStyle,
-} from "@chakra-ui/styled-system"
-import { orient } from "@chakra-ui/theme-tools"
+} from "@chakra-ui/styled-system";
+import { orient } from "@chakra-ui/theme-tools";
 
 const { defineMultiStyleConfig, definePartsStyle } =
-  createMultiStyleConfigHelpers(parts.keys)
+  createMultiStyleConfigHelpers(parts.keys);
 
-const $thumbSize = cssVar("slider-thumb-size")
-const $trackSize = cssVar("slider-track-size")
-const $bg = cssVar("slider-bg")
+const $thumbSize = cssVar("slider-thumb-size");
+const $trackSize = cssVar("slider-track-size");
+const $bg = cssVar("slider-bg");
 
 const baseStyleContainer = defineStyle((props) => {
-  const { orientation } = props
+  const { orientation } = props;
 
   return {
     display: "inline-block",
@@ -30,15 +30,15 @@ const baseStyleContainer = defineStyle((props) => {
       vertical: { h: "100%" },
       horizontal: { w: "100%" },
     }),
-  }
-})
+  };
+});
 
 const baseStyleTrack = defineStyle((props) => {
   const orientationStyles = orient({
     orientation: props.orientation,
     horizontal: { h: $trackSize.reference },
     vertical: { w: $trackSize.reference },
-  })
+  });
 
   return {
     ...orientationStyles,
@@ -55,11 +55,11 @@ const baseStyleTrack = defineStyle((props) => {
       },
     },
     bg: $bg.reference,
-  }
-})
+  };
+});
 
 const baseStyleThumb = defineStyle((props) => {
-  const { orientation } = props
+  const { orientation } = props;
   const orientationStyle = orient({
     orientation,
     vertical: {
@@ -76,7 +76,7 @@ const baseStyleThumb = defineStyle((props) => {
         transform: `translateY(-50%) scale(1.15)`,
       },
     },
-  })
+  });
 
   return {
     ...orientationStyle,
@@ -101,11 +101,11 @@ const baseStyleThumb = defineStyle((props) => {
     _disabled: {
       bg: "gray.300",
     },
-  }
-})
+  };
+});
 
 const baseStyleFilledTrack = defineStyle((props) => {
-  const { colorScheme: c } = props
+  const { colorScheme: c } = props;
 
   return {
     width: "inherit",
@@ -115,42 +115,42 @@ const baseStyleFilledTrack = defineStyle((props) => {
       [$bg.variable]: `colors.${c}.200`,
     },
     bg: $bg.reference,
-  }
-})
+  };
+});
 
 const baseStyle = definePartsStyle((props) => ({
   container: baseStyleContainer(props),
   track: baseStyleTrack(props),
   thumb: baseStyleThumb(props),
   filledTrack: baseStyleFilledTrack(props),
-}))
+}));
 
 const sizeLg = definePartsStyle({
   container: {
     [$thumbSize.variable]: `sizes.4`,
     [$trackSize.variable]: `sizes.1`,
   },
-})
+});
 
 const sizeMd = definePartsStyle({
   container: {
     [$thumbSize.variable]: `sizes.3.5`,
     [$trackSize.variable]: `sizes.1`,
   },
-})
+});
 
 const sizeSm = definePartsStyle({
   container: {
     [$thumbSize.variable]: `sizes.2.5`,
     [$trackSize.variable]: `sizes.0.5`,
   },
-})
+});
 
 const sizes = {
   lg: sizeLg,
   md: sizeMd,
   sm: sizeSm,
-}
+};
 
 export const sliderTheme = defineMultiStyleConfig({
   baseStyle,
@@ -159,4 +159,4 @@ export const sliderTheme = defineMultiStyleConfig({
     size: "md",
     colorScheme: "blue",
   },
-})
+});
