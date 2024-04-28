@@ -1,0 +1,28 @@
+var _path;
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+import * as React from "react";
+function SvgRefreshIcon(_ref, svgRef) {
+  let {
+    title,
+    titleId,
+    ...props
+  } = _ref;
+  return /*#__PURE__*/React.createElement("svg", _extends({
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 20 20",
+    fill: "none",
+    ref: svgRef,
+    "aria-labelledby": titleId
+  }, props), title ? /*#__PURE__*/React.createElement("title", {
+    id: titleId
+  }, title) : null, _path || (_path = /*#__PURE__*/React.createElement("path", {
+    d: "M16.6157 10.8333C16.6498 10.5603 16.6673 10.2822 16.6673 9.99992C16.6673 6.31802 13.6826 3.33325 10.0007 3.33325C7.91683 3.33325 6.05633 4.28931 4.83382 5.78672M4.83382 5.78672V3.33325M4.83382 5.78672V5.83319L7.33382 5.83325M3.38556 9.16659C3.35152 9.43959 3.33398 9.71767 3.33398 9.99992C3.33398 13.6818 6.31875 16.6666 10.0007 16.6666C11.9918 16.6666 13.7791 15.7937 15.0007 14.4096M15.0007 14.4096V14.1666H12.5007M15.0007 14.4096V16.6666",
+    stroke: "currentColor",
+    strokeWidth: 1.7,
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  })));
+}
+const ForwardRef = /*#__PURE__*/React.forwardRef(SvgRefreshIcon);
+export default __webpack_public_path__ + "static/media/refresh-icon.48b6e4d467b3fe7ab56adc162c92dca8.svg";
+export { ForwardRef as ReactComponent };

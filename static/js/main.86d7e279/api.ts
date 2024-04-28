@@ -1,0 +1,2 @@
+export const POINTS_UPDATE_INTERVAL = 10800;
+export const IGNORE_POINTS_DIFFERENCE = 21600; // 6 hours

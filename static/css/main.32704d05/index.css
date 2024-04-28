@@ -1,0 +1,14 @@
+body {
+  background: var(--chakra-colors-dash-background) !important;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.app {
+  width: 360px;
+  height: 600px;
+}

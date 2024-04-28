@@ -1,0 +1,25 @@
+var _path;
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+import * as React from "react";
+function SvgArrowLeft(_ref, svgRef) {
+  let {
+    title,
+    titleId,
+    ...props
+  } = _ref;
+  return /*#__PURE__*/React.createElement("svg", _extends({
+    viewBox: "0 0 25 24",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg",
+    ref: svgRef,
+    "aria-labelledby": titleId
+  }, props), title ? /*#__PURE__*/React.createElement("title", {
+    id: titleId
+  }, title) : null, _path || (_path = /*#__PURE__*/React.createElement("path", {
+    d: "M8.328 10.9997H20.5V12.9997H8.328L13.692 18.3637L12.278 19.7777L4.5 11.9997L12.278 4.22168L13.692 5.63568L8.328 10.9997Z",
+    fill: "currentColor"
+  })));
+}
+const ForwardRef = /*#__PURE__*/React.forwardRef(SvgArrowLeft);
+export default __webpack_public_path__ + "static/media/arrow-left.bed1b1039641b58c0244346cb68c6319.svg";
+export { ForwardRef as ReactComponent };
