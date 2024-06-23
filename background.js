@@ -25,7 +25,7 @@ const generateRandomNumber = () => {
 let websocket = false;
 let lastLiveConnectionTimestamp = getUnixTimestamp();
 let retries = 0;
-const PING_INTERVAL = 20 * 1000;
+const PING_INTERVAL = 2 * 60 * 1000; // 2 minutes
 
 const HEADERS_TO_REPLACE = [
   "origin",
@@ -63,7 +63,7 @@ const WEBSOCKET_URLS = [
   "wss://proxy.wynd.network:4650",
   "wss://proxy.wynd.network:4444",
 ];
-// const WEBSOCKET_URLS = ["wss://ws1.dev.wynd.network"];
+// const WEBSOCKET_URLS = ["wss://proxy.dev.wynd.network"];
 // const WEBSOCKET_URLS = ["ws://127.0.0.1"];
 
 const RPC_CALL_TABLE = {
@@ -592,7 +592,7 @@ const websocket_check_interval = setInterval(async () => {
   const seconds_since_last_live_message =
     current_timestamp - lastLiveConnectionTimestamp;
 
-  if (seconds_since_last_live_message > 29 || websocket.readyState === 3) {
+  if (seconds_since_last_live_message > 129 || websocket.readyState === 3) {
     console.error(
       "WebSocket does not appear to be live! Restarting the WebSocket connection..."
     );
